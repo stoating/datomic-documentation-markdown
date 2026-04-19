@@ -1,0 +1,93 @@
+# Read Revisited: More Query
+
+First, don't forget to acquire the latest value of the database,
+**after** the transaction that added the order.
+
+```clojure
+(def db (d/db conn))
+```
+
+## Parameterized Query
+
+Now let's try a more complex query. We would like to be able to
+suggest additional items to shoppers. We need a query that, given
+any inventory item, finds all the other items that have ever appeared
+in the same order.
+
+The "related items" query will have two parameters:
+
+- A database value
+- An inventory entity id
+
+Parameters enter query via additional arguments to `q`, and they are
+named by a corresponding `:in` clause. The special `$` name is a
+placeholder for the database value.
+
+The query below finds the SKUs for all items that have appeared in an
+order with SKU-25:
+
+```clojure
+(d/q
+ '[:find ?sku
+   :in $ ?inv
+   :where
+   [?item :item/id ?inv]
+   [?order :order/items ?item]
+   [?order :order/items ?other-item]
+   [?other-item :item/id ?other-inv]
+   [?other-inv :inv/sku ?sku]]
+ db [:inv/sku "SKU-25"])
+```
+
+```
+[["SKU-25"] ["SKU-26"]]
+```
+
+Notice how variables are used to join:
+
+- `?inv` is bound on input to the entity id for *SKU-25*, which
+- joins to every order `?item` mentioning `?inv`, which
+- joins to every `?order` of that `?item`, which
+- joins to every `?other-item` in those orders, which
+- joins to every `?other-inv` inventory entity, which
+- joins to all the skus `?sku`
+
+## Rules
+
+The "related items" feature is so nice that we would like to use it in
+a bunch of different queries. You can name query logic as a *rule* and
+reuse it in multiple queries.
+
+- Create a rule named `ordered-together` that binds two variables `?inv`
+
+and `?other-inv` if they have ever appeared in the same order:
+
+```clojure
+(def rules
+  '[[(ordered-together ?inv ?other-inv)
+     [?item :item/id ?inv]
+     [?order :order/items ?item]
+     [?order :order/items ?other-item]
+     [?other-item :item/id ?other-inv]]])
+```
+
+- Now you can pass these *rules* to a query, using the special `:in` name `%`,
+
+and then refer to the rules by name:
+
+```clojure
+(d/q
+ '[:find ?sku
+   :in $ % ?inv
+   :where
+   (ordered-together ?inv ?other-inv)
+   [?other-inv :inv/sku ?sku]]
+ db rules [:inv/sku "SKU-25"])
+```
+
+```
+[["SKU-25"] ["SKU-26"]]
+```
+
+So far we have created and accumulated data. Now let's look at what
+happens when things [change over time](../06-retract/retract.md).

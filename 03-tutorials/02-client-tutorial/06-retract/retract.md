@@ -1,0 +1,67 @@
+# Retract
+
+## Explicit Retract
+
+We would like to keep a count of items in inventory, so let's add a bit more schema:
+
+```clojure
+(def inventory-counts
+  [{:db/ident :inv/count
+    :db/valueType :db.type/long
+    :db/cardinality :db.cardinality/one}])
+
+(d/transact conn {:tx-data inventory-counts})
+```
+
+Now we can assert that we have seven of SKU-21 and a thousand of SKU-42:
+
+```clojure
+;; deliberate mistakes here!
+(def inventory-update
+  [[:db/add [:inv/sku "SKU-21"] :inv/count 7]
+   [:db/add [:inv/sku "SKU-22"] :inv/count 7]
+   [:db/add [:inv/sku "SKU-42"] :inv/count 100]])
+
+(d/transact conn {:tx-data inventory-update})
+```
+
+Curse my clumsy fingers, we just put some bad data into the system. We aren't supposed to have any *SKU-22*, but we just added seven. We can fix this with a retraction, which cancels the effect of an assertion:
+
+```clojure
+(d/transact
+ conn
+ {:tx-data [[:db/retract [:inv/sku "SKU-22"] :inv/count 7]
+            [:db/add "datomic.tx" :db/doc "remove incorrect assertion"]]})
+```
+
+The `:db/retract` above removes the incorrect value, but note that we are also adding an assertion about the special tempid "datomic.tx". Every transaction in Datomic is its own entity, making it easy to add facts about why a transaction was added (or who added it, or from where the data came, etc).
+
+## Implicit Retract
+
+We also miskeyed the entry for SKU-42, asserting 100 instead of 1000. We can fix this by asserting the correct value. We do **not** need also to retract the old value; since `:inv/count` is `:cardinality/one`, Datomic knows that there can only be one value at a time and will automatically retract the previous value:
+
+```clojure
+(d/transact
+ conn
+ {:tx-data [[:db/add [:inv/sku "SKU-42"] :inv/count 1000]
+            [:db/add "datomic.tx" :db/doc "correct data entry error"]]})
+```
+
+When we look only at the most recent database value, all we can see is the net effect after our corrections:
+
+```clojure
+(def db (d/db conn))
+
+(d/q
+ '[:find ?sku ?count
+   :where
+   [?inv :inv/sku ?sku]
+   [?inv :inv/count ?count]]
+ db)
+```
+
+```
+[["SKU-42" 1000] ["SKU-21" 7]]
+```
+
+Knowing the present truth is a starting point, but Datomic's model of time will let us [do a lot more](../07-history/history.md).

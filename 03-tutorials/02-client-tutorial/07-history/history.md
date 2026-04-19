@@ -1,0 +1,151 @@
+# History
+
+## Prerequisites
+
+- Update your database to add some inventory:
+
+```clojure
+(def inventory-counts
+  [{:db/ident :inv/count
+    :db/valueType :db.type/long
+    :db/cardinality :db.cardinality/one}])
+
+(d/transact conn {:tx-data inventory-counts})
+
+(def inventory-update
+  [[:db/add [:inv/sku "SKU-21"] :inv/count 7]
+   [:db/add [:inv/sku "SKU-22"] :inv/count 7]
+   [:db/add [:inv/sku "SKU-42"] :inv/count 100]])
+
+(d/transact conn {:tx-data inventory-update})
+```
+
+- Make some corrections to the data:
+
+```clojure
+(d/transact
+ conn
+ {:tx-data [[:db/retract [:inv/sku "SKU-22"] :inv/count 7]
+            [:db/add "datomic.tx" :db/doc "Retract incorrect assertion"]]})
+
+(d/transact
+ conn
+ {:tx-data [[:db/add [:inv/sku "SKU-42"] :inv/count 1000]
+            [:db/add "datomic.tx" :db/doc "Update inventory"]]})
+```
+
+## asOf Query
+
+Imagine that SKU-22 requires cold storage. Pat notices the database
+entry showing that we have some SKU-22 in stock and turns the
+thermostat down to 56F. This turns out to be very unpopular with
+everybody who works in the building. By the time somebody else checks
+the database to verify Pat's finding, the data error has been fixed.
+
+This example shows why systems of record *should never delete data,
+even if that data is mistaken*.
+Other parties may have acted on that data, and a key responsibility of data-of-record systems is to provide
+an audit trail in these situations.
+
+With Datomic, you can make a database query asOf any previous point
+in time, where time can be specified either as an instant or as a
+transaction id. If you are following along in code, you probably don't
+remember the exact instant in time that you made the correction
+above–and you don't have to.
+
+- You can query the system for the most recent transactions:
+
+```clojure
+@(def recent-txns
+   (d/q
+    '[:find (max 3 ?tx)
+      :where
+      [?tx :db/txInstant]]
+    (d/db conn)))
+```
+
+```
+[[[13194139533330 13194139533329 13194139533328]]] ;; your values may differ
+```
+
+The `max` in find limits the results to the three highest valued (most
+recent) transaction ids. Take the smallest of these, and use `as-of`
+to back up past the two "correction" transactions.
+
+- Now you can see the data about SKU-22 that justifies Pat's unpopular decision:
+
+```clojure
+;; Get the earliest transaction id
+(def txid
+  (->> recent-txns
+       ffirst
+       (apply min)))
+
+@(def db-before (d/as-of db txid))
+
+(d/q
+ '[:find ?sku ?count
+   :where
+   [?inv :inv/sku ?sku]
+   [?inv :inv/count ?count]]
+ db-before)
+```
+
+```
+[["SKU-42" 100] ["SKU-21" 7] ["SKU-22" 7]]
+```
+
+## History Query
+
+In addition to point-in-time auditing, you can also review the entire
+history of your data. When you query against a *history* database
+value, the query will return all assertions and retractions,
+regardless of when they were in effect. The following query shows the
+complete history of `:inv/count` data for items by SKU:
+
+```clojure
+(require '[clojure.pprint :as pp])
+
+(def db-hist (d/history (d/db conn)))
+
+(->> (d/q
+      '[:find ?tx ?sku ?val ?op
+        :where
+        [?inv :inv/count ?val ?tx ?op]
+        [?inv :inv/sku ?sku]]
+      db-hist)
+     (sort-by first)
+     (pp/pprint))
+```
+
+```
+([13194139534399 "SKU-21" 7 true]
+ [13194139534399 "SKU-22" 7 true]
+ [13194139534399 "SKU-42" 100 true]
+ [13194139534400 "SKU-22" 7 false]
+ [13194139534402 "SKU-42" 1000 true]
+ [13194139534402 "SKU-42" 100 false])
+```
+
+The `?op` is true for assertions and false for retractions. Note that:
+
+- Transaction *…399* set the count for three SKUs
+- Transaction *…400* retracted the count for SKU-22
+- Transaction *…402* "changed" the count for SKU-42
+
+## Deleting System (Optional)
+
+You have finished the tutorial. If you are done with your Datomic
+System, you can follow the instructions for [deleting a system](../../../05-operation/02-cloud/15-deleting/deleting.md).
+
+## Next Steps
+
+In this tutorial you have seen how to assert and retract datoms,
+create schema, pull hierarchical data, and query with Datalog. You
+have also seen how the indelible model facilitates as-of and
+history views of the database.
+
+While this tutorial has introduced several key ideas, it has only
+scratched the surface of Datomic's capabilities. As you build your
+database, consult the reference section of [Datomic Docs](http://docs.datomic.com/) for more
+in-depth coverage.
