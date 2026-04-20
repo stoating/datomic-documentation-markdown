@@ -1,0 +1,151 @@
+# Access Control
+
+On this page, the following metavariables are used:
+
+- *SystemName* is your Datomic [system name](../11-how-to/how-to.md#system-name)
+- *S3DatomicArn* is your Datomic system's [S3 bucket ARN](../11-how-to/how-to.md#s3-bucket)
+- *DbName* is the name of a particular database
+
+## Datomic Administrator Policy
+
+A Datomic Administrator has permission to use all Client API and CLI
+functions. An Administrator can:
+
+- Create, list, and delete Datomic databases
+- Read and write data for all Datomic databases within an account
+- Manage the access gateway (Datomic 781-9041 and lower)
+
+All Datomic permissions are implemented via S3 read and write
+permissions on a System's S3 buckets. The IAM policy below
+demonstrates all the permissions needed to be an administrator on a
+Datomic system:
+
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": [
+                "s3:GetObject"
+            ],
+            "Resource": [
+                "$(S3DatomicArn)/$(SystemName)/datomic/access/*"
+            ],
+            "Effect": "Allow"
+        },
+        {
+            "Action": [
+                "s3:PutObject",
+                "s3:DeleteObject"
+            ],
+            "Resource": [
+                "$(S3DatomicArn)/$(SystemName)/datomic/access/public-keys/*"
+            ],
+            "Effect": "Allow"
+        },
+        {
+            "Action": [
+                "ec2:DescribeInstances",
+            ],
+            "Resource": "*",
+            "Effect": "Allow"
+        },
+        {
+            "Action": [
+                "ec2:RebootInstances"
+            ],
+            "Resource": "*",
+            "Effect": "Allow",
+            "Condition": {
+              "StringEquals": {
+                "ec2:ResourceTag/datomic:system": "$(SystemName)"
+              }
+           }
+        }
+    ]
+}
+```
+
+- The `s3:GetObject` permission provides read, write, create, and delete access for all dbs in the specified system
+- The `s3:PutObject` permission allows the user to install access gateway keys, and
+- The `ec2:DescribeInstances` permission allows the user to query for the public IP of the access gateway
+
+The built-in
+[Administrator](https://console.aws.amazon.com/iam/home?#/policies/arn:aws:iam::aws:policy/AdministratorAccess$jsonEditor)
+and
+[PowerUser](https://console.aws.amazon.com/iam/home?#/policies/arn:aws:iam::aws:policy/PowerUserAccess$jsonEditor)
+policies in IAM have all the permissions listed above; therefore all AWS Administrators and Power Users are also
+Datomic Administrators.
+
+## How Datomic Access Control Works
+
+A `GET` request on the client endpoint will return a map with an `:s3-auth-path`. The value of `:s3-auth-path`
+is the location of the signing keys managed by Datomic Cloud. A user will only be able to create a client if they have IAM permissions for GetObject on the bucket listed in `:s3-auth-path`.
+
+All Client API requests to Datomic Cloud use SSL and authenticate via AWS
+[HMAC-SHA256 signatures](https://docs.aws.amazon.com/AmazonS3/latest/userguide/RESTAuthentication.html).
+
+Users never interact with Client API signing keys, either during
+development or in production. Datomic Cloud manages the signing keys,
+which are stored in S3. Clients and tools run with IAM permission to
+read the keys when needed, but the keys themselves never appear in
+code or configuration files. This reduces the likelihood of common
+problems such as inadvertently publishing credentials in source
+control.
+
+## Authorize Ions to Access Other AWS Services
+
+Ion applications may need specific IAM permissions beyond those needed by Datomic itself. For example, your
+application might want to read from an S3 bucket or send a message to
+an SNS queue.
+
+Datomic Cloud lets you grant these permissions via IAM in such a way
+that your app:
+
+- Never mentions AWS credentials
+- Never has "dev vs. prod" conditional logic
+
+To authorize ions to use AWS resources, follow the following four
+steps:
+
+- In your program, always create AWS clients using the
+[default credentials provider chain](#default-credentials-provider-chain)
+- [Create an IAM policy](#creating-an-iam-policy) with the permissions your code needs
+- [Add the policy](#adding-an-iam-policy-to-datomic-nodes) to your Datomic nodes
+- (Optional) add the policy to a user [for local testing](#testing-an-iam-policy-locally)
+
+### Default Credentials Provider Chain
+
+In the AWS SDK, the
+[DefaultCredentialsProviderChain](https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/auth/DefaultAWSCredentialsProviderChain.html)
+loads credentials from the runtime environment, so that you do not have to place credentials directly in your code.
+
+When creating AWS client objects, call constructors that use the
+default chain, such as
+[defaultClient](https://docs.aws.amazon.com/AWSJavaSDK/latest/javadoc/com/amazonaws/services/kinesis/AmazonKinesisClientBuilder.html#defaultClient--).
+
+### Creating an IAM Policy
+
+You can
+[create an IAM policy](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_create.html)
+listing any permissions your application needs.
+As a best practice, you should use fine-grained policies to grant your application the
+[least privilege](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html#grant-least-privilege)
+needed to perform its duties.
+
+### Adding an IAM Policy to Datomic Nodes
+
+You can specify a custom IAM policy for any compute group via the
+`NodePolicyArn` [template parameter](../05-compute-templates/compute-templates.md#parameters), either when creating the
+group, or by updating the template later. Check the [compute group template reference](../05-compute-templates/compute-templates.md).
+
+### Testing an IAM Policy Locally
+
+To test your IAM policy locally, attach the IAM policy to the user
+you use for development. Check [configure AWS access keys](../../../01-setup/02-cloud-setup/02-cloud-setup/cloud-setup.md) for more information.
+
+## Authorize Access Gateway Users (legacy)
+
+Only necessary for Datomic 781-9041 and Lower.
+
+Check [configuring access](../17-access-gateway-legacy/access-gateway-legacy.md).
