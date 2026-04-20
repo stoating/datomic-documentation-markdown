@@ -53,6 +53,13 @@ After writing a file, **always read it first** (the file exists but is empty —
 | `/cloud/api/io-stats.html` | `04-apis/10-io-stats/io-stats.md` |
 | `/cloud/api/query-stats.html` | `04-apis/11-query-stats/query-stats.md` |
 | `/cloud/transactions/transaction-data-reference.html` | `06-reference/02-transactions/02-transaction-data/transaction-data.md` |
+| `/whatis/data-model.html` | `06-reference/03-query-and-pull/02-query-reference/query-reference.md` |
+| `/client-api/datomic.client.api.html` | `04-apis/03-client-api-clojuredoc/client-api-clojuredoc.md` |
+| `/changes/pro.html` | `11-releases/01-datomic-pro/02-pro-change-log/pro-change-log.md` |
+| `/releases.html` | `11-releases/releases.md` |
+| `/analytics/analytics-concepts.html` | `08-analytics/01-analytics-concepts/analytics-concepts.md` |
+| `/analytics/analytics-configuring.html` | `08-analytics/02-pro-configuration/pro-configuration.md` |
+| `/analytics/analytics-tools.html` | `08-analytics/13-other-tools/other-tools.md` |
 
 For any URL not in this table, derive the repo path using the same pattern: strip the domain, map the path segments to the closest matching directory under the numbered top-level folders, and use the leaf `.md` file named after the directory. Add new entries to this table as you encounter and resolve new URLs.
 
@@ -76,7 +83,8 @@ For any URL not in this table, derive the repo path using the same pattern: stri
 - Preserve nesting
 
 ### Images
-- `<img src="../images/foo.png">` → `![foo](../images/foo.png)` — adjust the relative path to point from the `.md` file's location to an `images/` directory at the repo root
+- There is no local `images/` directory in this repo. Use the absolute URL form: `<img src="../images/foo.png">` → `![foo](https://docs.datomic.com/images/foo.png)`
+- If an image is wrapped in a link to itself (click-to-enlarge), render it as `[![foo](https://docs.datomic.com/images/foo.png)](https://docs.datomic.com/images/foo.png)`
 
 ### Things to strip entirely
 - Navigation sidebar (`<div class="d-nav-container">` and everything in it)
@@ -115,6 +123,21 @@ These files have content (as of the last session):
 - `04-apis/02-peer-api-javadoc/interfaces/listenable-future/listenable-future.md` ✓
 - `04-apis/02-peer-api-javadoc/peer-api-javadoc.md` ✓
 - `04-apis/03-client-api-clojuredoc/client-api-clojuredoc.md` ✓
+- `04-apis/05-datomic-local-api/datomic-local-api.md` ✓
+- `04-apis/07-index-apis/index-apis.md` ✓
+- `08-analytics/02-pro-configuration/pro-configuration.md` ✓
+- `08-analytics/04-sql-cli/sql-cli.md` ✓
+- `08-analytics/06-troubleshooting/troubleshooting.md` ✓
+- `08-analytics/08-r/r.md` ✓
+- `08-analytics/10-jupyter/jupyter.md` ✓
+- `08-analytics/12-jdbc/jdbc.md` ✓
+- `08-analytics/14-connecting-pro/connecting-pro.md` ✓
+- `09-tech-notes/01-comparison-with-updating-transactions/comparison-with-updating-transactions.md` ✓
+- `09-tech-notes/03-hosting-private-maven/hosting-private-maven.md` ✓
+- `09-tech-notes/05-write-a-problem-report/write-a-problem-report.md` ✓
+- `09-tech-notes/07-reserved-instances/reserved-instances.md` ✓
+- `09-tech-notes/09-outer-joins/outer-joins.md` ✓
+- `09-tech-notes/11-override-settings/override-settings.md` ✓
 
 ## Javadoc directory naming note
 
