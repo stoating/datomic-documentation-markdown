@@ -164,7 +164,23 @@ Datomic has two programmatic APIs, the client API and the peer API. Both APIs de
 
 The table below explores the API differences in more detail:
 
-![ClientandPeer](https://docs.datomic.com/images/ClientandPeer.svg)
+| Capability | Peer | Client |
+|------------|------|--------|
+| **Key differences** |  |  |
+| Process local | Datomic Pro only | Datomic Cloud (via ions), Datomic Local |
+| Remote client/server | No | Datomic Cloud |
+| API style | Synchronous only | Sync or async |
+| **Common core operations** |  |  |
+| Catalog operations | Yes | Yes |
+| Transactions | Yes | Yes |
+| Query and pull | Yes | Yes |
+| Index access | EAVT, AEVT, AVET, VAET | EAVT, AEVT, AVET, VAET |
+| Time filters | As-of, since, history | As-of, since, history |
+| **Operations where peer API has extended capability** |  |  |
+| Transaction ordering | In order submitted from a peer | In order acknowledged (might vary from the submission order if client reaches different server) |
+| Lazy entities | Yes | No |
+| Partition control | Implicit partitions and explicit partitions | Implicit partitions |
+| Predicate filters | Yes | No |
 
 ## Get Started
 
