@@ -46,6 +46,13 @@ After writing a file, **always read it first** (the file exists but is empty —
 | `/glossary.html` | `12-glossary/glossary.md` |
 | `/reference/database-functions.html` | `06-reference/02-transactions/04-transaction-functions/transaction-functions.md` |
 | `/transactions/transaction-processing.html` | `06-reference/02-transactions/03-processing-transactions/processing-transactions.md` |
+| `/cloud/time/filters.html` | `06-reference/06-time-in-datomic/time-in-datomic.md` |
+| `/cloud/query/raw-index-access.html` | `04-apis/07-index-apis/index-apis.md` |
+| `/cloud/query/query-pull.html` | `06-reference/03-query-and-pull/03-pull/pull.md` |
+| `/cloud/query/query-data-reference.html` | `06-reference/03-query-and-pull/02-query-reference/query-reference.md` |
+| `/cloud/api/io-stats.html` | `04-apis/10-io-stats/io-stats.md` |
+| `/cloud/api/query-stats.html` | `04-apis/11-query-stats/query-stats.md` |
+| `/cloud/transactions/transaction-data-reference.html` | `06-reference/02-transactions/02-transaction-data/transaction-data.md` |
 
 For any URL not in this table, derive the repo path using the same pattern: strip the domain, map the path segments to the closest matching directory under the numbered top-level folders, and use the leaf `.md` file named after the directory. Add new entries to this table as you encounter and resolve new URLs.
 
@@ -107,6 +114,7 @@ These files have content (as of the last session):
 - `04-apis/02-peer-api-javadoc/interfaces/database-predicate/database-predicate.md` ✓
 - `04-apis/02-peer-api-javadoc/interfaces/listenable-future/listenable-future.md` ✓
 - `04-apis/02-peer-api-javadoc/peer-api-javadoc.md` ✓
+- `04-apis/03-client-api-clojuredoc/client-api-clojuredoc.md` ✓
 
 ## Javadoc directory naming note
 
