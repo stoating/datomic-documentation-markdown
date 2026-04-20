@@ -39,7 +39,7 @@ Datomic system. From the
 - Under the same row in "Tags", enter a specific system name for the tag
 value, or leave the tag value blank to find resources for all Datomic systems
 
-![find-resources-to-tag](../../../images/find-resources-to-tag.png)
+![find-resources-to-tag](https://docs.datomic.com/images/find-resources-to-tag.png)
 
 ## Searching CloudWatch Logs
 
@@ -74,7 +74,7 @@ The example below demonstrates reviewing a week's worth of alerts. The
 single event that matches is a transient DynamoDB request failure, so
 not a problem.
 
-![search-for-alerts](../../../images/search-for-alerts.png)
+![search-for-alerts](https://docs.datomic.com/images/search-for-alerts.png)
 
 ### Finding Logs by Message
 
@@ -102,7 +102,7 @@ The image below shows using the CloudWatch
 - The `$` is a placeholder for log entry as a whole
 - The dot syntax scopes the search to the individual key `Msg`
 
-![cast-event](../../../images/cast-event.png)
+![cast-event](https://docs.datomic.com/images/cast-event.png)
 
 ## Metrics Produced by Datomic Cloud
 
@@ -151,7 +151,7 @@ Console.
 
 The [primary compute stack](../01-cloud-architecture/cloud-architecture.md#primary-compute-stack) creates a large dashboard, suitable for viewing on a large ops monitor screen:
 
-![production-dashboard](../../../images/production-dashboard.png)
+![production-dashboard](https://docs.datomic.com/images/production-dashboard.png)
 
 Each dashboard widget tells a story. For example, the DynamoDB Usage
 widget tracks [DynamoDB AutoScaling](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/AutoScaling.html) of reads (left axis) and writes
@@ -159,6 +159,6 @@ widget tracks [DynamoDB AutoScaling](https://docs.aws.amazon.com/amazondynamodb/
 provisioning (the green line) scaling up for a four-hour period during
 a batch load, and then scaling back down to almost nothing.
 
-![ddb-autoscaling](../../../images/ddb-autoscaling.png)
+![ddb-autoscaling](https://docs.datomic.com/images/ddb-autoscaling.png)
 
 A query group stack creates a dashboard that is a subset of the information shown for a primary compute group.
