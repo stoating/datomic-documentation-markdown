@@ -17,3 +17,10 @@ This section documents what Datomic's indexes are, how they are maintained, and 
 
 - [Index Model](index-model.md)
 - [Background Indexing](background-indexing.md)
+
+
+
+
+
+
+
