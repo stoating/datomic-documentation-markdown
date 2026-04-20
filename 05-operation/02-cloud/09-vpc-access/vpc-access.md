@@ -4,8 +4,8 @@ For most applications, the preferred way to access Datomic is via the [built-in 
 
 This page describes alternatives for situations where you *don't* want an API Gateway. If you want callers to connect to a private endpoint instead, you can connect directly to the load balancer for a compute group. There are two alternatives:
 
-- **Intra-VPC**: if you launch AWS resources [in Datomic's VPC](#intra-vpc), they will automatically be able to connect to Datomic.
-- **Inter-VPC**: callers from other VPCs require additional setup. The specific instructions vary depending on the type of load balancer Datomic provisions for your compute group, and are covered under [ALB](#vpc-peering) and [NLB](#vpc-endpoint) instructions below.
+- **Intra-VPC**: if you launch AWS resources [in Datomic's VPC](#intra-vpc-access), they will automatically be able to connect to Datomic.
+- **Inter-VPC**: callers from other VPCs require additional setup. The specific instructions vary depending on the type of load balancer Datomic provisions for your compute group, and are covered under [ALB](#inter-vpc-access-with-vpc-peering-alb-only) and [NLB](#inter-vpc-access-with-vpc-endpoint-nlb-only) instructions below.
 
 Each of these alternatives is described in more detail below. Throughout this page, the following metavariables are used:
 
@@ -60,7 +60,7 @@ To connect callers from an external VPC to a Datomic compute group NLB, check [V
 
 Find your Datomic System subnets and your application VPC subnets in the [subnet list](https://console.aws.amazon.com/vpc/home#subnets:) of the VPC Dashboard, taking note of the availability zones.
 
-If at least one of your application VPC subnets is in the same AZ as one of the Datomic system subnets, proceed to [create your VPC endpoint](#create-endpoint).
+If at least one of your application VPC subnets is in the same AZ as one of the Datomic system subnets, proceed to [create your VPC endpoint](#creating-vpc-service-and-endpoint).
 
 If your application VPC does not contain any AZ-matching subnets, you will need to [create an additional subnet](https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/working-with-vpcs.html#AddaSubnet) (or subnets) in your VPC in one of the AZs used by your Datomic system subnets.
 

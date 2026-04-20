@@ -2,16 +2,16 @@
 
 This page is a reference for [compute group](../01-cloud-architecture/cloud-architecture.md#compute-groups) CloudFormation templates. Because the primary compute and query group templates are so similar, they are both covered here, with differences noted where relevant. This page is organized to follow the steps in CloudFormation's web interface for creating or updating a stack.
 
-- [Stack operations](#operations)
+- [Stack operations](#stack-operations)
 - [Specify template](#specify-template)
 - [Specify stack details](#specify-stack-details)
 - [Configure stack options](#configure-stack-options)
 - [Review](#review)
-- [Wait for stack](#wait)
+- [Wait for stack](#wait-for-the-stack)
 
 ## Stack Operations
 
-You can [create](#create), [update](#update), or [delete](#delete) a compute group.
+You can [create](#creating-a-compute-group), [update](#updating-a-compute-group), or [delete](#deleting-a-compute-group) a compute group.
 
 ### Creating a Compute Group
 
@@ -85,15 +85,15 @@ Each parameter is summarized in the table below and then described in detail. Co
 
 - Instance type: type of EC2 instance for compute nodes. Check [instance sizes](../03-growing-your-system/growing-your-system.md#instance-sizes).
 - AWS EC2 key pair: [key pair](../../../01-setup/02-cloud-setup/01-aws-account-setup/aws-account-setup.md#ec2-key-pair) for ssh access to nodes.
-- Application name: [ion CodeDeploy application name](../../../07-datomic-cloud-ions/02-ions-reference/ions-reference.md#application-name). *This name cannot be changed later.*
+- Application name: [ion CodeDeploy application name](../../../07-datomic-cloud-ions/02-ions-reference/ions-reference.md#naming-applications). *This name cannot be changed later.*
 - Environment map: ion [environment map](../../../07-datomic-cloud-ions/02-ions-reference/ions-reference.md#environment-map).
 - Preload database: all compute group instances will load this database when they start, before accepting requests.
-- Metrics Level: [level of metrics detail](../03-growing-your-system/growing-your-system.md#monthly-price). *Default* sets metric level [based on instance size](../03-growing-your-system/growing-your-system.md#instance-sizes), and should be suitable for most users.
+- Metrics Level: [level of metrics detail](../03-growing-your-system/growing-your-system.md#monthly-prices). *Default* sets metric level [based on instance size](../03-growing-your-system/growing-your-system.md#instance-sizes), and should be suitable for most users.
 - Auto scaling configuration: each of the auto scaling configuration settings allows you to set a specific number, or "Default" to choose a default based on your instance size.
-  - Desired capacity: [AWS Auto Scaling desired capacity](https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html) or ["Default"](../03-growing-your-system/growing-your-system.md#instance-size-defaults)
-  - Minimum group instances: [AWS Auto Scaling minimum size](https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html) or ["Default"](../03-growing-your-system/growing-your-system.md#instance-size-defaults).
-  - Maximum group instances: [AWS Auto Scaling maximum size](https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html) or ["Default"](../03-growing-your-system/growing-your-system.md#instance-size-defaults).
-  - The minimum number of instances during update: the number of instances that must be in service within the AWS while AWS CloudFormation updates instances, should be at least 1 less than maximum. A number or ["Default"](../03-growing-your-system/growing-your-system.md#instance-size-defaults).
+  - Desired capacity: [AWS Auto Scaling desired capacity](https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html) or ["Default"](../03-growing-your-system/growing-your-system.md#instance-defaults)
+  - Minimum group instances: [AWS Auto Scaling minimum size](https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html) or ["Default"](../03-growing-your-system/growing-your-system.md#instance-defaults).
+  - Maximum group instances: [AWS Auto Scaling maximum size](https://docs.aws.amazon.com/autoscaling/ec2/userguide/what-is-amazon-ec2-auto-scaling.html) or ["Default"](../03-growing-your-system/growing-your-system.md#instance-defaults).
+  - The minimum number of instances during update: the number of instances that must be in service within the AWS while AWS CloudFormation updates instances, should be at least 1 less than maximum. A number or ["Default"](../03-growing-your-system/growing-your-system.md#instance-defaults).
 - Client API: manage an AWS API gateway for Datomic Client API access. Most users should choose "yes". (If "no", you will have to configure VPC access for clients).
   - Concurrent Client API operations: maximum number of Client API operations a single node can process concurrently. You can set a specific number, or "Default" to choose a default based on your instance size.
 - Ions: manage an AWS API Gateway for ion web applications. Most users should choose "yes". (If "no", HTTP direct ions will be inaccessible).

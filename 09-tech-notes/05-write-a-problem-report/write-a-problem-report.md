@@ -81,7 +81,7 @@ Below are some specific tips for how to make a Clojure or Datomic repro more con
 - Naming the nouns is just as important as naming the verbs. Put query and transaction data in vars, and give them good names.
 - Every Datomic API call in a repro should either contribute to the problem or be removed from the repro. (If this sounds like I am just restating the earlier point I made about reducing the number of steps in a repro, you are damn right I am! This mechanical exercise alone would probably redirect or eliminate half of all problem reports).
 - Datomic is a distributed system, with many potential processes: transactors, peers, clients, storage services, and cluster nodes. When you describe the environment and steps for a problem, be specific about which process(es) you are describing.
-- If your repro involves more than one process, try to shrink it repro down to a single process, with either [dev-local](../../04-apis/05-datomic-local-api/datomic-local-api.md) (for client applications) or an [in-memory database](../../05-operation/01-pro/16-pro-client-getting-started/pro-client-getting-started.md#connecting) (for peer applications).
+- If your repro involves more than one process, try to shrink it repro down to a single process, with either [dev-local](../../04-apis/05-datomic-local-api/datomic-local-api.md) (for client applications) or an [in-memory database](../../05-operation/01-pro/16-pro-client-getting-started/pro-client-getting-started.md#connect-to-a-database) (for peer applications).
 
 ## Additional Resources
 

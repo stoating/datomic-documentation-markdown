@@ -8,7 +8,7 @@ Releases with four version number components are bugfix-only releases based on t
 
 ## 2025-10-23 Excision Repair Tool
 
-Datomic [Release 1.0.7469](../02-pro-change-log/pro-change-log.md#1.0.7469) fixes a bug that prevented excisions from removing datoms from the [as-of](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/as-of) or [history](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/history) indexes. This release also includes a tool to detect incomplete excisions to the index and optionally re-apply them. This bug only affects databases that contain excision datoms (`:db/excise`). This bug does not affect ordinary database values (those without [as-of](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/as-of) or [history](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/history)), nor the transaction log.
+Datomic [Release 1.0.7469](../02-pro-change-log/pro-change-log.md#107469-20251023) fixes a bug that prevented excisions from removing datoms from the [as-of](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#as-of) or [history](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#history) indexes. This release also includes a tool to detect incomplete excisions to the index and optionally re-apply them. This bug only affects databases that contain excision datoms (`:db/excise`). This bug does not affect ordinary database values (those without [as-of](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#as-of) or [history](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#history)), nor the transaction log.
 
 The tool works in both report and repair modes while the transactor runs. The tool needs read permissions to storage, like a peer. Repair mode requires write permissions.
 
@@ -27,7 +27,7 @@ The tool prints a summary map that includes an `:ok` entry. When `:ok` is `true`
 ### Repair Mode
 
 - The Datomic team recommends taking a backup prior to any repair.
-- Ensure that the transactor runs at least version [1.0.7469](../02-pro-change-log/pro-change-log.md#1.0.7469).
+- Ensure that the transactor runs at least version [1.0.7469](../02-pro-change-log/pro-change-log.md#107469-20251023).
 
 Repair mode will find and also remove datoms that the original excision did not remove. Like excision, repair is irreversible.
 
@@ -143,7 +143,7 @@ The transactor, peer, and console now require Clojure 1.8 or greater.
 
 ## 2015-03-12 0.9.5344 AWS SDK Change
 
-The full Amazon AWS SDK for Java is no longer shipped with the Datomic peer library. If you are using AWS, see the section in the [storage docs](../../../05-operation/01-pro/01-storage-services/storage-services.md#provisioning-dynamo) about including the AWS SDK for Java for help with configuring your peer with this upgrade.
+The full Amazon AWS SDK for Java is no longer shipped with the Datomic peer library. If you are using AWS, see the section in the [storage docs](../../../05-operation/01-pro/01-storage-services/storage-services.md#provisioning-dynamodb-throughput) about including the AWS SDK for Java for help with configuring your peer with this upgrade.
 
 ## 2015-09-10 0.9.5327 Bug Fix for Cassandra Storage
 

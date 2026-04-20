@@ -2,11 +2,11 @@
 
 Pull is a declarative way to make hierarchical (and possibly nested) selections of information about entities. Pull applies a *pattern* to a collection of entities, building a map for each entity. Pull is available
 
-- via the standalone `pull` API [Peer](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/pull) | [Client](../../../04-apis/03-client-api-clojuredoc/client-api-clojuredoc.md#var-pull)
-- via the [standalone `pull-many` API in Peer](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/pull-many)
+- via the standalone `pull` API [Peer](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#pull) | [Client](../../../04-apis/03-client-api-clojuredoc/client-api-clojuredoc.md#pull)
+- via the [standalone `pull-many` API in Peer](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#pull-many)
 - as a [find specification](../02-query-reference/query-reference.md#pull-expressions) in query
 
-Patterns support [forward](#attribute-names) and [reverse lookup](#reverse-lookup) attribute navigation, [wildcarding](#wildcard-specifications), [nesting](#nesting), [recursion](#recursive-specifications), [naming control](#as-option), [transformation](#xform-option), [defaults](#default-option), and [limits](#limit-option) on the results returned. Entities can be passed to pull as any kind of [entity identifier](../../02-transactions/02-transaction-data/transaction-data.md#entity-identifiers): [entity ids](../../02-transactions/02-transaction-data/transaction-data.md#eid), [idents](../../02-transactions/02-transaction-data/transaction-data.md#ident), or [lookup refs](../../02-transactions/02-transaction-data/transaction-data.md#lookup-ref).
+Patterns support [forward](#attribute-names) and [reverse lookup](#reverse-lookup) attribute navigation, [wildcarding](#wildcards), [nesting](#map-specification), [recursion](#recursive-specifications), [naming control](#as-option), [transformation](#xform-option), [defaults](#default-option), and [limits](#limit-option) on the results returned. Entities can be passed to pull as any kind of [entity identifier](../../02-transactions/02-transaction-data/transaction-data.md#entity-identifiers): [entity ids](../../02-transactions/02-transaction-data/transaction-data.md#entity-ids), [idents](../../02-transactions/02-transaction-data/transaction-data.md#idents), or [lookup refs](../../02-transactions/02-transaction-data/transaction-data.md#lookup-refs).
 
 Pull patterns are written in the [Extensible Data Notation](https://github.com/edn-format/edn) (edn), which is programming language neutral. In programs, you can create patterns programmatically out of your basic language data types, e.g. Java Strings, Lists, and Maps. Alternatively, you can pass the pattern argument as a serialized edn string.
 
@@ -145,7 +145,7 @@ The underscore prefix reverses the direction of a `pull`, so `(d/pull db [:relea
 
 ### Attribute Name Reverse Lookup Example
 
-As an exploratory measure `led-zeppelin` is pulled with a [wildcard](#wildcard-specifications). `:release/artists` is not part of the result.
+As an exploratory measure `led-zeppelin` is pulled with a [wildcard](#wildcards). `:release/artists` is not part of the result.
 
 You can navigate "backwards" from `:release/artists` to find the releases with a reference to `led-zeppelin` by pulling `:release/_artists`.
 
@@ -424,13 +424,13 @@ The `fn` is either a fully qualified function allowed under the `:xforms` key in
 - [namespace](https://clojure.github.io/clojure/clojure.core-api.html#clojure.core/namespace)
 - [clojure.edn/read-string](https://clojure.github.io/clojure/clojure.edn-api.html#clojure.edn/read-string)
 
-To use additional xform functions in Cloud follow the instructions for adding `:xforms` to [ion-config.edn](../../../07-datomic-cloud-ions/02-ions-reference/ions-reference.md#configure). To use additional xform functions in Pro, add the fully qualified function under the `:xforms` key in `resources/datomic/extensions.edn`.
+To use additional xform functions in Cloud follow the instructions for adding `:xforms` to [ion-config.edn](../../../07-datomic-cloud-ions/02-ions-reference/ions-reference.md#configuring-compute-groups). To use additional xform functions in Pro, add the fully qualified function under the `:xforms` key in `resources/datomic/extensions.edn`.
 
 The `fn` takes the value returned from the pull expression, which might be `nil`, and returns a value that will be included in the result instead. The return value needs to be supported by [transit](https://github.com/cognitect/transit-format) (Client API) or [fressian](https://github.com/Datomic/fressian/wiki) (Peer API) without any extension handlers.
 
 [:default](#default-option) values are not transformed by `:xform`, and the `:xform` result takes precedence.
 
-[`cancel`](../../../02-transactions/03-processing-transactions/processing-transactions.md#cancel) can be used to cancel xform functions and throw `ex-info` to the caller.
+[`cancel`](../../02-transactions/04-transaction-functions/transaction-functions.md#canceling-a-transaction) can be used to cancel xform functions and throw `ex-info` to the caller.
 
 ### :xform Option Example
 
@@ -650,7 +650,7 @@ Paul McCartney has an `:artist/name` but not a `:died-in-1966`, so only the form
 
 ## Legacy Attribute Expressions
 
-> NOTE: [Attribute Specifications](#attribute-with-options) provides a superset of the functionality of Legacy Attribute Expressions and is preferred, however `limit` and `default` Attribute Expressions will continue to be supported.
+> NOTE: [Attribute Specifications](#attribute-spec) provides a superset of the functionality of Legacy Attribute Expressions and is preferred, however `limit` and `default` Attribute Expressions will continue to be supported.
 
 ```
 attr-expr = [attr-name attr-option+] | legacy-attr-expr

@@ -55,11 +55,11 @@ If your application uses certain logging backends, AWS Java SDK v2 requires thes
 | `[com.datomic/peer "1.0.7469"]` | 2025/10/23 | 1.0.7469 | `Copy Peer dep` |
 
 - Fix: Indexing slowly leaks garbage segments in storage which are unrecoverable by `gc-storage`.
-- Fix: excisions may not be completely applied to [as-of](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/as-of) or [history](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/history) database values.
+- Fix: excisions may not be completely applied to [as-of](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#as-of) or [history](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#history) database values.
 
-Datomic Release 1.0.7469 fixes a bug that prevented excisions from removing datoms from the [as-of](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/as-of) or [history](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/history) indexes. This release also includes a tool to detect incomplete excisions to the index and optionally re-apply them. This bug only affects databases that contain excision datoms (`:db/excise`). This bug does not affect ordinary database values (those without [as-of](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/as-of) or [history](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/history)), nor the transaction log.
+Datomic Release 1.0.7469 fixes a bug that prevented excisions from removing datoms from the [as-of](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#as-of) or [history](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#history) indexes. This release also includes a tool to detect incomplete excisions to the index and optionally re-apply them. This bug only affects databases that contain excision datoms (`:db/excise`). This bug does not affect ordinary database values (those without [as-of](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#as-of) or [history](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#history)), nor the transaction log.
 
-See: [Excision Repair Tool](../../releases.md#excision-repair-tool).
+See: [Excision Repair Tool](../03-pro-release-notices/pro-release-notices.md#2025-10-23-excision-repair-tool).
 
 The tool works in both report and repair modes while the transactor runs. The tool needs read permissions to storage, like a peer. Repair mode requires write permissions.
 
@@ -115,7 +115,7 @@ The tool works in both report and repair modes while the transactor runs. The to
 - Performance: Reduce memory required to calculate db-stats.
 - Performance: Reduce memory required to calculate index-metrics.
 - Feature: `datomic.api/with` now supports io-stats.
-- Feature: hints. See https://docs.datomic.com/reference/hints.html
+- Feature: hints. See [Reducing Latency with Transaction Hints](../../../06-reference/02-transactions/08-reducing-latency-with-transaction-hints/reducing-latency-with-transaction-hints.md).
 
 ## 1.0.7187: 2024/08/22
 
@@ -135,9 +135,9 @@ The tool works in both report and repair modes while the transactor runs. The to
 | `datomic-pro-1.0.7180.zip` | 2024/07/11 | 1.0.7180 | [Download](https://datomic-pro-downloads.s3.amazonaws.com/1.0.7180/datomic-pro-1.0.7180.zip) |
 | `[com.datomic/peer "1.0.7180"]` | 2024/07/11 | 1.0.7180 | `Copy Peer dep` |
 
-- Feature: tx-stats. See https://docs.datomic.com/reference/tx-stats.html
-- Feature: New Cassandra3 protocol with the V4 Datastax driver. See https://docs.datomic.com/operation/storage.html#cassandra
-- Performance: Improve performance in transactions and calls to `datomic.api/with` by prefetching reads. Config option datomic.prefetchConcurrency limits the number of concurrent prefetches. See https://docs.datomic.com/operation/system-properties.html
+- Feature: tx-stats. See [Tx Stats](../../../04-apis/12-tx-stats/tx-stats.md).
+- Feature: New Cassandra3 protocol with the V4 Datastax driver. See [Provisioning Cassandra3](../../../05-operation/01-pro/01-storage-services/storage-services.md#provisioning-cassandra3).
+- Performance: Improve performance in transactions and calls to `datomic.api/with` by prefetching reads. Config option datomic.prefetchConcurrency limits the number of concurrent prefetches. See [System Properties](../../../05-operation/01-pro/10-system-properties/system-properties.md).
 - Performance: Improved transaction performance.
 - Fix: Regression introduced in 1.0.7010 where the peer jar includes compiled Clojure libraries. If your app has an existing dependency on core.async, ensure that you depend on 1.6.681 or later. An older version will cause the peer to throw a ClassCastException when connecting to a database. See the core.async changelog for more details: https://github.com/clojure/core.async?tab=readme-ov-file#changelog
 - Fix: Regression introduced in 1.0.7010 where continuous heavy transaction load could cause unbounded memory use on the transactor.
@@ -202,7 +202,7 @@ Fix: correctly deserialize URIs to java.net.URI.
 | `datomic-pro-1.0.7021.zip` | 2023/10/19 | 1.0.7021 | [Download](https://datomic-pro-downloads.s3.amazonaws.com/1.0.7021/datomic-pro-1.0.7021.zip) |
 | `[com.datomic/peer "1.0.7021"]` | 2023/10/19 | 1.0.7021 | `Copy Peer dep` |
 
-[Critical Fixes](../../releases.md#1.0.7021):
+[Critical Fixes](#107021-20231019):
 
 - Fixed regression introduced in 1.0.7010 where query thread pool could deadlock under highly concurrent load, preventing queries from completing.
 - Fixed a regression introduced in transactors in 1.0.7010: Peer tx-range can temporarily fail to return a durably-logged transaction coincident with the start of an indexing job until a few more transactions are processed.
@@ -228,7 +228,7 @@ Fix: correctly deserialize URIs to java.net.URI.
 | `datomic-pro-1.0.6735.zip` | 2023/06/30 | 1.0.6735 | [Download](https://datomic-pro-downloads.s3.amazonaws.com/1.0.6735/datomic-pro-1.0.6735.zip) |
 | `[com.datomic/peer "1.0.6735"]` | 2023/06/30 | 1.0.6735 | `Copy Peer dep` |
 
-- Feature: [separated Garbage Collection](../../../05-operation/01-pro/04-capacity-planning/capacity-planning.md#separated-garbage-collection) tool for Datomic.
+- Feature: [separated Garbage Collection](../../../05-operation/01-pro/04-capacity-planning/capacity-planning.md#separated-garbage-collection-tool-for-datomic) tool for Datomic.
 - Fixed regression introduced in 1.0.6725 that disabled health check endpoint.
 
 ## 1.0.6733: 2023/05/18
@@ -258,7 +258,7 @@ Fixed regressions introduced in 1.0.6711:
 
 ## 1.0.6711: 2023/04/20
 
-- Feature: [implicit partitions](../../../06-reference/01-schema/01-schema-reference/schema-reference.md#implicit-partitions).
+- Feature: [implicit partitions](../../../06-reference/01-schema/01-schema-reference/schema-reference.md#legacy).
 - Feature: `:db/force-partition` and `:db/match-partition`. Check [Partition assignment](../../../06-reference/02-transactions/07-partitions/partitions.md#partition-assignment).
 - Upgrade: the transactor and peer now require an LTS version of Java 1.11 or greater.
 - Upgraded artemis to 2.28.0.
@@ -298,13 +298,13 @@ Fixed regressions introduced in 1.0.6711:
 - Performance: improved performance (throughput and $) for differential backups to S3.
 - Performance: Datomic now uses caffeine instead of guava for the object cache.
 - Performance improvements for Valcache and the object cache.
-- Performance: limit thread and memory usage when the transactor is [adding an AVET index](../../../06-reference/01-schema/02-changing-schema/changing-schema.md#adding-avet-index).
+- Performance: limit thread and memory usage when the transactor is [adding an AVET index](../../../06-reference/01-schema/02-changing-schema/changing-schema.md#adding-an-avet-index-to-an-attribute).
 - Fix: peer no longer resolves lookup refs before sending tx data to transactor.
 - Fix: attribute names that begin with an underscore can be used for forward lookups in entity and pull. Note that naming attributes with a leading underscore is strongly discouraged because it conflicts with the convention for reverse lookup.
 
 ## 1.0.6397: 2022/04/05
 
-- New API: add `:release-object-cache` to [d/administer-system](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/administer-system).
+- New API: add `:release-object-cache` to [d/administer-system](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#administer-system).
 - New: expose configuration to set the Memcached item expiration in days. Check [System Properties](../../../05-operation/01-pro/10-system-properties/system-properties.md).
 - Feature: support for DynamoDB in additional regions (including eu-north-1).
 - Feature: add support for JDK17.
@@ -352,7 +352,7 @@ Upgrade Client to 1.0.126.
 
 ## 1.0.6344: 2021/09/15
 
-- New API: `Database.dbStats`. Check [dbStats](../../../04-apis/02-peer-api-javadoc/interfaces/database/database.md#dbStats--).
+- New API: `Database.dbStats`. Check [dbStats](../../../04-apis/02-peer-api-javadoc/interfaces/database/database.md#dbstats).
 - Fix: prevent a problem where in rare situations indexing jobs can fail repeatedly with an `ArityException` in the transactor log.
 - Fix: prevent a problem where in rare situations indexing jobs can fail to progress, leading to `AlarmBackPressure` and operators needing to restart the transactor process.
 - Fix: ensure that `d/log` is only as recent as `d/db`.
@@ -387,7 +387,7 @@ Upgrade Client to 1.0.126.
 
 ## 1.0.6316: 2021/07/22
 
-- New feature: AWS memcached auto-discovery. Check [node auto discovery](../../../05-operation/01-pro/08-memory-and-caching/memory-and-caching.md#node-auto-discovery).
+- New feature: AWS memcached auto-discovery. Check [node auto discovery](../../../05-operation/01-pro/08-memory-and-caching/memory-and-caching.md#automatic-node-discovery).
 - Improved performance for query under heavy parallel load.
 - Fix: attribute specs respect `false` values when ensuring attribute existence.
 
@@ -419,7 +419,7 @@ Improvement: make client dynaload thread-safe.
 
 Changed in 1.0.6222
 
-- New: change the scale of a [BigDecimal attribute](../../../06-reference/01-schema/01-schema-reference/schema-reference.md#value-types) in a transaction.
+- New: change the scale of a [BigDecimal attribute](../../../06-reference/01-schema/01-schema-reference/schema-reference.md#dbvaluetype) in a transaction.
 - New: add `:apply-msec` key to `:tx/process` events in the log, useful for identifying slow transactions.
 - Upgrade to Presto 346 for [Datomic analytics](../../../08-analytics/01-analytics-concepts/analytics-concepts.md).
 
@@ -427,7 +427,7 @@ Changed in 1.0.6222
 
 Changed in 1.0.6202
 
-- New feature: [canceling](../../../06-reference/02-transactions/04-transaction-functions/transaction-functions.md#canceling).
+- New feature: [canceling](../../../06-reference/02-transactions/04-transaction-functions/transaction-functions.md#canceling-a-transaction).
 - Upgrade: the version of the bundled Presto server is now 338. Note: This upgrade now requires Java 11 to run the Presto server.
 - Fix: prevent a race condition in Valcache that could lead to a failed read.
 - Fix: regression introduced in 1.0.6165 that caused Datomic Console to fail to start on recent versions of Datomic.
@@ -449,9 +449,9 @@ Fixed bug that caused Console to fail to start on newer versions of Datomic.
 
 ## 1.0.6165: 2020/05/14
 
-- New feature: [qseq](../../../06-reference/03-query-and-pull/02-query-reference/query-reference.md#qseq).
+- New feature: [qseq](../../../06-reference/03-query-and-pull/01-executing-queries/executing-queries.md#qseq).
 - New feature: [index-pull](../../../04-apis/06-index-pull/index-pull.md).
-- New feature: [pull xform](../../../06-reference/03-query-and-pull/03-pull/pull.md#xform).
+- New feature: [pull xform](../../../06-reference/03-query-and-pull/03-pull/pull.md#xform-option).
 - Upgrade: the transactor and peer now require Java 1.8 or greater.
 - Enhancement: optimize cache usage of queries that pull.
 - Enhancement: improve index efficiency.
@@ -461,14 +461,14 @@ Fixed bug that caused Console to fail to start on newer versions of Datomic.
 
 ## 0.9.57: 2020/05/14 - Client-Pro Update
 
-- New feature: [qseq](../../../06-reference/03-query-and-pull/02-query-reference/query-reference.md#qseq).
+- New feature: [qseq](../../../06-reference/03-query-and-pull/01-executing-queries/executing-queries.md#qseq).
 - New feature: [index-pull](../../../04-apis/06-index-pull/index-pull.md).
 - Updated jetty dependencies from 9.4.24.v20191120 to 9.4.27.v20200227.
 
 ## 0.9.6045: 2020/02/13
 
 - New feature: `[:db/retract eid aid]` will retract all values for an eid/aid combination.
-- [Critical fix](../../releases.md#0.9.6045): regression introduced in 0.9.6014 where `datoms`, `seek-datoms`, and `index-range` return incorrect results if `Iterable.iterator` is called more than once on the returned value.
+- [Critical fix](#096045-20200213): regression introduced in 0.9.6014 where `datoms`, `seek-datoms`, and `index-range` return incorrect results if `Iterable.iterator` is called more than once on the returned value.
 - Fix: respect `nil` as a limit in query `pull` expression.
 - Fix: respect `false` as a default in query `pull` expressions for boolean-valued attributes.
 - Fix: allow arbitrary `java.util.List` (not just Clojure vectors) for lookup refs.
@@ -530,7 +530,7 @@ Fixed problem where databases that change an attribute from `:db.cardinality/one
 - New feature: [attribute predicates](../../../06-reference/01-schema/01-schema-reference/schema-reference.md#attribute-predicates).
 - New feature: [entity specs](../../../06-reference/01-schema/01-schema-reference/schema-reference.md#entity-specs).
 - New feature: [return maps](../../../06-reference/03-query-and-pull/02-query-reference/query-reference.md#return-maps).
-- New feature: [Cassandra2](../../../05-operation/01-pro/01-storage-services/storage-services.md#cassandra2).
+- New feature: [Cassandra2](../../../05-operation/01-pro/01-storage-services/storage-services.md#provisioning-cassandra3).
 - Vulnerability Fix: Updated [commons Collections](https://issues.apache.org/jira/browse/COLLECTIONS-580) from 3.2.1 to 3.2.2.
 - Fix: `sample` aggregate could hang the query thread.
 - Improved performance of Valcache cleanup.
@@ -570,7 +570,7 @@ Fix: Enhancement: added sync to Client API. [Client Synchronization](../../../06
 
 ## 0.9.5703: 2018/06/06
 
-- New feature: [classpath functions](../../../06-reference/02-transactions/04-transaction-functions/transaction-functions.md#types).
+- New feature: [classpath functions](../../../06-reference/02-transactions/04-transaction-functions/transaction-functions.md#types-of-transaction-functions).
 
 ## 0.9.5697: 2018/03/29
 
@@ -638,9 +638,9 @@ Bugfixes in new functionality introduced in 0.9.5530:
 
 ## 0.9.5530: 2016/11/28
 
-- New feature: [clients and peers](../../../introduction.md#datomic-APIs) and [Peer Server](../../../05-operation/01-pro/15-peer-server/peer-server.md).
-- New feature: [string tempids](../../../06-reference/02-transactions/03-processing-transactions/processing-transactions.md#creating-temp-id).
-- Improvement: `db.install/attribute` and `db.alter/attribute` are [now optional](../../../06-reference/01-schema/02-changing-schema/changing-schema.md#explicit-schema).
+- New feature: [clients and peers](../../../introduction.md#datomic-apis) and [Peer Server](../../../05-operation/01-pro/15-peer-server/peer-server.md).
+- New feature: [string tempids](../../../06-reference/02-transactions/02-transaction-data/transaction-data.md#tempids).
+- Improvement: `db.install/attribute` and `db.alter/attribute` are [now optional](../../../06-reference/01-schema/02-changing-schema/changing-schema.md#changing-schema).
 
 ## 0.9.5407: 2016/10/28
 
@@ -691,7 +691,7 @@ Bugfixes in new functionality introduced in 0.9.5530:
 
 ## 0.9.5344: 2015/12/03
 
-- Notice: the full Amazon AWS SDK for Java is no longer shipped with the Datomic peer library. If you are using AWS, see the section in the storage docs about including the AWS SDK for Java for help with configuring your peer with this upgrade: [provisioning-dynamo](../../../05-operation/01-pro/01-storage-services/storage-services.md#provisioning-dynamo).
+- Notice: the full Amazon AWS SDK for Java is no longer shipped with the Datomic peer library. If you are using AWS, see the section in the storage docs about including the AWS SDK for Java for help with configuring your peer with this upgrade: [provisioning-dynamo](../../../05-operation/01-pro/01-storage-services/storage-services.md#provisioning-dynamodb-throughput).
 - New: the transactor and peer now require Clojure 1.7.0 or greater.
 - Improvement: remove dependency on monolithic AWS SDK for Java library.
 - Improvement: add support for eu-central-1.
@@ -713,7 +713,7 @@ Bugfixes in new functionality introduced in 0.9.5530:
 
 ## 0.9.5206: 2015/07/30
 
-- Bugfix: Document and enforce [limitations](../../../06-reference/01-schema/01-schema-reference/schema-reference.md#bytes-limitations) of `:db.type/bytes`.
+- Bugfix: Document and enforce [limitations](../../../06-reference/01-schema/01-schema-reference/schema-reference.md#limitations-of-bytes) of `:db.type/bytes`.
 
 ## 0.9.5201: 2015/07/16
 
@@ -758,10 +758,10 @@ Reduced memory and thread use in DDB storage when writing large segments.
 - Note: we are looking for feedback on this initial release of `not` clauses and `or` clauses described below. The API is subject to change based on this feedback. See [this blog post](https://blog.datomic.com/2015/01/datalog-enhancements.html) for an overview of the new features.
 - New feature: [`not` clauses](../../../06-reference/03-query-and-pull/02-query-reference/query-reference.md#not-clauses).
 - New feature: [`or` clauses](../../../06-reference/03-query-and-pull/02-query-reference/query-reference.md#or-clauses).
-- New feature: require vars [in rules](../../../06-reference/03-query-and-pull/02-query-reference/query-reference.md#basics).
+- New feature: require vars [in rules](../../../06-reference/03-query-and-pull/02-query-reference/query-reference.md#queries).
 - Improvement: backing up to the same storage is now differential.
 - Performance Enhancement: the query engine will make better use of AVET indexes when range predicates are used in the query.
-- Improvement: `Peer.getDatabaseNames` can accept a map for Cassandra and SQL storages: [getDatabaseNames](../../../04-apis/02-peer-api-javadoc/classes/peer/peer.md#getDatabaseNames-java.lang.Object-).
+- Improvement: `Peer.getDatabaseNames` can accept a map for Cassandra and SQL storages: [getDatabaseNames](../../../04-apis/02-peer-api-javadoc/classes/peer/peer.md#getdatabasenames).
 - Improvement: better error messages from invalid transactions.
 - Update com.datastax.cassandra/cassandra-driver-core to 2.0.8.
 
@@ -783,10 +783,10 @@ Reduced memory and thread use in DDB storage when writing large segments.
 ## 0.9.5052: 2014/10/28
 
 - New feature:[pull](https://blog.datomic.com/2014/10/datomic-pull.html). Check this [pull documentation](../../../06-reference/03-query-and-pull/03-pull/pull.md).
-- New feature: [query find specifications](../../../06-reference/03-query-and-pull/02-query-reference/query-reference.md#find-specifications).
+- New feature: [query find specifications](../../../06-reference/03-query-and-pull/02-query-reference/query-reference.md#find-specs).
 - New feature: [query pull expressions](../../../06-reference/03-query-and-pull/02-query-reference/query-reference.md#pull-expressions).
-- New: [Peer.getDatabaseNames](../../../04-apis/02-peer-api-javadoc/classes/peer/peer.md#getDatabaseNames-java.lang.Object-).
-- New: [peer custom monitoring](../../../05-operation/01-pro/05-monitoring-and-performance/monitoring-and-performance.md#custom).
+- New: [Peer.getDatabaseNames](../../../04-apis/02-peer-api-javadoc/classes/peer/peer.md#getdatabasenames).
+- New: [peer custom monitoring](../../../05-operation/01-pro/05-monitoring-and-performance/monitoring-and-performance.md#custom-monitoring).
 - Fixed bug that could cause `Peer.shutdown` to hang.
 - Fixed bug that could cause `Peer.createDatabase` to leak threads.
 - Fixed bug where nested queries could deadlock.
@@ -795,8 +795,8 @@ Reduced memory and thread use in DDB storage when writing large segments.
 ## 0.9.4956: 2014/10/10
 
 - Notice: PostgreSQL is no longer shipped with the Datomic peer library. If you are using PostgreSQL, see the section in the storage docs about [JDBC drivers](../../../05-operation/01-pro/01-storage-services/storage-services.md#sql-database) for help with configuring your peer with this upgrade.
-- New: `cassandra-cluster-callback` transactor property for configuring a [Cassandra](../../../05-operation/01-pro/01-storage-services/storage-services.md#cassandra) cluster.
-- New: [garbage collection](../../../05-operation/01-pro/04-capacity-planning/capacity-planning.md#garbage-collection-deleted) for deleted databases.
+- New: `cassandra-cluster-callback` transactor property for configuring a [Cassandra](../../../05-operation/01-pro/01-storage-services/storage-services.md#provisioning-cassandra3) cluster.
+- New: [garbage collection](../../../05-operation/01-pro/04-capacity-planning/capacity-planning.md#garbage-collection-for-deleted-databases) for deleted databases.
 - New: transactions now support Clojure bigint literals.
 - New: `groovysh.cmd` for Windows.
 - Improvement: better failover handling for high availability.
@@ -850,7 +850,7 @@ Transactor properties documentation can be found at [System Properties](../../..
 
 - Transactors now use the G1 garbage collector and require Java 7 or later. Peers continue to work with Java 6 or later.
 - Database backups to S3 can now use `-encryption sse` to request server-side encryption.
-- Better defaults and more configuration options for I/O utilization during backup and restore. [The Defaults](../../../05-operation/01-pro/07-backup-and-restore/backup-and-restore.md#performance) are now good for most scenarios.
+- Better defaults and more configuration options for I/O utilization during backup and restore. [The Defaults](../../../05-operation/01-pro/07-backup-and-restore/backup-and-restore.md#backup-restore-and-verify-performance) are now good for most scenarios.
 - Updated AMIs across all regions with current Amazon Linux distributions and support for HVM-based instances.
 - Added support for more Amazon instance types.
 - Prevented race condition in `deleteDatabase` that could tie up a thread writing error messages in the log.
@@ -876,7 +876,7 @@ Transactor properties documentation can be found at [System Properties](../../..
 
 ## 0.9.4766: 2014/05/21
 
-- New built-in [query expressions](../../../06-reference/03-query-and-pull/02-query-reference/query-reference.md#expression-clauses): `get-else`, `get-some`, `ground`, and `missing`.
+- New built-in [query expressions](../../../06-reference/03-query-and-pull/02-query-reference/query-reference.md#where-clauses): `get-else`, `get-some`, `ground`, and `missing`.
 - Added support for memcached-sasl, check [Caching](../../../05-operation/01-pro/08-memory-and-caching/memory-and-caching.md) for details.
 - Allow lookup refs for V position in users of VAET index, including `:db.fn/retractEntity`.
 - String representation for Connection no longer throws an exception if the connection is closed.
@@ -990,7 +990,7 @@ bin/datomic revert-to-log-version-1 {your-database-uri}
 ## 0.9.4470: 2014/01/29
 
 - New Feature: [alter schema](https://blog.datomic.com/2014/01/schema-alteration.html). This feature breaks compatibility with older versions. Once a schema alteration has been performed on a database, only connect peers and transactors running at least version 0.9.4470 to that database.
-- New API: database.[attribute](../../../04-apis/02-peer-api-javadoc/interfaces/database/database.md#attribute-java.lang.Object-) and [Attribute](../../../04-apis/02-peer-api-javadoc/interfaces/attribute/attribute.md).
+- New API: database.[attribute](../../../04-apis/02-peer-api-javadoc/interfaces/database/database.md#attribute) and [Attribute](../../../04-apis/02-peer-api-javadoc/interfaces/attribute/attribute.md).
 - New APIs: [connection.syncIndex / syncSchema / syncExcise](../../../04-apis/02-peer-api-javadoc/interfaces/connection/connection.md).
 - Datomic will now reject some unworkable memory settings, e.g. combinations of memory-index-max and object-cache-max that exceed 75% of JVM RAM.
 - Added validation to prevent conflicting unique value assertions within a transaction.

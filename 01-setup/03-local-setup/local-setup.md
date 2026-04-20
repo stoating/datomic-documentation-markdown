@@ -59,7 +59,7 @@ To explicitly request a local client, pass a map to `d/client` with:
                        :system "dev"}))
 ```
 
-If you are using Datomic Local to develop and test a Datomic Cloud application, [add the client-cloud dependency](../../02-accessing/02-client-library/client-library.md#deps) to your project. Then, to divert an existing Datomic Cloud system to Datomic Local, call [divert-system](../../04-apis/05-datomic-local-api/datomic-local-api.md#divert-system):
+If you are using Datomic Local to develop and test a Datomic Cloud application, [add the client-cloud dependency](../../02-accessing/02-client-library/client-library.md#clojure-cli) to your project. Then, to divert an existing Datomic Cloud system to Datomic Local, call [divert-system](../../04-apis/05-datomic-local-api/datomic-local-api.md#divert-system):
 
 ```clojure
 (require '[datomic.local :as dl])

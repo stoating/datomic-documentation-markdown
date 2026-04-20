@@ -1,19 +1,19 @@
 # How To
 
-- [Install the AWS CLI](#install-cli)
-- [Manage AWS Access Keys for Datomic](#aws-access-keys)
-- [Install Clojure CLI](#clojure-cli)
-- [Install Ion-Dev Tools](#ion-dev)
-- [Install Ion Library](#ion)
+- [Install the AWS CLI](#install-the-aws-cli)
+- [Manage AWS Access Keys for Datomic](#manage-aws-access-keys-for-datomic)
+- [Install Clojure CLI](#install-clojure-cli)
+- [Install Ion-Dev Tools](#install-ion-dev-tools)
+- [Install Ion Library](#install-ion-library)
 - [Delete Ion lambdas](#delete-ion-lambdas)
-- [Control Shell Scripts](#control-scripts)
-- [Find Datomic System Name](#system-name)
+- [Control Shell Scripts](#control-shell-scripts)
+- [Find Datomic System Name](#find-datomic-system-name)
 - [Find Datomic Nodes](#find-datomic-nodes)
-- [Find Compute Group Name](#compute-group-name)
-- [Find Datomic Application Name](#application-name)
-- [Find System S3 Bucket](#s3-bucket)
-- [Find Ion Code Bucket](#ion-code-bucket)
-- [Find Template Outputs](#template-outputs)
+- [Find Compute Group Name](#find-compute-group-name)
+- [Find Datomic Application Name](#find-datomic-application-name)
+- [Find System S3 Bucket](#find-system-s3-bucket)
+- [Find Ion Code Bucket](#find-ion-code-bucket)
+- [Find Template Outputs](#find-template-outputs)
 - [Upgrade Base Schema](#upgrade-base-schema)
 - [Legacy](#legacy)
 
@@ -25,13 +25,13 @@
 aws --version
 ```
 
-> Running the `datomic-socks-proxy` script with an earlier version of the AWS CLI will result in a [generic error message](../13-cloud-troubleshooting/cloud-troubleshooting.md#unsupported-aws-cli) and failure of the script.
+> Running the `datomic-socks-proxy` script with an earlier version of the AWS CLI will result in a [generic error message](../13-cloud-troubleshooting/cloud-troubleshooting.md#unsupported-aws-cli-version) and failure of the script.
 
 If you require multiple versions of the AWS CLI to be installed, then investigate [using Python's virtual environments](https://packaging.python.org/tutorials/installing-packages/#creating-virtual-environments), or the third-party [virtualenv solution](https://virtualenv.pypa.io/en/latest/).
 
 ## Manage AWS Access Keys for Datomic
 
-The Datomic [CLI tools](../07-cli-tools/cli-tools.md) and [ion deployment tools](../../../07-datomic-cloud-ions/02-ions-reference/ions-reference.md#deploying) require that you have a set of AWS access keys with permissions to access Datomic. To create these keys, you must have an [authorized IAM user](../06-access-control/access-control.md). With this user you can then:
+The Datomic [CLI tools](../07-cli-tools/cli-tools.md) and [ion deployment tools](../../../07-datomic-cloud-ions/02-ions-reference/ions-reference.md#deploy) require that you have a set of AWS access keys with permissions to access Datomic. To create these keys, you must have an [authorized IAM user](../06-access-control/access-control.md). With this user you can then:
 
 - [Create access keys](http://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html)
 - [Add access keys to your environment](http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html#cli-quick-configuration)
@@ -54,7 +54,7 @@ The Datomic ion-dev tools should be installed via an alias in your [user deps.ed
 "datomic-cloud" {:url "s3://datomic-releases-1fc2183a/maven/releases"}
 ```
 
-- Then add an `:ion-dev` entry under your `:aliases` key with the [latest version](../../../11-releases/releases.md#current) of ion-dev:
+- Then add an `:ion-dev` entry under your `:aliases` key with the [latest version](../../../11-releases/releases.md) of ion-dev:
 
 ```clojure
 :ion-dev
@@ -76,7 +76,7 @@ The Datomic ion library has to be installed in the deps.edn for each ion project
 "datomic-cloud" {:url "s3://datomic-releases-1fc2183a/maven/releases"}
 ```
 
-- Then add the [latest version](../../../11-releases/releases.md#current) of ion-dev to your `:deps`:
+- Then add the [latest version](../../../11-releases/releases.md) of ion-dev to your `:deps`:
 
 ```clojure
 com.datomic/ion {:mvn/version "1.0.71"}
@@ -113,7 +113,7 @@ You can list the names of all running Datomic nodes using:
 
 or
 
-- Utilize the following [AWS CLI](#install-cli) command, replacing `[region]` with the region you want to query:
+- Utilize the following [AWS CLI](#install-the-aws-cli) command, replacing `[region]` with the region you want to query:
 
 ```sh
 aws ec2 describe-instances --region [region] --filters "Name=tag-key,Values=datomic:tx-group" "Name=instance-state-name,Values=running" --query 'Reservations[*].Instances[*].[Tags[?Key==`datomic:system`].Value]' --output text
@@ -201,12 +201,12 @@ All Datomic systems include one or more CloudFormation stacks. To check whether 
 
 or
 
-- Find your system's [primary compute group](#compute-group-name) in the CloudFormation console.
+- Find your system's [primary compute group](#find-compute-group-name) in the CloudFormation console.
 - If the CloudFormation template has a `DatomicProductionCompute` key in its Outputs, the system is running the *production* topology. If the key is absent, the system is running *solo*.
 
 ### Convert from Solo to Production (Legacy)
 
-> This section only applies to [Datomic 781-9041](../../../11-releases/02-datomic-cloud/02-cloud-change-log/cloud-change-log.md#781-9041) and lower.
+> This section only applies to [Datomic 781-9041](../../../11-releases/02-datomic-cloud/02-cloud-change-log/cloud-change-log.md#20210302-781-9041-compute-update) and lower.
 
 To update your system from solo to production [topology](../01-cloud-architecture/cloud-architecture.md#high-availability):
 

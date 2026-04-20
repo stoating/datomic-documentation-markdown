@@ -18,7 +18,7 @@ When a transaction times out, the peer does not know whether the transaction suc
 
 ### Monitoring Transactions
 
-Peers can monitor all transactions being processed by the system's transactor. In the Peer API, [tx-report-queue](../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/tx-report-queue) returns a queue of transaction notifications.
+Peers can monitor all transactions being processed by the system's transactor. In the Peer API, [tx-report-queue](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#tx-report-queue) returns a queue of transaction notifications.
 
 The queue delivers a report for every transaction submitted while a peer is connected to the database, even those submitted by other peers.
 
@@ -29,9 +29,9 @@ Reports are records with the following keys:
 | `:db-before` | database value before the transaction |
 | `:db-after` | database value after the transaction |
 | `:tx-data` | datoms produced by the transaction |
-| `:tempids` | argument to [resolve-tempid](../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/resolve-tempid) |
+| `:tempids` | argument to [resolve-tempid](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#resolve-tempid) |
 
-It is the responsibility of your application to empty the queue. When you are done monitoring the queue, remove it by calling [remove-tx-report-queue](../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/remove-tx-report-queue) otherwise it will continue to accumulate transaction reports and consume memory.
+It is the responsibility of your application to empty the queue. When you are done monitoring the queue, remove it by calling [remove-tx-report-queue](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#remove-tx-report-queue) otherwise it will continue to accumulate transaction reports and consume memory.
 
 This example shows how to connect to the notification queue, and retrieve a transaction report from it:
 

@@ -94,9 +94,9 @@ At least one of *inputs* or *where-clauses* must be specified.
 
 Datomic offers multiple ways to query:
 
-- `q` [Peer API](../../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/q) | [Client API](../../../../04-apis/03-client-api-clojuredoc/client-api-clojuredoc.md#var-q)
-- `query` [Peer API](../../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/query) | [Client API arity-1](../../../../04-apis/03-client-api-clojuredoc/client-api-clojuredoc.md#var-q)
-- `qseq` [Peer API](../../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/qseq)
+- `q` [Peer API](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#q) | [Client API](../../../04-apis/03-client-api-clojuredoc/client-api-clojuredoc.md#q)
+- `query` [Peer API](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#query) | [Client API arity-1](../../../04-apis/03-client-api-clojuredoc/client-api-clojuredoc.md#q)
+- `qseq` [Peer API](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#qseq)
 
 ### Query Example
 
@@ -229,10 +229,10 @@ This example uses `songs-by-artist` to find all tracks for an artist, then uses 
 
 ## Custom Query Functions
 
-You can write your own custom functions for use as [aggregates](#aggregates), [predicates](#predicates), or [functions](#functions) clauses in query. To make these functions available in Datomic Pro, follow the instructions to [deploy transaction functions](../../02-transactions/04-transaction-functions/transaction-functions.md#deploying).
-To make these functions available in Datomic Cloud, follow the instructions to deploy as an [ion](../../../../07-datomic-cloud-ions/02-ions-reference/ions-reference.md#ion-config).
+You can write your own custom functions for use as [aggregates](#aggregates), [predicates](#predicates), or [functions](#functions) clauses in query. To make these functions available in Datomic Pro, follow the instructions to [deploy transaction functions](../../02-transactions/04-transaction-functions/transaction-functions.md#deploying-transaction-functions).
+To make these functions available in Datomic Cloud, follow the instructions to deploy as an [ion](../../../07-datomic-cloud-ions/02-ions-reference/ions-reference.md#ion-config).
 
-You can [cancel](../../02-transactions/04-transaction-functions/transaction-functions.md#canceling) custom query functions.
+You can [cancel](../../02-transactions/04-transaction-functions/transaction-functions.md#canceling-a-transaction) custom query functions.
 
 ## Return Maps
 
@@ -359,7 +359,7 @@ More than one artist can have the same name. The following query uses *count* to
      db)
 ```
 
-Note the use of a [with-clause](#with) so that equal names do not coalesce.
+Note the use of a [with-clause](#with-clauses) so that equal names do not coalesce.
 
 #### Statistics: median, avg, variance, and stddev
 
@@ -835,8 +835,8 @@ Datomic provides the following built-in expression functions and predicates:
   - [tuple](#tuple)
   - [untuple](#untuple)
 - A set of functions that are aware of Datomic's Log:
-  - [tx-ids](../../../../04-apis/08-log-api/log-api.md#log-in-query) [Peer API]
-  - [tx-data](../../../../04-apis/08-log-api/log-api.md#log-in-query) [Peer API]
+  - [tx-ids](../../../04-apis/08-log-api/log-api.md#log-in-query-tx-ids-and-tx-data) [Peer API]
+  - [tx-data](../../../04-apis/08-log-api/log-api.md#log-in-query-tx-ids-and-tx-data) [Peer API]
 
 Comparison and math operators work as in Clojure with the exception that `/` will work like [quot](https://clojuredocs.org/clojure.core/quot) when called with integer arguments to avoid introducing Clojure's ratio type to other language callers that cannot support it.
 
@@ -948,7 +948,7 @@ The following query finds all artists whose start year is not recorded in the da
 
 ### q
 
-The *q* function allows you to perform nested queries, and takes the same arguments as the variable-arity [q api function](../../../../04-apis/03-client-api-clojuredoc/client-api-clojuredoc.md#var-q).
+The *q* function allows you to perform nested queries, and takes the same arguments as the variable-arity [q api function](../../../04-apis/03-client-api-clojuredoc/client-api-clojuredoc.md#q).
 
 The example below shows using a nested query to bind the `?duration` variable for use by an enclosing query that returns the entity id and name of the shortest tracks:
 
@@ -1092,7 +1092,7 @@ Not clauses are evaluated like a subquery and return a set of tuples that is use
 
 ### Insufficient Binding for a Not Clause
 
-All variables used in a *not* clause will unify with the surrounding query. This includes both the arguments to nested expression clauses as well as any bindings made by nested function expressions. Datomic will attempt to push the *not* clause down until all necessary variables are bound, and will throw an `::anom/incorrect` [anomaly](../../../../04-apis/13-error-handling/error-handling.md) if that is not possible.
+All variables used in a *not* clause will unify with the surrounding query. This includes both the arguments to nested expression clauses as well as any bindings made by nested function expressions. Datomic will attempt to push the *not* clause down until all necessary variables are bound, and will throw an `::anom/incorrect` [anomaly](../../../04-apis/13-error-handling/error-handling.md) if that is not possible.
 
 The query below demonstrates the problem. It attempts to remove eids that are not associated with an `:artist/country`, without ever finding a set of eids to begin with:
 
@@ -1370,7 +1370,7 @@ Rules with multiple definitions will evaluate them as different logical paths to
 
 Rules normally operate exactly like other items in a where clause. They must unify with the variables already bound, and must bind any variables not already bound.
 
-But sometimes you know that a rule will only be correct, or only be efficient, if some variables are already bound. You can require that some variables be bound before a rule can fire by enclosing the required variables in a vector or list as the first argument to the rule. If the required variables are not bound, Datomic will report an incorrect [anomaly](../../../../04-apis/13-error-handling/error-handling.md).
+But sometimes you know that a rule will only be correct, or only be efficient, if some variables are already bound. You can require that some variables be bound before a rule can fire by enclosing the required variables in a vector or list as the first argument to the rule. If the required variables are not bound, Datomic will report an incorrect [anomaly](../../../04-apis/13-error-handling/error-handling.md).
 
 In the example below, the `track-info` rule has `?artist` as a required binding, and a query that does not bind `?artist` fails:
 

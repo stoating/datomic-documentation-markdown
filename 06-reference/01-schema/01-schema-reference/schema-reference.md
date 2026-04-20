@@ -56,24 +56,24 @@ boolean     = ('true' | 'false')
 
 The grammar above shows only the attributes that are built-in to Datomic schema. Just like all other entities in Datomic, schema entities are open and can have any attributes you define added to them.
 
-The grammar shows only the transaction [map form](../../02-transactions/02-transaction-data/transaction-data.md#map-forms). It is also possible to define schema with the more verbose transaction [list form](../../02-transactions/02-transaction-data/transaction-data.md#list-forms), as these forms are semantically equivalent.
+The grammar shows only the transaction [map form](../../02-transactions/02-transaction-data/transaction-data.md#map-forms). It is also possible to define schema with the more verbose transaction [list form](../../02-transactions/02-transaction-data/transaction-data.md#grammar), as these forms are semantically equivalent.
 
 Because schema is composed of ordinary Datomic data, the schema grammar is a specialization of the [transaction grammar](../../02-transactions/02-transaction-data/transaction-data.md#grammar). The shared grammar elements `tx-entid`, `identifier`, `eid`, `lookup-ref`, and `ident` are documented there.
 
 ## Defining Schema
 
-Attributes are defined using the same data model used for application data. That is, attributes are themselves defined by entities with associated attributes and are added to the database using [`d/transact`](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/transact).
+Attributes are defined using the same data model used for application data. That is, attributes are themselves defined by entities with associated attributes and are added to the database using [`d/transact`](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#transact).
 
 | Name | Purpose | Required? |
 |------|---------|-----------|
-| `:db/ident` | specifies a unique programmatic name for an entity (normally a schema entity) | [Required](#db-ident) for schema entities |
-| `:db/cardinality` | specifies whether an attribute associates a single value or a set of values | [Required](#db-cardinality) |
-| `:db/valueType` | specifies the type of value that can be associated with an attribute | [Required](#db-valuetype) |
-| `:db/unique` | specifies a uniqueness constraint for the values of an attribute | [Optional](#db-unique) |
+| `:db/ident` | specifies a unique programmatic name for an entity (normally a schema entity) | [Required](#dbident) for schema entities |
+| `:db/cardinality` | specifies whether an attribute associates a single value or a set of values | [Required](#dbcardinality) |
+| `:db/valueType` | specifies the type of value that can be associated with an attribute | [Required](#dbvaluetype) |
+| `:db/unique` | specifies a uniqueness constraint for the values of an attribute | [Optional](#dbunique) |
 | `:db/index` | specifies a boolean value indicating that an index should be generated for this attribute. Defaults to false. | Optional |
-| `:db/isComponent` | specifies whether an attribute is a ref to a component entity | [Optional](#db-iscomponent) |
-| `:db/noHistory` | specifies whether historical values should be forgotten for an attribute | [Optional](#db-nohistory) |
-| `:db/doc` | specifies a documentation string for an attribute | [Optional](#db-doc) |
+| `:db/isComponent` | specifies whether an attribute is a ref to a component entity | [Optional](#dbiscomponent) |
+| `:db/noHistory` | specifies whether historical values should be forgotten for an attribute | [Optional](#dbnohistory) |
+| `:db/doc` | specifies a documentation string for an attribute | [Optional](#dbdoc) |
 | `:db.attr/preds` | specifies one or more predicates that constrain an attribute's value by more than just its value type | [Optional](#attribute-predicates) |
 | `:db/fulltext` | specifies a boolean value indicating that an eventually consistent fulltext search index should be generated for the attribute. Defaults to false. | Optional; not supported in Cloud |
 
@@ -171,8 +171,8 @@ These characteristics also imply situations where idents should *not* be used:
 
 Idents can be used instead of entity ids in the following API calls:
 
-- As the sole argument to [`d/entity`](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/entity)
-- In the E, A, and V positions of assertions and retractions passed to [`d/transact`](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/transact) and [`d/with`](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/with)
+- As the sole argument to [`d/entity`](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#entity)
+- In the E, A, and V positions of assertions and retractions passed to [`d/transact`](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#transact) and [`d/with`](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#with)
 - In the E, A, and V positions of a [where clause](../../03-query-and-pull/02-query-reference/query-reference.md#where-clauses) in a query
 
 ### Allowable Values
@@ -191,7 +191,7 @@ If using underscores in `:db/ident` values, do not use as the first character in
 
 A component entity is one that exists only as part of a larger parent entity.
 
-The optional `:db/isComponent` attribute specifies that an attribute whose [`:db/valueType`](#db-valuetype) is `:db.type/ref` refers to a sub-component of the entity to which the attribute is applied. When you retract an entity with [`d/fn/retractEntity`](../../02-transactions/04-transaction-functions/transaction-functions.md#db-retractentity), all sub-components are also retracted.
+The optional `:db/isComponent` attribute specifies that an attribute whose [`:db/valueType`](#dbvaluetype) is `:db.type/ref` refers to a sub-component of the entity to which the attribute is applied. When you retract an entity with [`d/fn/retractEntity`](../../02-transactions/04-transaction-functions/transaction-functions.md#dbretractentity), all sub-components are also retracted.
 
 Omitting `:db/isComponent` for an entity is semantically equivalent to setting it to `false`.
 
@@ -205,7 +205,7 @@ Omitting `:db/isComponent` for an entity is semantically equivalent to setting i
 
 By default, Datomic maintains all historical values of an attribute. To disable this, set `:db/noHistory` to true. The purpose of `:db/noHistory` is to conserve storage, not to make semantic guarantees about removing information.
 
-`:db/noHistory` is often used for [high churn attributes](../../08-best-practices/best-practices.md#nohistory-for-high-churn) along with attributes that you do not require a history of.
+`:db/noHistory` is often used for [high churn attributes](../../08-best-practices/best-practices.md#use-nohistory-for-high-churn-attributes) along with attributes that you do not require a history of.
 
 Note: excision relies on full entity history to identify excision targets. `:db/noHistory` attributes do not guarantee full history nor precisely when history is removed. Therefore excision cannot guarantee full removal of all datoms with a `:db/noHistory` attribute from index and log. If you need this guarantee, do not use `:db/noHistory`.
 
@@ -227,7 +227,7 @@ Adding a unique constraint does not change history, therefore historical databas
 
 ### :db.unique/identity
 
-Unique identity is specified through an attribute with `:db/unique` set to `:db.unique/identity`. Unique identity is appropriate whenever you want to assert a database-wide unique identifier for an entity. Common use cases include email addresses, account names, product codes/skus, and UUIDs. If transaction data includes a tempid + unique identity, and an entity with that identity already exists in the database, Datomic will unify the new transaction data with the existing entity id. This enables ["upsert"](../../12-glossary/glossary.md#upsert), e.g.
+Unique identity is specified through an attribute with `:db/unique` set to `:db.unique/identity`. Unique identity is appropriate whenever you want to assert a database-wide unique identifier for an entity. Common use cases include email addresses, account names, product codes/skus, and UUIDs. If transaction data includes a tempid + unique identity, and an entity with that identity already exists in the database, Datomic will unify the new transaction data with the existing entity id. This enables ["upsert"](../../../12-glossary/glossary.md#upsert), e.g.
 
 ```clojure
 {:db/ident       :person/email
@@ -247,7 +247,7 @@ Unique identity is specified through an attribute with `:db/unique` set to `:db.
 [:db/add 42 :person/age 50]
 ```
 
-An entity can have multiple different unique attributes, however, this creates the possibility of encountering a [conflict anomaly](../../../04-apis/13-error-handling/error-handling.md). If a transaction tries to ["upsert"](../../12-glossary/glossary.md#upsert) a tempid into two *different* existing entities. For example, if entity 42 has the unique email `johndoe@example.com`, and entity 43 has the unique account number `1007`, then a transaction cannot claim that a new entity has both an email of `johndoe@example.com` and an account number of `1007`.
+An entity can have multiple different unique attributes, however, this creates the possibility of encountering a [conflict anomaly](../../../04-apis/13-error-handling/error-handling.md). If a transaction tries to ["upsert"](../../../12-glossary/glossary.md#upsert) a tempid into two *different* existing entities. For example, if entity 42 has the unique email `johndoe@example.com`, and entity 43 has the unique account number `1007`, then a transaction cannot claim that a new entity has both an email of `johndoe@example.com` and an account number of `1007`.
 
 ### :db.unique/value
 
@@ -318,7 +318,7 @@ String values within a tuple are limited to 256 characters.
 
 `nil` is a legal value for any slot in a tuple. This facilitates using tuples in range searches, where `nil` sorts lowest.
 
-Datomic includes the query helpers [tuple](../../03-query-and-pull/03-pull/pull.md#tuple) and [untuple](../../03-query-and-pull/03-pull/pull.md#untuple) for working with tuples in queries.
+Datomic includes the query helpers [tuple](../../03-query-and-pull/02-query-reference/query-reference.md#tuple) and [untuple](../../03-query-and-pull/02-query-reference/query-reference.md#untuple) for working with tuples in queries.
 
 ### Composite Tuples
 
@@ -539,7 +539,7 @@ Attribute predicates must be on the classpath of a process that is performing a 
 
 Attribute predicates can be asserted or retracted at any time, and will be enforced starting on the transaction after they are asserted. Asserting or retracting an attribute predicate does not affect attribute values that already exist in the database.
 
-Attribute predicates can [cancel](../../02-transactions/04-transaction-functions/transaction-functions.md#canceling) the transaction directly.
+Attribute predicates can [cancel](../../02-transactions/04-transaction-functions/transaction-functions.md#canceling-a-transaction) the transaction directly.
 
 ## Entity Specs
 
@@ -607,7 +607,7 @@ When a required attribute is missing, Datomic will throw an anomaly whose `ex-da
 
 The `:db.entity/preds` attribute is a multi-valued attribute of symbols, where each symbol names a predicate of database value and entity id. Inside a transaction, Datomic will call all predicates, and abort the transaction if any predicate returns a value that is not `true`.
 
-For example, given the following predicate that has been [deployed](../../02-transactions/04-transaction-functions/transaction-functions.md#deploying):
+For example, given the following predicate that has been [deployed](../../02-transactions/04-transaction-functions/transaction-functions.md#deploying-transaction-functions):
 
 ```clojure
 (ns datomic.samples.entity-preds
@@ -649,7 +649,7 @@ Datomic will report the value returned by the failing predicate under the `:db.e
 
 A full example can be found [in Day of Datomic Cloud](https://github.com/cognitect-labs/day-of-datomic-cloud/blob/master/tutorial/entity_specs.clj)
 
-[`d/cancel`](../../02-transactions/04-transaction-functions/transaction-functions.md#canceling) can be used directly from entity predicates to cancel the transaction.
+[`d/cancel`](../../02-transactions/04-transaction-functions/transaction-functions.md#canceling-a-transaction) can be used directly from entity predicates to cancel the transaction.
 
 ### Number of Schema Elements
 
@@ -674,5 +674,5 @@ The `:db.type/bytes` value type has been deprecated because it maps directly to 
 Bytes attributes **cannot** be used in situations that require value semantics:
 
 - Cannot be unique and therefore cannot be used to lookup an entity
-- Cannot be used in [Datomic Cloud](../../../introduction.md#datomic-editions)
-- Cannot be used with [analytics](../../08-analytics/01-analytics-concepts/analytics-concepts.md)
+- Cannot be used in [Datomic Cloud](../../../introduction.md)
+- Cannot be used with [analytics](../../../08-analytics/01-analytics-concepts/analytics-concepts.md)

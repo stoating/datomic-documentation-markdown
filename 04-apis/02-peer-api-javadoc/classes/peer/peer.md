@@ -282,7 +282,7 @@ Returns the partition of this [entity id](../../../../06-reference/01-schema/04-
 
 `public static Collection<List<Object>> q(Object query, Object... inputs)`
 
-Like [`query(Object, Object...)`](#query), but with a more specific return signature. Supports the same [grammar](../../../../06-reference/03-query-and-pull/02-query-reference/query-reference.md#grammar) as `query`, except for `find-coll`, `find-scalar`, and `find-tuple`.
+Like [`query(Object, Object...)`](#query), but with a more specific return signature. Supports the same [grammar](../../../../06-reference/03-query-and-pull/02-query-reference/query-reference.md#query-grammar) as `query`, except for `find-coll`, `find-scalar`, and `find-tuple`.
 
 ---
 
@@ -302,7 +302,7 @@ In addition to basic pattern matching, query supports:
 - find specification for outputs
 - pull patterns
 
-Query can be applied to multiple inputs, including both databases and plain old data. See the [grammar](../../../../06-reference/03-query-and-pull/02-query-reference/query-reference.md#grammar) and [documentation](../../../../06-reference/03-query-and-pull/02-query-reference/query-reference.md#queries) for complete details.
+Query can be applied to multiple inputs, including both databases and plain old data. See the [grammar](../../../../06-reference/03-query-and-pull/02-query-reference/query-reference.md#query-grammar) and [documentation](../../../../06-reference/03-query-and-pull/02-query-reference/query-reference.md#queries) for complete details.
 
 Query runs locally in a Peer process. Query is set-based: intermediate and final result sets must fit in memory.
 
@@ -321,7 +321,7 @@ The `inputs` can be any of:
 
 If a single database value is provided as input, then no `:in` section is required in the `query`.
 
-**Type Parameters:** `T` — a type compatible with the [find specification](../../../../06-reference/03-query-and-pull/02-query-reference/query-reference.md#find-specifications)
+**Type Parameters:** `T` — a type compatible with the [find specification](../../../../06-reference/03-query-and-pull/02-query-reference/query-reference.md#find-specs)
 
 **Parameters:**
 - `query` — a data structure describing the query

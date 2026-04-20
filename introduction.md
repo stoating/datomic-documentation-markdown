@@ -99,7 +99,7 @@ The pervasive use of immutable data in the API and in interprocess communication
 The live (recent) index in every application process eliminates the need to rebuild the indexes on every transaction.
 Current Datomic editions combine transactions, catalog operations, and indexing in the same processes. This is not fundamental to Datomic’s design, and could be further simplified in the future.
 
-Datomic Editions
+## Datomic Editions
 Datomic is available in three editions: Local, Pro, and Cloud. The table below explores the differences in detail, but the choice is usually fairly straightforward:
 
 Datomic Local is an embedded database for use in a single process. It uses the local file system for storage, and is suitable for single-process applications that do not need high availability or scale.
@@ -108,7 +108,7 @@ Datomic Cloud is a distributed database that runs exclusively on AWS. Datomic Cl
 
 
 
-Datomic APIs
+## Datomic APIs
 Datomic has two programmatic APIs, the client API and the peer API. Both APIs deliver access to the entire information model and architecture of Datomic discussed above. They differ in presumptions about data locality, communication mode, availability in Datomic editions, and access to some features specific to Datomic Pro.
 
 The client API makes no presumptions about the location of the query engine, which might be in the same process or might be across a client/server connection. The client API supports both synchronous and asynchronous communication modes. The client API is available in all Datomic editions, which makes it the best choice for library code that needs the greatest reach. The client API is the only choice for Datomic Cloud and Datomic Local.

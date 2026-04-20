@@ -24,22 +24,22 @@ An immutable, point-in-time database value.
 | Modifier and Type | Method | Description |
 |---|---|---|
 | `Database` | [`asOf(Object t)`](#asof) | Returns the value of the database filtered to include data up to `t`, inclusive |
-| `Long` | [`asOfT()`](#asOft) | [`asOf(Object)`](#asof) [t value](../../../../12-glossary/glossary.md#t). |
-| `Attribute` | [`attribute(Object attrId)`](#attribute) | Returns information about an [attribute](../../../../06-reference/01-schema/01-schema-reference/schema-reference.md#attributes). |
+| `Long` | [`asOfT()`](#asoft) | [`asOf(Object)`](#asof) [t value](../../../../12-glossary/glossary.md#t). |
+| `Attribute` | [`attribute(Object attrId)`](#attribute) | Returns information about an [attribute](../../../../06-reference/01-schema/01-schema-reference/schema-reference.md#defining-schema). |
 | `long` | [`basisT()`](#basist) | [t value](../../../../12-glossary/glossary.md#t) of the most recent transaction in this db. |
-| `Iterable<Datom>` | [`datoms(Object index, Object... components)`](#datoms) | Implements the [Datoms API](../../../../06-reference/04-indexes/01-index-model/index-model.md#datoms-api) for raw access to matching index data. |
+| `Iterable<Datom>` | [`datoms(Object index, Object... components)`](#datoms) | Implements the [Datoms API](../../../07-index-apis/index-apis.md#datoms-api) for raw access to matching index data. |
 | `Map` | [`dbStats()`](#dbstats) | Queries for database stats. |
 | `Object` | [`entid(Object entityId)`](#entid) | Returns the entity id associated with any kind of entity identifier. |
 | `Object` | [`entidAt(Object partition, Object timePoint)`](#entidat) | Returns a fabricated entity id in the supplied partition whose T component is at or after the supplied t |
 | `Entity` | [`entity(Object entityId)`](#entity) | Returns an [entity](../../../../06-reference/07-entities/entities.md): a lazy, dynamic associative view of datoms sharing an entity id. |
 | `Database` | [`filter(Database.Predicate<Datom> pred)`](#filterdatabasepredicatedatom-pred) | Returns a value of the database containing only Datoms satisfying the predicate. |
-| `Database` | [`filter(Object pred)`](#filter-object-pred) |  |
+| `Database` | [`filter(Object pred)`](#filterobject-pred) |  |
 | `Database` | [`history()`](#history) | Returns a history database value containing all assertions and retractions across time. |
 | `String` | [`id()`](#id) | Opaque, globally unique database id. |
 | `Object` | [`ident(Object idOrKey)`](#ident) | Returns the symbolic keyword associated with an id, or the key itself if passed. |
 | `Stream<Object>` | [`indexPull(Object options)`](#indexpull) | Walks an index, pulling entities via `:e` if `:avet` or `:v` if `:aevt`, using the selector, returning a Stream of the results. |
 | `Iterable<Datom>` | [`indexRange(Object attrid, Object start, Object end)`](#indexrange) | Returns a range of [AVET-indexed](../../../../06-reference/04-indexes/01-index-model/index-model.md#avet) datoms. |
-| `Object` | [`invoke(Object entityId, Object... args)`](#invoke) | Look up the [database function](../../../../06-reference/database-functions/database-functions.md) of the entity at `entityId`, and invoke the function with `args`. |
+| `Object` | [`invoke(Object entityId, Object... args)`](#invoke) | Look up the [database function](../../../../06-reference/02-transactions/04-transaction-functions/transaction-functions.md) of the entity at `entityId`, and invoke the function with `args`. |
 | `boolean` | [`isFiltered()`](#isfiltered) | Does database have a filter set with e.g. [`filter(Database.Predicate)`](#filterdatabasepredicatedatom-pred)? |
 | `boolean` | [`isHistory()`](#ishistory) | True for databases created with [`history()`](#history) |
 | `long` | [`nextT()`](#nextt) | next [t value](../../../../12-glossary/glossary.md#t) that will be assigned by this database. |
@@ -259,7 +259,7 @@ Returns an [entity](../../../../06-reference/07-entities/entities.md): a lazy, d
 
 `Attribute attribute(Object attrId)`
 
-Returns information about an [attribute](../../../../06-reference/01-schema/01-schema-reference/schema-reference.md#attributes).
+Returns information about an [attribute](../../../../06-reference/01-schema/01-schema-reference/schema-reference.md#defining-schema).
 
 **Parameters:**
 - `attrId` — an [entity identifier](../../../../06-reference/01-schema/04-identity-and-uniqueness/identity-and-uniqueness.md#entity-identifiers) for an attribute
@@ -314,7 +314,7 @@ Returns a fabricated entity id in the supplied partition whose T component is at
 
 `Object invoke(Object entityId, Object... args)`
 
-Look up the [database function](../../../../06-reference/database-functions/database-functions.md) of the entity at `entityId`, and invoke the function with `args`.
+Look up the [database function](../../../../06-reference/02-transactions/04-transaction-functions/transaction-functions.md) of the entity at `entityId`, and invoke the function with `args`.
 
 **Parameters:**
 - `entityId` — an [entity identifier](../../../../06-reference/01-schema/04-identity-and-uniqueness/identity-and-uniqueness.md#entity-identifiers)
@@ -328,7 +328,7 @@ Look up the [database function](../../../../06-reference/database-functions/data
 
 `Iterable<Datom> datoms(Object index, Object... components)`
 
-Implements the [Datoms API](../../../../06-reference/04-indexes/01-index-model/index-model.md#datoms-api) for raw access to matching index data. The index must be supplied, and, optionally, one or more leading components of the index can be supplied to narrow the result.
+Implements the [Datoms API](../../../07-index-apis/index-apis.md#datoms-api) for raw access to matching index data. The index must be supplied, and, optionally, one or more leading components of the index can be supplied to narrow the result.
 
 [EAVT](../../../../06-reference/04-indexes/01-index-model/index-model.md#eavt) and [AEVT](../../../../06-reference/04-indexes/01-index-model/index-model.md#aevt) indexes will contain all datoms. [AVET](../../../../06-reference/04-indexes/01-index-model/index-model.md#avet) will contain datoms for attributes where either `:db/index` or `:db/unique` are true. [VAET](../../../../06-reference/04-indexes/01-index-model/index-model.md#avet) will contain datoms for attributes of `:db.type/ref` — it is the reverse index.
 
@@ -353,7 +353,7 @@ Arguments are the same as to [`datoms(Object, Object...)`](#datoms), but their i
 
 `seekDatoms` is for more advanced applications, and [`datoms(Object, Object...)`](#datoms) should be preferred wherever it is adequate.
 
-`seekDatoms` is typically used in conjunction with [`entidAt(Object, Object)`](#entidat) to implement [new entity scans](../../../../06-reference/04-indexes/01-index-model/index-model.md#new-entity-scans).
+`seekDatoms` is typically used in conjunction with [`entidAt(Object, Object)`](#entidat) to implement [new entity scans](../../../../06-reference/02-transactions/07-partitions/partitions.md#new-entity-scans).
 
 **Parameters:**
 - `index` — one of [`EAVT`](#eavt), [`AEVT`](#aevt), [`AVET`](#avet), or [`VAET`](#vaet)

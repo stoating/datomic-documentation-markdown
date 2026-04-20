@@ -39,11 +39,11 @@ This has two implications:
 - Apps that target the client API are much easier to move between Datomic Pro and Cloud
 - Apps that make heavy use of peer locality will require substantial alteration for Cloud
 
-Check [clients and peers](../../../introduction.md#datomic-apis) for more information.
+Check [clients and peers](../../../introduction.md) for more information.
 
 ## Difference 3: Ions
 
-Datomic lets you run your code in process with your data. In Datomic Pro, this takes the form of [functions installed in a database](../../../06-reference/02-transactions/04-transaction-functions/transaction-functions.md#database-function-basics), or [functions you add to the classpath](../../../06-reference/02-transactions/04-transaction-functions/transaction-functions.md#classpath-functions).
+Datomic lets you run your code in process with your data. In Datomic Pro, this takes the form of [functions installed in a database](../../../06-reference/02-transactions/04-transaction-functions/transaction-functions.md#deploying-database-functions), or [functions you add to the classpath](../../../06-reference/02-transactions/04-transaction-functions/transaction-functions.md#deploying-classpath-functions).
 
 Datomic Cloud's tight AWS integration makes this capability much more powerful. [Ions](../../../07-datomic-cloud-ions/01-ions-overview/ions-overview.md) let you run your entire application on Datomic, with reproducible deployment, elastic autoscaling, and integration via AWS lambda events and AWS API gateway.
 

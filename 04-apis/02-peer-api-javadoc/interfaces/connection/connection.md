@@ -29,7 +29,7 @@ A connection to a database for submitting and monitoring transactions, and retri
 | [`ListenableFuture`](../listenable-future/listenable-future.md)`<`[`Database`](../database/database.md)`>` | [`sync(long t)`](#synclong) | Retrieve a database value that includes all transactions completed up to and including time t. |
 | [`ListenableFuture`](../listenable-future/listenable-future.md)`<`[`Database`](../database/database.md)`>` | [`syncExcise(long t)`](#syncexcise) | Retrieve a database value that is aware of all [excisions](../../../../05-operation/01-pro/14-excision/excision.md) up to a [database t](../../../../12-glossary/glossary.md#t). |
 | [`ListenableFuture`](../listenable-future/listenable-future.md)`<`[`Database`](../database/database.md)`>` | [`syncIndex(long t)`](#syncindex) | Retrieve a database value that is [indexed](../../../../05-operation/01-pro/04-capacity-planning/capacity-planning.md#indexing) through the [database t](../../../../12-glossary/glossary.md#t) passed in. |
-| [`ListenableFuture`](../listenable-future/listenable-future.md)`<`[`Database`](../database/database.md)`>` | [`syncSchema(long t)`](#syncschema) | Retrieve a database value that is aware of all [schema changes](../../../../06-reference/01-schema/02-changing-schema/changing-schema.md#schema-alteration) up to a [database t](../../../../12-glossary/glossary.md#t). |
+| [`ListenableFuture`](../listenable-future/listenable-future.md)`<`[`Database`](../database/database.md)`>` | [`syncSchema(long t)`](#syncschema) | Retrieve a database value that is aware of all [schema changes](../../../../06-reference/01-schema/02-changing-schema/changing-schema.md#changing-schema) up to a [database t](../../../../12-glossary/glossary.md#t). |
 | [`ListenableFuture`](../listenable-future/listenable-future.md)`<Map>` | [`transact(List txData)`](#transact) | Submits a [transaction](../../../../06-reference/02-transactions/transactions.md), blocking until a result is available. |
 | [`ListenableFuture`](../listenable-future/listenable-future.md)`<Map>` | [`transactAsync(List txData)`](#transactasync) | Like [`transact(List)`](#transact), but returns immediately, with timeout logic left up to the caller. |
 | [`BlockingQueue`](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/BlockingQueue.html)`<Map>` | [`txReportQueue()`](#txreportqueue) | Gets the single transaction report queue associated with this connection, creating it if necessary. |
@@ -141,7 +141,7 @@ The future can take arbitrarily long to complete. Waiters should specify a timeo
 
 [`ListenableFuture`](../listenable-future/listenable-future.md)`<`[`Database`](../database/database.md)`>` `syncSchema(long t)`
 
-Retrieve a database value that is aware of all [schema changes](../../../../06-reference/01-schema/02-changing-schema/changing-schema.md#schema-alteration) up to a [database t](../../../../12-glossary/glossary.md#t).
+Retrieve a database value that is aware of all [schema changes](../../../../06-reference/01-schema/02-changing-schema/changing-schema.md#changing-schema) up to a [database t](../../../../12-glossary/glossary.md#t).
 
 Does not communicate with the transactor, so the future may be available immediately.
 
@@ -178,7 +178,7 @@ The future can take arbitrarily long to complete. Waiters should specify a timeo
 Submits a [transaction](../../../../06-reference/02-transactions/transactions.md), blocking until a result is available.
 
 **Parameters:**
-- `txData` — a list of data to be added, containing any combination of [assertions](../../../../06-reference/02-transactions/transactions.md#list-forms), [retractions](../../../../06-reference/02-transactions/transactions.md#retracting-data), [transaction functions](../../../../06-reference/02-transactions/04-transaction-functions/transaction-functions.md), or [entity maps](../../../../06-reference/02-transactions/transactions.md#map-forms):
+- `txData` — a list of data to be added, containing any combination of [assertions](../../../../06-reference/02-transactions/02-transaction-data/transaction-data.md#assert-and-retract), [retractions](../../../../06-reference/02-transactions/02-transaction-data/transaction-data.md#assert-and-retract), [transaction functions](../../../../06-reference/02-transactions/04-transaction-functions/transaction-functions.md), or [entity maps](../../../../06-reference/02-transactions/02-transaction-data/transaction-data.md#map-forms):
 
   | Type | Example |
   |---|---|
@@ -233,7 +233,7 @@ Removes the queue associated with this connection.
 
 Reclaim storage garbage older than a certain age.
 
-As part of [capacity planning](../../../../05-operation/01-pro/04-capacity-planning/capacity-planning.md#garbage-collection) for a Datomic system, you should schedule regular (e.g. daily, weekly) calls to `gcStorage`.
+As part of [capacity planning](../../../../05-operation/01-pro/04-capacity-planning/capacity-planning.md#garbage-collection-for-live-databases) for a Datomic system, you should schedule regular (e.g. daily, weekly) calls to `gcStorage`.
 
 **Parameters:**
 - `olderThan` — limits how recent garbage may be collected

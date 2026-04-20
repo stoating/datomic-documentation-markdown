@@ -3,7 +3,7 @@
 Everything gets better when data moves closer to processing. Datomic Valcache is a local, immutable, high-capacity, durable, SSD-backed, low latency cache for Datomic. Valcache also:
 
 - Is transparent to application code
-- Caches segments of [index](../../../06-reference/04-indexes/01-index-model/index-model.md#efficient-accumulation) and [log](../../../04-apis/08-log-api/log-api.md#implementation), which are immutable values that never expire
+- Caches segments of [index](../../../06-reference/04-indexes/01-index-model/index-model.md#efficient-accumulation) and [log](../../../04-apis/08-log-api/log-api.md#log), which are immutable values that never expire
 - Runs on the same instance as a Datomic process, serving that process
 - Is backed by an SSD, providing a higher capacity per price than a memory-backed cache
 - Stays hot across process restarts

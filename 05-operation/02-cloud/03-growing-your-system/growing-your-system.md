@@ -4,36 +4,36 @@ This page covers topics that will help you improve the operation of Datomic as y
 
 - [Instance sizes](#instance-sizes)
 - [Primary compute group](#primary-compute-group)
-- [Adding and scaling a query group](#query-group)
+- [Adding and scaling a query group](#adding-and-scaling-a-query-group)
 - [Task-specific query groups](#task-specific-query-groups)
-- [Valcache for large datasets](#valcache)
+- [Valcache for large datasets](#valcache-for-large-databases)
 - [Scaling storage](#scaling-storage)
-- [Understanding your AWS bill](#understanding-bill)
-- [Reducing AWS costs](#reducing-costs)
-- [Development workflow](#dev-workflow)
+- [Understanding your AWS bill](#understanding-your-aws-bill)
+- [Reducing AWS costs](#reducing-aws-costs)
+- [Development workflow](#development-workflow)
 
 ## Instance Sizes
 
-> This section only applies to [Datomic 990-9202](../../../11-releases/02-datomic-cloud/02-cloud-change-log/cloud-change-log.md#990-9202) and lower. Newer versions of Datomic Cloud are free of licensing-related costs, and the user only pays for the hardware that you use to run the system.
+> This section only applies to [Datomic 990-9202](../../../11-releases/02-datomic-cloud/02-cloud-change-log/cloud-change-log.md#20230228-990-9202) and lower. Newer versions of Datomic Cloud are free of licensing-related costs, and the user only pays for the hardware that you use to run the system.
 
 You can change your Datomic Cloud instance size at any time by updating the CloudFormation template. As the table below shows, moving up the [t3 instance size chart](https://aws.amazon.com/ec2/instance-types/t3/#Product_Details) provides more memory and more CPUs.
 
 - Additional memory can improve the performance of queries and transactions
 - Increasing the number of CPUs allows Datomic to serve more requests simultaneously, and can also improve the performance of individual queries and transactions
 
-If you need maximum performance, consider [i3 instances.](https://aws.amazon.com/ec2/instance-types/i3/) They provide [valcache](#valcache), are not subject to [unlimited mode usage charges](#usage-price), and require that you [raise your AWS account limit](#verify-i3).
+If you need maximum performance, consider [i3 instances.](https://aws.amazon.com/ec2/instance-types/i3/) They provide [valcache](#valcache-for-large-databases), are not subject to [unlimited mode usage charges](#usage-price), and require that you [raise your AWS account limit](#verify-your-i3-instance-limit).
 
 |                    | dev-local* | t3.small | t3.medium | t3.large | t3.xlarge | t3.2xlarge | i3.large | i3.xlarge |
 |--------------------|------------|----------|-----------|----------|-----------|------------|----------|-----------|
 | (v)CPUs            | any        | 2        | 2         | 2        | 4         | 8          | 2        | 4         |
 | GB RAM             | any        | 2        | 4         | 8        | 16        | 32         | 8        | 16        |
-| [default metrics](#monthly-price) | N/A | None | Basic | Detailed | Detailed | Detailed | 475 | 950 |
+| [default metrics](#monthly-prices) | N/A | None | Basic | Detailed | Detailed | Detailed | 475 | 950 |
 | 1 instance on-demand | $0       | $34      | $74       | $127     | $216      | $395       | $216     | $395      |
 | 2 instances on-demand | n/a     | $49      | $118      | $216     | $396      | $754       | $396     | $754      |
 | 1 instance reserved | n/a       | $28      | $62       | $104     | $172      | $306       | $172     | $306      |
 | 2 instances reserved | n/a      | $37      | $96       | $172     | $307      | $576       | $307     | $576      |
 
-To develop and test your Datomic applications at no cost, use [dev-local](../../../01-setup/03-local-setup/local-setup.md). For complete details on the monthly base price, check [understanding your AWS bill](#understanding-bill).
+To develop and test your Datomic applications at no cost, use [dev-local](../../../01-setup/03-local-setup/local-setup.md). For complete details on the monthly base price, check [understanding your AWS bill](#understanding-your-aws-bill).
 
 ### Instance Defaults
 
@@ -51,7 +51,7 @@ The CloudFormation template provides settings for AutoScaling and Metrics level 
 
 The primary compute group of a system performs all transactions, while queries can be performed by any compute group (primary or query). The primary compute group should not autoscale: it should run a fixed number of instances based on your transaction load and database count.
 
-For a system with a single primary database or with a low total write volume, you should fix the size of the primary compute group at two instances. When you need to scale queries beyond what these two instances can support, add a [query group](#query-group).
+For a system with a single primary database or with a low total write volume, you should fix the size of the primary compute group at two instances. When you need to scale queries beyond what these two instances can support, add a [query group](#adding-and-scaling-a-query-group).
 
 If your system serves a high write volume across more than one database, you may want to run more than two instances in your primary compute group. Contact [Datomic support](mailto:support@datomic.com) if necessary.
 
@@ -80,7 +80,7 @@ You can set the minimum and maximum number of instances that will run in the gro
 
 ### Autoscaling Triggers
 
-You can configure autoscaling triggers for a query group. These triggers should be based on [a metric](../12-monitoring-cloud/monitoring-cloud.md#metrics) that measures when work is (or is close to) backing up. For example:
+You can configure autoscaling triggers for a query group. These triggers should be based on [a metric](../12-monitoring-cloud/monitoring-cloud.md#metrics-produced-by-datomic-cloud) that measures when work is (or is close to) backing up. For example:
 
 - If your system serves remote Datomic clients, then you can scale on `HttpEndpointThrottled`, which counts the number of *client* requests that were throttled because the system is busy.
 - If your system serves *web* requests, then you can scale on `HttpDirectThrottled`, which counts the number of *web* requests that were throttled, or based on a domain-specific metric that you create.
@@ -138,7 +138,7 @@ The Datomic catalog is stored in a DynamoDB table named "[system]-catalog", conf
 
 ## Understanding Your AWS Bill
 
-> This section only applies to [Datomic 990-9202](../../../11-releases/02-datomic-cloud/02-cloud-change-log/cloud-change-log.md#990-9202) and lower. Newer versions of Datomic Cloud are free of licensing-related costs, and the user only pays for the hardware that you use to run the system.
+> This section only applies to [Datomic 990-9202](../../../11-releases/02-datomic-cloud/02-cloud-change-log/cloud-change-log.md#20230228-990-9202) and lower. Newer versions of Datomic Cloud are free of licensing-related costs, and the user only pays for the hardware that you use to run the system.
 
 The total cost of running a Datomic system is the sum of the *base price* and the *usage price*.
 
@@ -149,13 +149,13 @@ All prices below are for us-east-1, and were most recently updated on May 17, 20
 
 ### Base Price
 
-> This section only applies to [Datomic 990-9202](../../../11-releases/02-datomic-cloud/02-cloud-change-log/cloud-change-log.md#990-9202) and lower. Newer versions of Datomic Cloud are free of licensing-related costs, and the user only pays for the hardware that you use to run the system.
+> This section only applies to [Datomic 990-9202](../../../11-releases/02-datomic-cloud/02-cloud-change-log/cloud-change-log.md#20230228-990-9202) and lower. Newer versions of Datomic Cloud are free of licensing-related costs, and the user only pays for the hardware that you use to run the system.
 
 The base price for a Datomic system combines all the hourly and monthly components of Datomic into a single monthly price. These components are enumerated below:
 
 #### Hourly Prices
 
-> This section only applies to [Datomic 990-9202](../../../11-releases/02-datomic-cloud/02-cloud-change-log/cloud-change-log.md#990-9202) and lower. Newer versions of Datomic Cloud are free of licensing related costs, and the user only pays for the hardware that you use to run the system.
+> This section only applies to [Datomic 990-9202](../../../11-releases/02-datomic-cloud/02-cloud-change-log/cloud-change-log.md#20230228-990-9202) and lower. Newer versions of Datomic Cloud are free of licensing related costs, and the user only pays for the hardware that you use to run the system.
 
 Each compute group will have a single ALB, with an hourly price of $0.0225, plus an instance hourly price based on the numbers and types of instances you choose:
 
@@ -171,7 +171,7 @@ Each compute group will have a single ALB, with an hourly price of $0.0225, plus
 
 #### Monthly Prices
 
-> This section only applies to [Datomic 990-9202](../../../11-releases/02-datomic-cloud/02-cloud-change-log/cloud-change-log.md#990-9202) and lower. Newer versions of Datomic Cloud are free of licensing-related costs, and the user only pays for the hardware that you use to run the system.
+> This section only applies to [Datomic 990-9202](../../../11-releases/02-datomic-cloud/02-cloud-change-log/cloud-change-log.md#20230228-990-9202) and lower. Newer versions of Datomic Cloud are free of licensing-related costs, and the user only pays for the hardware that you use to run the system.
 
 | Resource          | Monthly price |
 |-------------------|---------------|
@@ -181,7 +181,7 @@ Each compute group will have a single ALB, with an hourly price of $0.0225, plus
 | detailed metrics  | ~$15.00       |
 | metrics dashboard | $3.00         |
 
-Basic metrics include [all the metrics normally used by operators](../12-monitoring-cloud/monitoring-cloud.md#metrics). Detailed metrics include the basic metrics, plus a number of additional metrics that are useful for Datomic support. The metrics dashboard is enabled whenever you select at least basic metrics. The metrics prices are approximate because AWS charges only for metrics recorded, and systems do not necessarily report every possible metric.
+Basic metrics include [all the metrics normally used by operators](../12-monitoring-cloud/monitoring-cloud.md#metrics-produced-by-datomic-cloud). Detailed metrics include the basic metrics, plus a number of additional metrics that are useful for Datomic support. The metrics dashboard is enabled whenever you select at least basic metrics. The metrics prices are approximate because AWS charges only for metrics recorded, and systems do not necessarily report every possible metric.
 
 The [instance sizes table](#instance-sizes) calculates a base price from the information above using the following assumptions:
 
@@ -193,7 +193,7 @@ Your AWS bill will show line items for each AWS service separately.
 
 ### Usage Price
 
-> This section only applies to [Datomic 990-9202](../../../11-releases/02-datomic-cloud/02-cloud-change-log/cloud-change-log.md#990-9202) and lower. Newer versions of Datomic Cloud are free of licensing-related costs, and the user only pays for the hardware that you use to run the system.
+> This section only applies to [Datomic 990-9202](../../../11-releases/02-datomic-cloud/02-cloud-change-log/cloud-change-log.md#20230228-990-9202) and lower. Newer versions of Datomic Cloud are free of licensing-related costs, and the user only pays for the hardware that you use to run the system.
 
 Datomic uses several AWS services that have a pricing model based on use:
 

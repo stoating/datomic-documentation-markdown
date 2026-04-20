@@ -40,7 +40,7 @@ Run the following query in the [debug CLI](#debug-cli):
 SELECT * FROM system.metadata.catalogs;
 ```
 
-The results of this query will include all catalogs that are available in the analytics system. [Your catalog](../02-pro-configuration/pro-configuration.md#catalog) will be listed in the results. If not, ensure that you have [created](../02-pro-configuration/pro-configuration.md#catalog) and [synced](../02-pro-configuration/pro-configuration.md#syncing) your catalog properties file correctly. Be sure that you have run sync with the correct directory structure (a `catalog` and a `datomic` directory).
+The results of this query will include all catalogs that are available in the analytics system. [Your catalog](../02-pro-configuration/pro-configuration.md#catalog) will be listed in the results. If not, ensure that you have [created](../02-pro-configuration/pro-configuration.md#catalog) and [synced](../../05-operation/02-cloud/07-cli-tools/cli-tools.md#sync) your catalog properties file correctly. Be sure that you have run sync with the correct directory structure (a `catalog` and a `datomic` directory).
 
 Another possible cause of this error is that your [Metaschema file](../02-pro-configuration/pro-configuration.md#metaschema) is not properly formatted edn or is not correctly located. Also, verify that your Metaschema file ends with a .edn extension.
 

@@ -1,7 +1,7 @@
 # Access Gateway (Legacy)
 
 > The access gateway is deprecated and is no longer available in
-> Datomic Cloud. This page only applies to [Datomic 781-9041](../../../11-releases/02-datomic-cloud/02-cloud-change-log/cloud-change-log.md#781-9041) and lower.
+> Datomic Cloud. This page only applies to [Datomic 781-9041](../../../11-releases/02-datomic-cloud/02-cloud-change-log/cloud-change-log.md#20210302-781-9041-compute-update) and lower.
 
 The access gateway provides two capabilities: client access from
 outside the VPC, and Datomic analytics. If you are planning a new
@@ -16,7 +16,7 @@ compute group, runs in the same VPC as your Datomic compute groups.
 
 ### Allow Inbound Traffic to the Access Gateway
 
-> This section only applies to [Datomic 781-9041](../../../11-releases/02-datomic-cloud/02-cloud-change-log/cloud-change-log.md#781-9041) and lower.
+> This section only applies to [Datomic 781-9041](../../../11-releases/02-datomic-cloud/02-cloud-change-log/cloud-change-log.md#20210302-781-9041-compute-update) and lower.
 
 Datomic runs in a private VPC. To allow access from outside the Datomic VPC
 (e.g. for developers), you must add an inbound rule to the
@@ -40,7 +40,7 @@ Datomic runs in a private VPC. To allow access from outside the Datomic VPC
 
 ### Prerequisites
 
-> This section only applies to [Datomic 781-9041](../../../11-releases/02-datomic-cloud/02-cloud-change-log/cloud-change-log.md#781-9041) and lower.
+> This section only applies to [Datomic 781-9041](../../../11-releases/02-datomic-cloud/02-cloud-change-log/cloud-change-log.md#20210302-781-9041-compute-update) and lower.
 
 This page assumes that an administrator has already:
 
@@ -93,12 +93,12 @@ If you are trying Datomic for the first time, a good next step is the
 
 ## Analytics
 
-> This section only applies to [Datomic 781-9041](../../../11-releases/02-datomic-cloud/02-cloud-change-log/cloud-change-log.md#781-9041) and lower.
+> This section only applies to [Datomic 781-9041](../../../11-releases/02-datomic-cloud/02-cloud-change-log/cloud-change-log.md#20210302-781-9041-compute-update) and lower.
 
 For the initial setup of analytics support, you need to do three things:
 
 - [Enable](#enable) analytics in CloudFormation
-- Create a local [configuration directory](#configuration-directory) and [sync](#syncing-configuration) it to your Datomic
+- Create a local [configuration directory]() and [sync](#syncing-configuration) it to your Datomic
 system
 - [Restart](#restarting-access-gateway) the [access gateway](../01-cloud-architecture/cloud-architecture.md#api-gateways) to pick up the initial configuration
 
@@ -158,13 +158,13 @@ Populate the catalog and metaschema files as described below.
 
 ### Catalog
 
-The `catalog` subdirectory of your [local configuration directory](#configuration-directory)
+The `catalog` subdirectory of your [local configuration directory]()
 should contain a `[your-catalog-name].properties` file with the contents:
 
 ```
 connector.name=datomic
 
-#optional - limit exposed dbs by listing them here:
+#assert-and-retracttional - limit exposed dbs by listing them here:
 #datomic.databases=[thisdb thatdb]
 ```
 
@@ -199,7 +199,7 @@ databases you want to query with the `datomic.databases` property
 ### Metaschema
 
 Place zero or more [metaschema EDN files](../../../08-analytics/01-analytics-concepts/analytics-concepts.md#metaschemas) in the `datomic` subdirectory
-of your [local configuration directory](#configuration-directory).
+of your [local configuration directory]().
 
 After you call [sync](#syncing-configuration), your metaschema changes will be available in a
 minute or less. This facilitates the interactive development of your
@@ -214,7 +214,7 @@ may need to re-run this scan manually to pick up schema changes.
 ### Syncing Configuration
 
 The `analytics sync` command in the [datomic tools](../07-cli-tools/cli-tools.md) updates analytics
-configuration to match your local [configuration directory](#configuration-directory). Call `sync` with
+configuration to match your local [configuration directory](). Call `sync` with
 your [system name](../11-how-to/how-to.md#find-datomic-system-name) and configuration dir:
 
 ```

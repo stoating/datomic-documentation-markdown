@@ -10,7 +10,7 @@ The peer library can act in standalone mode, using an in-memory database as a st
 
 | Class | Description |
 |-------|-------------|
-| [Attribute](interfaces/attribute/attribute.md) | Programmatic representation of a [schema attribute](../../06-reference/01-schema/01-schema-reference/schema-reference.md#attributes). |
+| [Attribute](interfaces/attribute/attribute.md) | Programmatic representation of a [schema attribute](../../06-reference/01-schema/01-schema-reference/schema-reference.md#defining-schema). |
 | [Connection](interfaces/connection/connection.md) | A connection to a database for submitting and monitoring transactions, and retrieving the current value of the database. |
 | [Database](interfaces/database/database.md) | An immutable, point-in-time database value. |
 | [`Database.Predicate<T>`](interfaces/database-predicate/database-predicate.md) | Boolean-valued function for filtering a database. |

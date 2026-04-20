@@ -5,9 +5,9 @@ This page is for users who have completed the [Datomic Pro setup](../../01-setup
 The [peer library](../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md) must be on the classpath to be used to interact with Datomic.
 
 - [Maven setup](#maven-setup)
-- [Using from Deps.edn](#deps)
-- [Using from Maven](#maven)
-- [Using from Leiningen](#leiningen)
+- [Using from Deps.edn](#using-from-depsedn)
+- [Using from Maven](#using-from-maven)
+- [Using from Leiningen](#using-from-leiningen)
 
 ## Maven Setup
 

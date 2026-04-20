@@ -79,8 +79,8 @@
 |---|---|---|
 | `1125-9339` | `1125-9339` | `1125-9339` |
 
-- Feature: tx-stats. See https://docs.datomic.com/reference/tx-stats.html
-- Performance: Improve performance in transactions and calls to d/with by prefetching reads. Config option `datomic.prefetchConcurrency` limits the number of concurrent prefetches. See https://docs.datomic.com/operation/system-properties.html
+- Feature: tx-stats. See [Tx Stats](../../../04-apis/12-tx-stats/tx-stats.md).
+- Performance: Improve performance in transactions and calls to d/with by prefetching reads. Config option `datomic.prefetchConcurrency` limits the number of concurrent prefetches. See [System Properties](../../../05-operation/01-pro/10-system-properties/system-properties.md).
 - Fix: Ensure datoms are virtual and are no longer added to the log.
 - Upgraded com.datomic/client-cloud to 1.0.130
 - Upgraded com.datomic/ion to 1.0.71
@@ -225,7 +225,7 @@ Datomic cloud AMIs are free of any markup outside the AWS marketplace under the 
 
 ## 2022/11/29 - 981-9188
 
-> The 981-9188 release templates have been removed (12/12/2022) per [Critical Notice](../../releases.md#critical-notices).
+> The 981-9188 release templates have been removed (12/12/2022) per [Critical Notice](../01-cloud-releases/cloud-releases.md#critical-notices).
 >
 > This release introduced a problem in Datomic that could eventually halt transactions (but not Reads). All templates have been removed and de-listed from the docs and marketplace. The 990-9202 release contains all features in this release and replaces 981-9188.
 >
@@ -417,8 +417,8 @@ Datomic cloud AMIs are free of any markup outside the AWS marketplace under the 
 | `884-9095` | `884-9095` | `884-9095` |
 
 - Enhancement: many new [EC2 instance sizes](../../../05-operation/02-cloud/03-growing-your-system/growing-your-system.md#instance-sizes).
-- Enhancement: [lower pricing](../../../05-operation/02-cloud/03-growing-your-system/growing-your-system.md#hourly-price) for all instance sizes.
-- Enhancement: [API Gateways](../../../05-operation/02-cloud/01-cloud-architecture/cloud-architecture.md#api-gateway) for client and application internet access.
+- Enhancement: [lower pricing](../../../05-operation/02-cloud/03-growing-your-system/growing-your-system.md#hourly-prices) for all instance sizes.
+- Enhancement: [API Gateways](../../../05-operation/02-cloud/01-cloud-architecture/cloud-architecture.md#api-gateways) for client and application internet access.
 - Enhancement: [run analytics anywhere](../../../08-analytics/03-cloud-configuration/cloud-configuration.md).
 - Upgrade: compute nodes have been upgraded from Java 8 to Java 11.
 - Replaced: the client access gateway is no longer available; you can connect directly to the new client API gateway.
@@ -435,15 +435,15 @@ In addition, make sure to read the upgrade instructions below *for each of the f
 
 Datomic no longer has a Solo compute stack. If you were using Solo you can upgrade to Production at no additional cost by performing the following steps:
 
-- Your web applications no longer need to go through a [web lambda proxy](../../../07-datomic-cloud-ions/02-ions-reference/ions-reference.md#web-lambda-proxies). They can (and must) instead use [HTTP direct](../../../07-datomic-cloud-ions/02-ions-reference/ions-reference.md#web-ion). HTTP direct is higher performance and simplifies your code, which no longer needs to call `ionize`.
-- Perform a [storage upgrade](../../../05-operation/02-cloud/14-upgrading/upgrading.md#storage-only-upgrade).
-- Perform a [compute upgrade](../../../05-operation/02-cloud/14-upgrading/upgrading.md#compute-only-upgrade), selecting the t3.small instance size (the default).
+- Your web applications no longer need to go through a [web lambda proxy](../../../07-datomic-cloud-ions/02-ions-reference/ions-reference.md#web-lambda-proxies). They can (and must) instead use [HTTP direct](../../../07-datomic-cloud-ions/02-ions-reference/ions-reference.md#http-direct-entry-point). HTTP direct is higher performance and simplifies your code, which no longer needs to call `ionize`.
+- Perform a [storage upgrade](../../../05-operation/02-cloud/14-upgrading/upgrading.md#storage-upgrade).
+- Perform a [compute upgrade](../../../05-operation/02-cloud/14-upgrading/upgrading.md#compute-upgrade), selecting the t3.small instance size (the default).
 
 ### 884-9095 for Production Users
 
 If you are running Production, you now have a set of t3 instance sizes to choose from. Many users will be able to provision smaller, less expensive instances:
 
-- Unless your compute group [needs valcache](../../../05-operation/02-cloud/03-growing-your-system/growing-your-system.md#valcache), you should switch from your current i3 instance to the matching-sized t3 instance.
+- Unless your compute group [needs valcache](../../../05-operation/02-cloud/03-growing-your-system/growing-your-system.md#valcache-for-large-databases), you should switch from your current i3 instance to the matching-sized t3 instance.
 - If you believe you were already overprovisioned with i3.large, you should consider a [smaller t3 instance size](../../../05-operation/02-cloud/03-growing-your-system/growing-your-system.md#instance-sizes).
 
 ### 884-9095 for Developer Connections
@@ -469,8 +469,8 @@ If you manually created an API Gateway for your ion application on a previous re
 If you were using [Web Lambda Proxies](../../../07-datomic-cloud-ions/02-ions-reference/ions-reference.md#web-lambda-proxies), then you should change to HTTP Direct or lambdas. Perform the following:
 
 - Move the function to the `:http-direct` or `:lambdas` key in your ion-config.edn.
-- The [ionize](../../../07-datomic-cloud-ions/02-ions-reference/ions-reference.md#ionize) function should not be used.
-- Expect the appropriate input data for the type of entry point ([HTTP Direct](../../../07-datomic-cloud-ions/02-ions-reference/ions-reference.md#web-ion) or [lambda](../../../07-datomic-cloud-ions/02-ions-reference/ions-reference.md#lambda-ion)).
+- The [ionize](../../../07-datomic-cloud-ions/02-ions-reference/ions-reference.md#create-a-web-lambda-proxy-entry-point) function should not be used.
+- Expect the appropriate input data for the type of entry point ([HTTP Direct](../../../07-datomic-cloud-ions/02-ions-reference/ions-reference.md#http-direct-entry-point) or [lambda](../../../07-datomic-cloud-ions/02-ions-reference/ions-reference.md#lambda-entry-point)).
 
 ### 884-9095 for Analytics Users
 
@@ -551,9 +551,9 @@ Enhancement: The storage template now sets DDB provisioning to fit within the AW
 |---|---|---|---|
 | `732-8992` | `732-8992` | `732-8992` | `732-8992` |
 
-- New: change the scale of a [BigDecimal attribute](../../../06-reference/01-schema/01-schema-reference/schema-reference.md#value-types) in a transaction.
+- New: change the scale of a [BigDecimal attribute](../../../06-reference/01-schema/01-schema-reference/schema-reference.md#dbvaluetype) in a transaction.
 - Upgrade to presto 346, fixing a [bug](https://github.com/prestosql/presto/commit/e7eeeedcc9751c022ffb9df648ee5442cd421c32) that prevents analytics gateway from launching.
-- Fix: reenable query counts metric in [dashboard](../../../05-operation/01-pro/05-monitoring-and-performance/monitoring-and-performance.md#dashboards).
+- Fix: reenable query counts metric in [dashboard](../../../05-operation/02-cloud/12-monitoring-cloud/monitoring-cloud.md#datomic-cloud-dashboards).
 - Fix: query correctly treats range functions as functions (not as predicates).
 - New region: `eu-north-1`.
 
@@ -573,7 +573,7 @@ Enhancement: The storage template now sets DDB provisioning to fit within the AW
 |---|---|---|---|
 | `704-8957` | `704-8957` | `704-8957` | `704-8957` |
 
-- New feature: [cancel](../../../06-reference/02-transactions/03-processing-transactions/processing-transactions.md#cancel).
+- New feature: [cancel](../../../06-reference/02-transactions/04-transaction-functions/transaction-functions.md#canceling-a-transaction).
 - New region: `eu-west-2`.
 - Fix: prevent race conditions in Valcache that could lead to a failed read.
 - Improvement: better entity predicate error messages.
@@ -589,7 +589,7 @@ Enhancement: The storage template now sets DDB provisioning to fit within the AW
 |---|---|
 | `0.9.48` | `0.9.276` |
 
-- New feature: [cancel](../../../06-reference/02-transactions/03-processing-transactions/processing-transactions.md#cancel).
+- New feature: [cancel](../../../06-reference/02-transactions/04-transaction-functions/transaction-functions.md#canceling-a-transaction).
 - Cloud-deps update.
 
 ## 2020/07/21 - 0.8.102 - Client-Cloud Update
@@ -606,7 +606,7 @@ Enhancement: The storage template now sets DDB provisioning to fit within the AW
 |---|
 | `0.8.101` |
 
-- New feature: [dev-local](../../../02-accessing/02-client-library/client-library.md#deps).
+- New feature: [dev-local](../../../02-accessing/02-client-library/client-library.md#installing-the-client-library).
 
 ## 2020/05/14 - 668-8927 - Compute Update
 
@@ -614,7 +614,7 @@ Enhancement: The storage template now sets DDB provisioning to fit within the AW
 |---|---|---|---|
 | `668-8927` | `668-8927` | `668-8927` | `668-8927` |
 
-- New feature: [qseq](../../../06-reference/03-query-and-pull/02-query-reference/query-reference.md#qseq)
+- New feature: [qseq](../../../06-reference/03-query-and-pull/01-executing-queries/executing-queries.md#qseq)
 - New feature: [index-pull](../../../04-apis/06-index-pull/index-pull.md)
 - New feature: [xform](../../../06-reference/03-query-and-pull/03-pull/pull.md#xform-option)
 - Enhancement: improve index efficiency.
@@ -622,7 +622,7 @@ Enhancement: The storage template now sets DDB provisioning to fit within the AW
 - Enhancement: improve internal record keeping of active databases that could lead to spurious error messages.
 - Upgrade: base AMI is now sourced from Amazon Linux 2, and includes recent security updates.
 
-> **Upgrade:** As recommended by AWS, we have upgraded our base AMI to [Amazon Linux 2](https://aws.amazon.com/blogs/aws/update-on-amazon-linux-ami-end-of-life/). This new AMI includes a breaking change to the Linux Netcat utility that Ions use to deploy new code to a cluster. We encourage all users of Ions to upgrade to [version 0.9.265](#0.9.265) or later of ion-dev prior to upgrading to this release.
+> **Upgrade:** As recommended by AWS, we have upgraded our base AMI to [Amazon Linux 2](https://aws.amazon.com/blogs/aws/update-on-amazon-linux-ami-end-of-life/). This new AMI includes a breaking change to the Linux Netcat utility that Ions use to deploy new code to a cluster. We encourage all users of Ions to upgrade to [version 0.9.265](#20200514-09265-ion-dev-0943-ion) or later of ion-dev prior to upgrading to this release.
 
 ## 2020/05/14 - 0.9.265 - Ion-Dev & 0.9.43 - Ion
 
@@ -631,7 +631,7 @@ Enhancement: The storage template now sets DDB provisioning to fit within the AW
 | `0.9.43` | `0.9.265` |
 
 - Enhancement: calculate transitive list of dependencies in [`:dependency-conflict`](../../../07-datomic-cloud-ions/02-ions-reference/ions-reference.md#dependency-conflicts) map.
-- Update dep list for [Cloud 668-8927](#668-8927) release.
+- Update dep list for [Cloud 668-8927](#20200514-668-8927-compute-update) release.
 
 ## 2020/05/14 - 0.8.96 - Client-Cloud Update
 
@@ -639,7 +639,7 @@ Enhancement: The storage template now sets DDB provisioning to fit within the AW
 |---|
 | `0.8.98` |
 
-- New feature: [qseq](../../../06-reference/03-query-and-pull/02-query-reference/query-reference.md#qseq).
+- New feature: [qseq](../../../06-reference/03-query-and-pull/01-executing-queries/executing-queries.md#qseq).
 - New feature: [index-pull](../../../04-apis/06-index-pull/index-pull.md).
 - Updated jetty dependencies from 9.4.24.v20191120 to 9.4.27.v20200227.
 
@@ -710,7 +710,7 @@ Enhancement: The storage template now sets DDB provisioning to fit within the AW
 - Enhancement: performance improvement for range predicates in analytics support.
 - Enhancement: SSH public keys automatically handled by access gateway and proxy script.
 - Enhancement: AutoScalingGroup details exposed as CloudFormation outputs.
-- Enhancement: [JDBC metadata](../../../08-analytics/03-cloud-configuration/cloud-configuration.md#jdbc-metadata) support in analytics.
+- Enhancement: [JDBC metadata](../../../08-analytics/03-cloud-configuration/cloud-configuration.md#enabling-jdbc-metadata) support in analytics.
 - Upgrade: AWS Lambda Runtimes moved to NodeJs 10.x.
 
 ## 2019/11/19 - 0.9.247 - Ion-dev
@@ -720,7 +720,7 @@ Enhancement: The storage template now sets DDB provisioning to fit within the AW
 | `0.9.247` |
 
 - Better error message for invalid ion-config.edn.
-- Update commands to match the preferred approach of [installing ion-dev in your user deps.edn](../../../05-operation/02-cloud/11-how-to/how-to.md#ion-dev).
+- Update commands to match the preferred approach of [installing ion-dev in your user deps.edn](../../../05-operation/02-cloud/11-how-to/how-to.md#install-ion-dev-tools).
 - Use slf4j-simple to prevent console warnings when invoking tools.
 
 ## 2019/11/14 - 0.8.81 - Client-Cloud Update
@@ -756,7 +756,7 @@ Enhancement: The storage template now sets DDB provisioning to fit within the AW
 |---|
 | [0.9.11](https://datomic-releases-1fc2183a.s3.amazonaws.com/tools/datomic-cli/datomic-cli-0.9.11.zip) |
 
-- Initial release of [CLI tools](../../../05-operation/02-cloud/11-how-to/how-to.md#cli-tools)
+- Initial release of [CLI tools](../../../05-operation/02-cloud/11-how-to/how-to.md#install-the-aws-cli)
 
 ## 2019/10/01 - 512-8806 - Storage and Compute Template Update
 
@@ -831,7 +831,7 @@ Enhancement: The storage template now sets DDB provisioning to fit within the AW
 
 The 477-8741 release contains fixes, enhancements, and dependency updates:
 
-- Enhancement: [HTTP Direct](../../../07-datomic-cloud-ions/02-ions-reference/ions-reference.md#http-direct-config) integration for ions.
+- Enhancement: [HTTP Direct](../../../07-datomic-cloud-ions/02-ions-reference/ions-reference.md#http-direct-configuration) integration for ions.
 - Enhancement: improved integration between ions and AWS Network Load Balancers. This eliminates transient errors during rolling deployments.
 - Enhancement: improved integration between ions and AWS Lambda. This also eliminates transient errors.
 - Fix: issue where cluster nodes could become unresponsive when serving multiple databases or a burst of `tx-range` queries.
@@ -858,7 +858,7 @@ The 477-8741 release contains fixes, enhancements, and dependency updates:
 >
 > Effective May 1, 2019, Datomic Cloud CloudFormation templates older than 4/25/2019 will no longer be executed. Datomic systems launched with those templates will continue to run, but any template operations (launching or upgrading CloudFormation stacks) will fail.
 >
-> All Datomic Cloud users should [upgrade](../../../05-operation/02-cloud/14-upgrading/upgrading.md) to [470-8654.1](#470-8654.1) at their earliest convenience.
+> All Datomic Cloud users should [upgrade](../../../05-operation/02-cloud/14-upgrading/upgrading.md) to [470-8654.1](#20190425-470-86541-compute-storage-and-query-group-update) at their earliest convenience.
 >
 > For more information see the AWS [runtime support policy](https://docs.aws.amazon.com/lambda/latest/dg/runtime-support-policy.html).
 
@@ -874,7 +874,7 @@ Critical: Updated to Node.js 8.10 runtime. All Datomic Cloud users should [upgra
 >
 > Attempting to upgrade to or past this release without deleting the Stack will result in a failed update with the message: `Export <SystemName>-VpcEndpointServiceName cannot be deleted as it is in use by <SystemName>-vpc-endpoint`
 >
-> See [the troubleshooting documentation](../../../05-operation/02-cloud/13-cloud-troubleshooting/cloud-troubleshooting.md#vpc-endpoint-stack) for more information.
+> See [the troubleshooting documentation](../../../05-operation/02-cloud/09-vpc-access/vpc-access.md#creating-vpc-service-and-endpoint) for more information.
 
 The 470-8654 release contains fixes, enhancements, and dependency updates:
 
@@ -885,7 +885,7 @@ The 470-8654 release contains fixes, enhancements, and dependency updates:
 - Enhancement: new AWS Region - ap-southeast-1.
 - Enhancement: improved Valcache cleanup algorithm.
 - Enhancement: reduce storage overhead of transactions.
-- Enhancement: defer the creation of VPC Endpoint Service until specifically needed for [cross-VPC client access](../../../05-operation/02-cloud/09-vpc-access/vpc-access.md#separate-vpc).
+- Enhancement: defer the creation of VPC Endpoint Service until specifically needed for [cross-VPC client access](../../../05-operation/02-cloud/09-vpc-access/vpc-access.md#inter-vpc-access).
 - Update to version 2.9.8 of [Jackson](https://github.com/FasterXML/jackson).
 - Update to version 1.11.479 of the [AWS SDK for Java](https://aws.amazon.com/sdk-for-java/).
 
@@ -940,8 +940,8 @@ Critical: fixes a problem that can cause portions of the log to become inaccessi
 | `441-8477` | `441-8477` | `441-8477` | `441-8477` |
 
 - New feature: [query groups](../../../05-operation/02-cloud/01-cloud-architecture/cloud-architecture.md#query-groups).
-- New instance type option: i3.xlarge for [Production](../../../05-operation/02-cloud/01-cloud-architecture/cloud-architecture.md#production-topology).
-- Improved memory settings: more stack space for [Solo](../../../05-operation/02-cloud/01-cloud-architecture/cloud-architecture.md#solo-topology), more heap space for Production.
+- New instance type option: i3.xlarge for [Production](../../../05-operation/02-cloud/01-cloud-architecture/cloud-architecture.md#primary-compute-stack).
+- Improved memory settings: more stack space for [Solo](../../../05-operation/02-cloud/01-cloud-architecture/cloud-architecture.md#primary-compute-stack), more heap space for Production.
 - Bugfix: fixed bug that could prevent a Production node from beginning indexing jobs.
 
 ## 2018/08/21 - 0.8.63 - Client-Cloud Update
@@ -991,7 +991,7 @@ Critical: fixes a problem that can cause portions of the log to become inaccessi
 
 ## 2018/07/02 - 0.8.56 - Client Cloud Update
 
-- Enhancement: added sync to client API. Check [Client Synchronization](../../02-transactions/07-transaction-synchronization/transaction-synchronization.md).
+- Enhancement: added sync to client API. Check [Client Synchronization](../../../06-reference/02-transactions/06-client-synchronization/client-synchronization.md).
 - Better error message when unable to connect to cluster or proxy.
 
 ## 2018/06/29 - 402-8396 - Compute Template Update
@@ -1020,7 +1020,7 @@ Critical: fixes a problem that can cause portions of the log to become inaccessi
 | `397-8384` | `397-8384` | `397-8384` |
 
 - Enhancement: [Datomic Ions](../../../07-datomic-cloud-ions/01-ions-overview/ions-overview.md).
-- Improvement: Replaced Application Load Balancer with Network Load Balancer. If your applications run in a separate VPC you will need to [configure a VPC endpoint](../../../05-operation/02-cloud/09-vpc-access/vpc-access.md#inter-vpc).
+- Improvement: Replaced Application Load Balancer with Network Load Balancer. If your applications run in a separate VPC you will need to [configure a VPC endpoint](../../../05-operation/02-cloud/09-vpc-access/vpc-access.md#inter-vpc-access).
 
 ## 2018/02/21 - 303-8300 - Storage and Compute Template Update
 

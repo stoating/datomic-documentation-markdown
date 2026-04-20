@@ -1,12 +1,12 @@
 # Lambda Provisioned Concurrency
 
-Configuring your Datomic [ion Lambda](../../07-datomic-cloud-ions/02-ions-reference/ions-reference.md#lambda-config) with
+Configuring your Datomic [ion Lambda](../../07-datomic-cloud-ions/02-ions-reference/ions-reference.md#lambdas) with
 [provisioned concurrency](https://docs.aws.amazon.com/lambda/latest/dg/configuration-concurrency.html#configuration-concurrency-provisioned)
 can alleviate Lambda cold-start issues when the Ion is infrequently invoked.
 
 To configure provisioned concurrency for an ion lambda:
 
-- [Deploy a lambda ion](../../07-datomic-cloud-ions/02-ions-reference/ions-reference.md#deploying)
+- [Deploy a lambda ion](../../07-datomic-cloud-ions/02-ions-reference/ions-reference.md#deploy)
 - [Publish a version of the lambda](https://docs.aws.amazon.com/lambda/latest/dg/API_PublishVersion.html)
 - (Optional) [Provide an alias for the published version](https://docs.aws.amazon.com/lambda/latest/dg/configuration-aliases.html)
 - [Configure provisioned concurrency for the lambda version or alias](https://docs.aws.amazon.com/lambda/latest/dg/configuration-concurrency.html#configuration-concurrency-provisioned)
@@ -17,7 +17,7 @@ The following example uses the [aws-api](https://github.com/cognitect-labs/aws-a
 create an [alias](https://docs.aws.amazon.com/lambda/latest/dg/configuration-aliases.html) for that version,
 and configure provisioned concurrency for it. Run it in an environment with
 proper AWS credentials to create and modify AWS lambda resources. The example can be run any time after an
-[ion deploy](../../07-datomic-cloud-ions/02-ions-reference/ions-reference.md#deploying) to ensure that the latest lambda is published and configured with
+[ion deploy](../../07-datomic-cloud-ions/02-ions-reference/ions-reference.md#deploy) to ensure that the latest lambda is published and configured with
 provisioned concurrency.
 
 `deps.edn`:
@@ -77,7 +77,7 @@ provisioned concurrency.
 ;                                       :concurrency 1})
 ```
 
-When using the newly configured lambda, for example as a target of [a lambda](../../07-datomic-cloud-ions/07-entry-points/entry-points.md#invoke-lambda),
+When using the newly configured lambda, for example as a target of [a lambda](../../07-datomic-cloud-ions/07-entry-points/entry-points.md#invoke-a-lambda),
 specify the alias as the target:
 
 `my-lambda-name:my-alias`

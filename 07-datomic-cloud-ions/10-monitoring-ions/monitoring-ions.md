@@ -7,14 +7,14 @@
 - [Alerts](#alerts)
 - [Dev](#dev)
 - [Metrics](#metrics)
-- [Local development workflow](#local-workflow)
+- [Local development workflow](#local-development-workflow)
 - [Java logging](#java-logging)
 
 All the code examples shown below are available in the [ion event example](https://github.com/Datomic/ion-event-example) project.
 
 ## Overview
 
-AWS CloudWatch provides a powerful set of tools for monitoring a software system running on AWS, and Datomic [fully integrates with these tools](../operation/monitoring.md).
+AWS CloudWatch provides a powerful set of tools for monitoring a software system running on AWS, and Datomic [fully integrates with these tools](../../05-operation/02-cloud/12-monitoring-cloud/monitoring-cloud.md).
 
 The `datomic.ion.cast` namespace lets ion application code add your own monitoring data alongside the monitoring data already being produced by Datomic applications. Cast supports four categories of monitoring data:
 
@@ -23,7 +23,7 @@ The `datomic.ion.cast` namespace lets ion application code add your own monitori
 - [Metric](#metrics): a numeric value in a named time series, such as the latency for an operation.
 - [Dev](#dev): information of interest during development, e.g. fine-grained logging to troubleshoot a problem during development. Dev data can be much higher volume than events or alerts.
 
-The cast is part of the [com.datomic/ion](../releases.md#current) library.
+The cast is part of the [com.datomic/ion](../../11-releases/releases.md) library.
 
 ## Events
 
@@ -35,7 +35,7 @@ For example, the `event` call below logs the raw JSON sent to an AWS lambda ion:
 (cast/event {:msg "CodeDeployEvent" ::json input})
 ```
 
-When the ion code is running on Datomic Cloud, events are posted to [Datomic's CloudWatch log](../operation/monitoring.md#logs). Datomic transforms data to [searchable JSON](../operation/monitoring.md#finding-logs) as follows:
+When the ion code is running on Datomic Cloud, events are posted to [Datomic's CloudWatch log](../../05-operation/02-cloud/12-monitoring-cloud/monitoring-cloud.md#logs-produced-by-datomic-cloud). Datomic transforms data to [searchable JSON](../../05-operation/02-cloud/12-monitoring-cloud/monitoring-cloud.md#finding-logs-by-message) as follows:
 
 - Datomic adds the key/value pair `{"Type" "Event"}`
 - Keywords are converted to CamelCase strings, with the delimiters `.`, `/`, and `_` introducing a new capital letter – for example, `my.app/key` becomes "MyAppKey"
@@ -57,13 +57,13 @@ For example, the `alert` call below is used in the catch block of a web service 
 (cast/alert {:msg "SlackHandlerFailed" :ex t})
 ```
 
-When the ion code is running on Datomic Cloud, alerts are posted to [Datomic's CloudWatch log](../operation/monitoring.md). The data transformation is the same as for [events](#events), except that the value for `Type` is "Alert".
+When the ion code is running on Datomic Cloud, alerts are posted to [Datomic's CloudWatch log](../../05-operation/02-cloud/12-monitoring-cloud/monitoring-cloud.md). The data transformation is the same as for [events](#events), except that the value for `Type` is "Alert".
 
-In addition to the log entry, alerts create a [Datomic CloudWatch metric](../operation/monitoring.md#metrics) value named "Alerts." You can use the occurrence of this metric to e.g. send an SNS message to an operator.
+In addition to the log entry, alerts create a [Datomic CloudWatch metric](../../05-operation/02-cloud/12-monitoring-cloud/monitoring-cloud.md#metrics-produced-by-datomic-cloud) value named "Alerts." You can use the occurrence of this metric to e.g. send an SNS message to an operator.
 
 ## Metrics
 
-To create your own metrics, enable detailed metrics for your compute group. This is the default for EC2 instances "large" and larger. For smaller instance sizes, choose the "detailed" metrics level in your [CloudFormation template parameters](../operation/compute-template.md#parameters).
+To create your own metrics, enable detailed metrics for your compute group. This is the default for EC2 instances "large" and larger. For smaller instance sizes, choose the "detailed" metrics level in your [CloudFormation template parameters](../../05-operation/02-cloud/05-compute-templates/compute-templates.md#parameters).
 
 A metric is a numeric value in a named time series, such as the latency for an operation. The `metric` function takes a map with the following required keys:
 
@@ -79,7 +79,7 @@ For example, the `metric` call below is used to record the occurrence of a CodeD
 
 > AWS will display all metrics in lowercase with the first character capitalized. As an example, the aforementioned `:CodeDeployEvent` will display as `Codedeployevent` in both the metrics and the logs. Additionally, CloudWatch Metric names do not have namespaces, and any namespace provided in the metric name will be ignored.
 
-Choose metric names that do not collide with Datomic's [built-in metric names](../operation/monitoring.md#metrics).
+Choose metric names that do not collide with Datomic's [built-in metric names](../../05-operation/02-cloud/12-monitoring-cloud/monitoring-cloud.md#metrics-produced-by-datomic-cloud).
 
 ## Dev
 
@@ -91,7 +91,7 @@ The `cast/dev` function takes an arbitrary map. In the example below, `cast/dev`
 (cast/dev {:msg "PostingToSlack" ::channel channel ::text text})
 ```
 
-You can redirect `cast/dev` as part of your [local dev workflow](#local-workflow).
+You can redirect `cast/dev` as part of your [local dev workflow](#local-development-workflow).
 
 > Configuring a destination for `cast/dev` when running in Datomic Cloud is currently not supported, and `dev` calls do not post to CloudWatch.
 

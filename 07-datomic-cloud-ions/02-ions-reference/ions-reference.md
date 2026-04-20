@@ -2,16 +2,16 @@
 
 This page covers the basic steps of [ion](../01-ions-overview/ions-overview.md) development:
 
-- [Prerequisites](#setup)
-- [Developing ions](#developing)
+- [Prerequisites](#prerequisites)
+- [Developing ions](#developing-ions)
 - Packaging ions with [push](#push)
 - [Deploying ions](#deploy) to a running compute group
-- [Invoking ions](#invoke)
+- [Invoking ions](#invoking-ions)
 
 It also covers more advanced topics:
 
-- [Configuring compute groups](#configure)
-- [Naming applications](#application-name)
+- [Configuring compute groups](#configuring-compute-groups)
+- [Naming applications](#naming-applications)
 - [Best practices](#best-practices)
 
 ## Prerequisites
@@ -19,8 +19,8 @@ It also covers more advanced topics:
 Before you begin developing an ion application, you will need:
 
 - A Datomic system using a [split stack](../../05-operation/02-cloud/16-splitting-stacks/splitting-stacks.md)
-- The Clojure [CLI](../../05-operation/02-cloud/11-how-to/how-to.md#clojure-cli)
-- The [ion-dev tools](../../05-operation/02-cloud/11-how-to/how-to.md#ion-dev)
+- The Clojure [CLI](../../05-operation/02-cloud/11-how-to/how-to.md#install-clojure-cli)
+- The [ion-dev tools](../../05-operation/02-cloud/11-how-to/how-to.md#install-ion-dev-tools)
 - [Git](https://git-scm.com)
 
 ## Developing Ions
@@ -28,8 +28,8 @@ Before you begin developing an ion application, you will need:
 This section covers the things you need to know when writing ion code:
 
 - Ion [project structure](#project-structure)
-- [Using the Client API from ions](#server-type-ion)
-- Implementing ion [entry points](#entry-points)
+- [Using the Client API from ions](#ion-clients)
+- Implementing ion [entry points](#ion-entry-points)
 - [Configuring entry points](#ion-config)
 - Ion [JVM settings](#jvm-settings)
 
@@ -39,19 +39,19 @@ You develop ions in a tools.deps project organized as follows:
 
 - The project must be a git repository – Ions use git SHAs to uniquely name a reproducible revision.
 - There should be a single deps.edn file located at the project root. Multiple deps.edn files are incompatible with the use of SHAs to uniquely name a revision.
-- The `:deps` sections of deps.edn must include the [client-cloud](../../../04-apis/04-client-api/client-api.md#deps) and [ion](../../05-operation/02-cloud/11-how-to/how-to.md#ion) libraries.
-- The deps.edn classpath must include a resource named `datomic/ion-config.edn`. This resource configures the [entry points](#entry-points) for an application.
+- The `:deps` sections of deps.edn must include the [client-cloud](../../02-accessing/02-client-library/client-library.md#installing-the-client-library) and [ion](../../05-operation/02-cloud/11-how-to/how-to.md#install-ion-library) libraries.
+- The deps.edn classpath must include a resource named `datomic/ion-config.edn`. This resource configures the [entry points](#ion-entry-points) for an application.
 
 For an example, check the sample project [deps.edn](https://github.com/Datomic/ion-starter/blob/master/deps.edn) and [ion-config.edn](https://github.com/Datomic/ion-starter/blob/master/resources/datomic/ion-config.edn).
 
 ### Ion Clients
 
-In an ion application, your client code and Datomic run in the same process on a [compute node](../../05-operation/02-cloud/01-cloud-architecture/cloud-architecture.md#nodes). To support this while also supporting development and testing, you can use the `:ion` server type as an argument to the [client](../../../04-apis/04-client-api/client-api.md#client). When you create a client with `:ion` server-type, Datomic will create a client based on where your code is running:
+In an ion application, your client code and Datomic run in the same process on a [compute node](../../05-operation/02-cloud/01-cloud-architecture/cloud-architecture.md#nodes). To support this while also supporting development and testing, you can use the `:ion` server type as an argument to the [client](../../04-apis/03-client-api-clojuredoc/client-api-clojuredoc.md#client). When you create a client with `:ion` server-type, Datomic will create a client based on where your code is running:
 
 - If the code is running on a Cloud node, Datomic will ignore the rest of the argument map to `client` and create an in-memory ion client
-- Otherwise, Datomic will use the rest of the argument map to create a client as for the [cloud server-type](https://docs.datomic.com/client-api/datomic.client.api.html#var-client)
+- Otherwise, Datomic will use the rest of the argument map to create a client as for the [cloud server-type](../../04-apis/03-client-api-clojuredoc/client-api-clojuredoc.md#client)
 
-> Clients created with the `:ion` server type support the [synchronous client API](../../../04-apis/04-client-api/client-api.md#sync) only.
+> Clients created with the `:ion` server type support the [synchronous client API](../../04-apis/04-client-api/client-api.md#synchronous-api) only.
 
 The following example shows how to create a client that connects to the inventory-dev system in us-east-1 during development. When deployed as an ion, the same code will create an in-memory client on the system it is deployed to.
 
@@ -70,17 +70,17 @@ The following example shows how to create a client that connects to the inventor
 
 Ion applications are arbitrary Clojure code, exposed to consumers via one or more *entry points*. An entry point is a function with a well-known signature. There are five types of entry points for different callers, each with a different function signature.
 
-[Lambda](#lambda-ion) and [HTTP direct](#web-ion) are external entry points. They expose AWS lambdas and web services, respectively.
+[Lambda](#lambda-entry-point) and [HTTP direct](#http-direct-entry-point) are external entry points. They expose AWS lambdas and web services, respectively.
 
-Internal entry points are callbacks that extend the [Datomic Client API](../../../04-apis/04-client-api/client-api.md) with your code. They include [transaction functions](../../../06-reference/02-transactions/04-transaction-functions/transaction-functions.md), [query functions](../../../06-reference/03-query-and-pull/query-reference.md#functions), and [pull xforms](../../../06-reference/03-query-and-pull/03-pull/pull.md#xform-option).
+Internal entry points are callbacks that extend the [Datomic Client API](../../04-apis/04-client-api/client-api.md) with your code. They include [transaction functions](../../06-reference/02-transactions/04-transaction-functions/transaction-functions.md), [query functions](../../06-reference/03-query-and-pull/02-query-reference/query-reference.md#functions), and [pull xforms](../../06-reference/03-query-and-pull/03-pull/pull.md#xform-option).
 
 | Entry point | Called from | Input | Output |
 |---|---|---|---|
-| [Lambda](#lambda-ion) | AWS lambda | `:input` JSON, `:context` map | String, InputStream, ByteBuffer, or File |
-| [HTTP Direct](#web-ion) | Web client | Web request | Web response |
-| [Transaction fn](../../../06-reference/02-transactions/04-transaction-functions/transaction-functions.md) | Inside a transaction | Transaction data | Data |
-| [Query fn](../../../06-reference/03-query-and-pull/query-reference.md#functions) | Inside query | Data | Data |
-| [xform](../../../06-reference/03-query-and-pull/03-pull/pull.md#xform-option) | Pulled attribute value | Data | Data |
+| [Lambda](#lambda-entry-point) | AWS lambda | `:input` JSON, `:context` map | String, InputStream, ByteBuffer, or File |
+| [HTTP Direct](#http-direct-entry-point) | Web client | Web request | Web response |
+| [Transaction fn](../../06-reference/02-transactions/04-transaction-functions/transaction-functions.md) | Inside a transaction | Transaction data | Data |
+| [Query fn](../../06-reference/03-query-and-pull/02-query-reference/query-reference.md#functions) | Inside query | Data | Data |
+| [xform](../../06-reference/03-query-and-pull/03-pull/pull.md#xform-option) | Pulled attribute value | Data | Data |
 
 #### Lambda Entry Point
 
@@ -131,13 +131,13 @@ The ion-starter project includes an example [HTTP direct ion](https://github.com
 
 ### ion-config
 
-The `datomic/ion-config.edn` resource configures the application's [entry points](#entry-points). Ion-config is an EDN map with the following keys:
+The `datomic/ion-config.edn` resource configures the application's [entry points](#ion-entry-points). Ion-config is an EDN map with the following keys:
 
 - `:app-name` is string name of a Datomic application.
-- `:allow` is a vector of fully qualified symbols naming [query](../../../06-reference/03-query-and-pull/query-reference.md#deploying) or [transaction](../../../06-reference/02-transactions/04-transaction-functions/transaction-functions.md) functions. When you deploy an application, Datomic will automatically require all the namespaces mentioned under `:allow`.
-- `:xforms` is a vector of fully qualified symbols naming functions for use in [xform](../../../06-reference/03-query-and-pull/03-pull/pull.md#xform-option).
-- `:lambdas` is a map configuring [AWS lambda entry points](#lambda-ion)
-- `:http-direct` is a map configuring an [HTTP direct entry point](#web-ion)
+- `:allow` is a vector of fully qualified symbols naming [query](../../06-reference/03-query-and-pull/02-query-reference/query-reference.md#calling-clojure-functions) or [transaction](../../06-reference/02-transactions/04-transaction-functions/transaction-functions.md) functions. When you deploy an application, Datomic will automatically require all the namespaces mentioned under `:allow`.
+- `:xforms` is a vector of fully qualified symbols naming functions for use in [xform](../../06-reference/03-query-and-pull/03-pull/pull.md#xform-option).
+- `:lambdas` is a map configuring [AWS lambda entry points](#lambda-entry-point)
+- `:http-direct` is a map configuring an [HTTP direct entry point](#http-direct-entry-point)
 
 #### `:lambdas`
 
@@ -173,7 +173,7 @@ The HTTP Direct configuration map supports the following keys:
 
 Nodes will enqueue up to `:pending-ops-queue-length` HTTP direct requests, servicing them with `:processing-concurrency` threads. When the ops queue is full, nodes will reject requests with `:pending-ops-exceeded-messsage` and `:pending-ops-exceeded-code`.
 
-You can use the `HttpDirectOpsPending` and `HttpDirectThrottled` [metrics](../../05-operation/02-cloud/12-monitoring-cloud/monitoring-cloud.md#metrics) to monitor your application and [autoscale query groups](../../05-operation/02-cloud/03-growing-your-system/growing-your-system.md#query-group).
+You can use the `HttpDirectOpsPending` and `HttpDirectThrottled` [metrics](../../05-operation/02-cloud/12-monitoring-cloud/monitoring-cloud.md#metrics-produced-by-datomic-cloud) to monitor your application and [autoscale query groups](../../05-operation/02-cloud/03-growing-your-system/growing-your-system.md#adding-and-scaling-a-query-group).
 
 #### Ion-Config Example
 
@@ -234,11 +234,11 @@ clojure -A:ion-dev '{:op :push (options)}'
 | Keyword | Required | Value | Example |
 |---|---|---|---|
 | `:op` | Yes | `:push` | `:push` |
-| `:uname` | No | [Unreproducible name](#unreproducible) | "janes-wip" |
-| `:creds-profile` | No | [AWS profile name](../../05-operation/02-cloud/11-how-to/how-to.md#aws-access-keys) | "janes-profile" |
-| `:region` | No | [AWS region](../../../01-setup/02-cloud-setup/01-aws-account-setup/aws-account-setup.md#regions) | "us-east-1" |
+| `:uname` | No | [Unreproducible name](#unreproducible-push) | "janes-wip" |
+| `:creds-profile` | No | [AWS profile name](../../05-operation/02-cloud/11-how-to/how-to.md#manage-aws-access-keys-for-datomic) | "janes-profile" |
+| `:region` | No | [AWS region](../../01-setup/02-cloud-setup/01-aws-account-setup/aws-account-setup.md#supported-regions) | "us-east-1" |
 
-Push will ensure that your application's dependencies (Git and Maven libs) exist in your [ion code bucket](../../05-operation/02-cloud/11-how-to/how-to.md#ion-code-bucket):
+Push will ensure that your application's dependencies (Git and Maven libs) exist in your [ion code bucket](../../05-operation/02-cloud/11-how-to/how-to.md#find-ion-code-bucket):
 
 ```text
 s3://$(ion-code-bucket)/datomic/libs
@@ -255,7 +255,7 @@ On success, push returns a map with the following keys:
 | Keyword | Required | Value |
 |---|---|---|
 | `:rev` | No | Git SHA for the commit that was pushed |
-| `:uname` | No | [Unreproducible name](#unreproducible) for the push |
+| `:uname` | No | [Unreproducible name](#unreproducible-push) for the push |
 | `:deploy-groups` | Yes | List of available groups for deploy |
 | `:deploy-command` | Yes | Sample command for [deploy](#deploy) |
 | `:doc` | No | Documentation |
@@ -282,7 +282,7 @@ In some situations, you may want to push code that Datomic does not know to be r
 
 For these situations, ions permit an *unreproducible* push. Since an unreproducible push has no git SHA, you must specify an *uname* (`:uname`).
 
-You are responsible for making the uname unique within your [application](#application-name). If unames are not unique, ions will be unable to automatically roll back failed deploys.
+You are responsible for making the uname unique within your [application](#naming-applications). If unames are not unique, ions will be unable to automatically roll back failed deploys.
 
 ## Deploy
 
@@ -306,11 +306,11 @@ clojure -A:ion-dev '{:op :deploy (options)}'
 | Keyword | Required | Value | Example |
 |---|---|---|---|
 | `:op` | Yes | `:deploy` | `:deploy` |
-| `:group` | Yes | [Compute group name](../../05-operation/02-cloud/11-how-to/how-to.md#compute-group-name) | "my-datomic-compute" |
+| `:group` | Yes | [Compute group name](../../05-operation/02-cloud/11-how-to/how-to.md#find-compute-group-name) | "my-datomic-compute" |
 | `:rev` | (Or `:uname`) | Output from [push](#push) | "6468765f843d70e01a7a2e483405c5fcc9aa0883" |
 | `:uname` | (Or `:rev`) | Input to [push](#push) | "janes-wip" |
-| `:creds-profile` | No | [AWS profile name](../../05-operation/02-cloud/11-how-to/how-to.md#aws-access-keys) | "janes-profile" |
-| `:region` | No | [AWS region](../../../01-setup/02-cloud-setup/01-aws-account-setup/aws-account-setup.md#regions) | "us-east-1" |
+| `:creds-profile` | No | [AWS profile name](../../05-operation/02-cloud/11-how-to/how-to.md#manage-aws-access-keys-for-datomic) | "janes-profile" |
+| `:region` | No | [AWS region](../../01-setup/02-cloud-setup/01-aws-account-setup/aws-account-setup.md#supported-regions) | "us-east-1" |
 
 The **time to complete** an entire deployment is the sum of:
 
@@ -325,7 +325,7 @@ The **time to deploy** to a single node is the sum of:
 
 Deployment to a single node can take from 20 seconds up to several minutes, depending on the number and size of active databases.
 
-You can monitor a deployment with the [deploy-status command](#deploy-status) or [from the AWS Console](#status-console).
+You can monitor a deployment with the [deploy-status command](#deploy-status) or [from the AWS Console](#console-status).
 
 #### Deploy-Status
 
@@ -340,7 +340,7 @@ clojure -A:ion-dev '{:op :deploy-status ...}'
 | `:op` | Yes | `:deploy-status` | `:deploy-status` |
 | `:execution-arn` | Yes | Output from [deploy](#deploy) | "arn:aws:states:us-east-1:123456789012:execution:datomic-compute:datomic-compute-1526506240469" |
 | `:creds-profile` | No | AWS profile name | "janes-profile" |
-| `:region` | No | [AWS region](../../../01-setup/02-cloud-setup/01-aws-account-setup/aws-account-setup.md#regions) | "us-east-1" |
+| `:region` | No | [AWS region](../../01-setup/02-cloud-setup/01-aws-account-setup/aws-account-setup.md#supported-regions) | "us-east-1" |
 
 Deploy status returns the [Step Functions reference](https://docs.aws.amazon.com/step-functions/latest/apireference/API_DescribeExecution.html#StepFunctions-DescribeExecution-response-status) of the overall ion deploy and the code deploy as a map:
 
@@ -361,21 +361,21 @@ The CodeDeploy step can be monitored in the [CodeDeploy Deployments console](htt
 
 Ion entry points that extend the power of the Client API are described in the relevant documentation sections:
 
-- [Transaction functions](../../../06-reference/02-transactions/04-transaction-functions/transaction-functions.md)
-- [Query functions](../../../06-reference/03-query-and-pull/query-reference.md#functions)
-- [Xforms](../../../06-reference/03-query-and-pull/03-pull/pull.md#xform-option)
+- [Transaction functions](../../06-reference/02-transactions/04-transaction-functions/transaction-functions.md)
+- [Query functions](../../06-reference/03-query-and-pull/02-query-reference/query-reference.md#functions)
+- [Xforms](../../06-reference/03-query-and-pull/03-pull/pull.md#xform-option)
 
 Web service and lambda invocations are described below.
 
 ### Invoking Web Services
 
-Ion web services are exposed at the URL `https://$(IonApiGatewayEndpoint)`, where `IonApiGatewayEndpoint` is in your compute group's [template outputs](../../05-operation/02-cloud/11-how-to/how-to.md#template-outputs). You can invoke a web service with any HTTPS client, e.g. curl:
+Ion web services are exposed at the URL `https://$(IonApiGatewayEndpoint)`, where `IonApiGatewayEndpoint` is in your compute group's [template outputs](../../05-operation/02-cloud/11-how-to/how-to.md#find-template-outputs). You can invoke a web service with any HTTPS client, e.g. curl:
 
 ```sh
 curl https://$(IonApiGatewayEndpoint)
 ```
 
-If your compute template does not have an `IonApiGatewayEndpoint`, see [older versions of Datomic](#older-versions).
+If your compute template does not have an `IonApiGatewayEndpoint`, see [older versions of Datomic](#older-versions-of-datomic-cloud).
 
 ### Invoking Lambdas
 
@@ -387,7 +387,7 @@ $(group)-$(name)
 
 Where `group` is the `:group` key you used to invoke `deploy`, and `name` is the name under the `:lambdas` key in [ion-config.edn](#ion-config).
 
-The tutorial includes an [example](../../07-datomic-cloud-ions/03-ions-tutorial-introduction/ions-tutorial.md#invoke-lambda) of invoking an ion Lambda via the AWS CLI.
+The tutorial includes an [example](../07-entry-points/entry-points.md#invoke-a-lambda) of invoking an ion Lambda via the AWS CLI.
 
 ## Configuring Compute Groups
 
@@ -405,7 +405,7 @@ If you have more complex ions, potentially deployed to multiple compute groups (
 
 Datomic Cloud provides tools to help with these challenges.
 
-- The compute group [app-info map](#get-app-info) describes the compute group
+- The compute group [app-info map](#app-info-map) describes the compute group
 - The compute group [environment map](#environment-map) lets you add your own configuration, per compute group
 - [Parameters](#parameters) allow you to create a configuration with arbitrary scope and lifecycle, and [secure them at fine granularity with IAM](https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-access.html)
 
@@ -448,7 +448,7 @@ For example, the following excerpt from [deploy-monitor](https://github.com/Dato
 
 You can set the environment map for local development via the `DATOMIC_ENV_MAP` environment variable. When running outside Datomic Cloud, `get-env` returns the value of `DATOMIC_ENV_MAP`, read as EDN.
 
-If you need to change the environment map for a running compute group, you can [update the group's CloudFormation stack](../../05-operation/02-cloud/05-compute-templates/compute-templates.md#update).
+If you need to change the environment map for a running compute group, you can [update the group's CloudFormation stack](../../05-operation/02-cloud/05-compute-templates/compute-templates.md#updating-a-compute-group).
 
 If you need a more flexible lifecycle or granular security, you can use parameters as described below.
 
@@ -471,11 +471,11 @@ For example, the call to `get-params` below returns all the parameters under the
 
 #### Per-System Permissions
 
-The `datomic-shared` parameter prefix is readable by all Datomic systems in a particular AWS account and region. If you want more [granular permissions](https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-access.html), you can choose your own naming convention (under a different prefix), and explicitly [add permissions to the IAM policy](../../05-operation/02-cloud/06-access-control/access-control.md#add-policy-to-nodes) for your Datomic nodes.
+The `datomic-shared` parameter prefix is readable by all Datomic systems in a particular AWS account and region. If you want more [granular permissions](https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-access.html), you can choose your own naming convention (under a different prefix), and explicitly [add permissions to the IAM policy](../../05-operation/02-cloud/06-access-control/access-control.md#adding-an-iam-policy-to-datomic-nodes) for your Datomic nodes.
 
 #### Configuration Example
 
-The [deploy-monitor](https://github.com/Datomic/ion-event-example) sample application demonstrates using [app-info](#get-app-info), the [environment map](#environment-map), and [parameters](#parameters) together. First, the environment and app-info map are used to create a key prefix following the naming convention:
+The [deploy-monitor](https://github.com/Datomic/ion-event-example) sample application demonstrates using [app-info](#app-info-map), the [environment map](#environment-map), and [parameters](#parameters) together. First, the environment and app-info map are used to create a key prefix following the naming convention:
 
 ```text
 /datomic-shared/(env)/(app-name)/
@@ -523,24 +523,24 @@ When you [create a compute group](../../05-operation/02-cloud/05-compute-templat
 
 Override the default and choose a common application name if you plan to have multiple compute groups run the same code, e.g. different development stages of the same application. For example, you might have two systems "inventory-staging" and "inventory-production", with the intent that code deployed to production has always been deployed and tested in staging first. You can give the compute groups in both systems a shared application name "inventory" when you create their compute stacks.
 
-The application name cannot be changed after a compute group is created. If you need a different application name, simply [delete the compute group](../../05-operation/02-cloud/05-compute-templates/compute-templates.md) and [create a new one](../../05-operation/02-cloud/05-compute-templates/compute-templates.md#create).
+The application name cannot be changed after a compute group is created. If you need a different application name, simply [delete the compute group](../../05-operation/02-cloud/05-compute-templates/compute-templates.md) and [create a new one](../../05-operation/02-cloud/05-compute-templates/compute-templates.md#creating-a-compute-group).
 
 ## Best Practices
 
 - Ions are designed to let you do most of your development and testing at a [Clojure REPL](https://clojure.org/guides/repl/introduction), with a much faster feedback loop than push/deploy. Take advantage of this wherever possible.
-- You do not need ions, or a Datomic Cloud system, to get develop and test Datomic applications. You can start with [dev-local](../../01-setup/03-local-setup/local-setup.md), and when you are ready for ions, make your code portable with [divert-system](../../01-setup/03-local-setup/local-setup.md#divert-system).
-- Do **not** store AWS credentials in the Parameter Store, as Datomic Cloud [fully supports IAM roles](../../../05-operation/02-cloud/06-access-control/access-control.md#authorize-ions).
+- You do not need ions, or a Datomic Cloud system, to get develop and test Datomic applications. You can start with [dev-local](../../01-setup/03-local-setup/local-setup.md), and when you are ready for ions, make your code portable with [divert-system](../../01-setup/03-local-setup/local-setup.md#using-datomic-local).
+- Do **not** store AWS credentials in the Parameter Store, as Datomic Cloud [fully supports IAM roles](../../05-operation/02-cloud/06-access-control/access-control.md#authorize-ions-to-access-other-aws-services).
 - The tools.deps classpath is the source of truth for an ion revision. If you need a file for local development that you do not want deployed, you should [add that file's directory with a tools.deps alias](https://clojure.org/guides/deps_and_cli#extra_paths). (You cannot e.g. "subtract" the file with a `.gitignore`. Ions use git only for calculating a SHA.)
-- [Provision](../../09-tech-notes/lambda-prov-conc.html) AWS lambda concurrency to mitigate cold starts.
+- [Provision](../../09-tech-notes/08-lambda-provisioned-concurrency/lambda-provisioned-concurrency.md) AWS lambda concurrency to mitigate cold starts.
 - If you have dependencies that are needed only in dev and test, place them [under a tools.deps alias](https://clojure.org/guides/deps_and_cli#extra_deps) so that you do not deploy them to production.
 
 ## Older Versions of Datomic Cloud
 
-Datomic versions 781-9041 (2021-03-02) and older do not manage an [API Gateway](../../05-operation/02-cloud/01-cloud-architecture/cloud-architecture.md#api-gateway) for ion applications. If you are running an older version of Datomic, the easiest way to deploy web services is to [upgrade Datomic](../../05-operation/02-cloud/01-cloud-architecture/cloud-architecture.md) and follow the instructions above.
+Datomic versions 781-9041 (2021-03-02) and older do not manage an [API Gateway](../../05-operation/02-cloud/01-cloud-architecture/cloud-architecture.md#api-gateways) for ion applications. If you are running an older version of Datomic, the easiest way to deploy web services is to [upgrade Datomic](../../05-operation/02-cloud/01-cloud-architecture/cloud-architecture.md) and follow the instructions above.
 
-If this is not possible, the instructions below cover managing your own API Gateway. The instructions vary based on your [system topology](../../05-operation/02-cloud/11-how-to/how-to.md#check-topology).
+If this is not possible, the instructions below cover managing your own API Gateway. The instructions vary based on your [system topology](../../05-operation/02-cloud/11-how-to/how-to.md#check-system-topology-legacy).
 
-For Datomic Solo, you can connect an API Gateway to a [web lambda proxy](#web-lambda-proxies). For Production, you can connect an API Gateway [to your Network Load Balancer](#nlb).
+For Datomic Solo, you can connect an API Gateway to a [web lambda proxy](#web-lambda-proxies). For Production, you can connect an API Gateway [to your Network Load Balancer](#api-gateway-to-network-load-balancer).
 
 ### Web Lambda Proxies
 
@@ -548,9 +548,9 @@ If you are running the Solo Topology, version 781-9041 and older, you can expose
 
 To deploy a Lambda proxy web endpoint, you will need to:
 
-- Develop and test an ordinary [web entry point](#web-ion)
-- Create a web lambda entry point with [ionize](#ionize)
-- [Configure an API Gateway](#api-gateway-lambda-proxy)
+- Develop and test an ordinary [web entry point](#http-direct-entry-point)
+- Create a web lambda entry point with [ionize](#create-a-web-lambda-proxy-entry-point)
+- [Configure an API Gateway](#configure-an-api-gateway-for-a-web-lambda-proxy)
 
 #### Create a Web Lambda Proxy Entry Point
 
@@ -576,7 +576,7 @@ The input map for web lambda proxies includes the following additional keys:
 
 #### Configure an API Gateway for a Web Lambda Proxy
 
-After you [push](#push) and [deploy](#deploy) an ion application with a [web Lambda Proxy](#ionize) entry point, you can create an API gateway as follows:
+After you [push](#push) and [deploy](#deploy) an ion application with a [web Lambda Proxy](#create-a-web-lambda-proxy-entry-point) entry point, you can create an API gateway as follows:
 
 - Go to the [AWS API gateway console](https://console.aws.amazon.com/apigateway/home) to create a new AWS API gateway.
   - If this is the first AWS API Gateway you are creating, choose "Get started."
@@ -589,7 +589,7 @@ After you [push](#push) and [deploy](#deploy) an ion application with a [web Lam
   - Other fields will be updated with defaults. Leave these as is.
 - If you will need to support CORS, then select the "Enable API Gateway CORS" option. This will set up an `OPTIONS` method with a Mock Integration Request which can be changed to fit your needs.
 - Click "Create resource."
-- Set the lambda function to the [name of your Lambda proxy](#invoke-lambda) and click "Save."
+- Set the lambda function to the [name of your Lambda proxy](#invoking-lambdas) and click "Save."
   - Note that the autocomplete does not always work correctly on this step, so trust and verify your own spelling.
 - Choose "Ok" to give API Gateway permission to call your lambda.
 - Under your API on the left side of the UI, click on the bottom choice "Settings."
@@ -607,9 +607,9 @@ The top of the Stage Editor will show the Invoke URL for your deployed app. Your
 
 If you are running the Production Topology, version 781-9041 and older, you can expose a web service by connecting an API Gateway to a compute group's Network Load Balancer as follows:
 
-- Develop and test an ordinary [web entry point](#web-ion)
-- [Create a VPC Link](#create-vpc-link)
-- [Configure an API Gateway](#apig-vpc-link)
+- Develop and test an ordinary [web entry point](#http-direct-entry-point)
+- [Create a VPC Link](#create-a-vpc-link)
+- [Configure an API Gateway](#create-an-api-gateway)
 
 #### Create a VPC Link
 
@@ -626,7 +626,7 @@ The list of all VPC Links active in your system can be found in the [API gateway
 
 To create an API Gateway associated with a specific VPC link:
 
-- Ensure that the [VPC Link](https://console.aws.amazon.com/apigateway/home#/vpc-links) that you [created](#create-vpc-link) in the previous step shows "Status: Available."
+- Ensure that the [VPC Link](https://console.aws.amazon.com/apigateway/home#/vpc-links) that you [created](#create-a-vpc-link) in the previous step shows "Status: Available."
 - Go to the [AWS API Gateway console](https://console.aws.amazon.com/apigateway/home).
   - If this is the first AWS API Gateway you are creating, choose **Get Started**.
   - Then click "Ok" and choose the "New API" radio button.

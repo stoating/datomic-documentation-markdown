@@ -28,4 +28,4 @@ The transaction below creates an artist named *Leonard Cohen* with the country `
 
 The `:artist/country` attribute is of type `:db.type/ref`, so its value must be a reference to another entity. The `:country/CA` keyword can be used as a value because it is the identity of an entity, as specified by `:db/ident` in the previous transaction.
 
-Attempting to use identity keywords that have not been transacted as referenced identities will result in an [anomaly](../../04-apis/04-client-api/client-api.md#anomalies).
+Attempting to use identity keywords that have not been transacted as referenced identities will result in an [anomaly](../../../04-apis/04-client-api/client-api.md#handling-errors).

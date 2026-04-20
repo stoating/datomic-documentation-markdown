@@ -34,7 +34,7 @@ Use at most one of *:db.excise/before* or *:db.excise/beforeT*.
 
 > Note that excision is a special operation that happens outside the timeline of Datomic history, removing data across all of history as if the data never happened. While the excise request itself is transactional, the excision operation is not transactional - the effect of excision is a background operation that occurs during the first indexing job after an excision transaction.
 
-More than one excision can occur between indexing jobs, and you should avoid attempting to repeatedly excise/[request-index](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/request-index) in an attempt to make excision feels synchronous. It's not. If you need to coordinate with a database that is guaranteed to have your excision, you can accomplish this with [sync-excise](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/sync-excise).
+More than one excision can occur between indexing jobs, and you should avoid attempting to repeatedly excise/[request-index](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#request-index) in an attempt to make excision feels synchronous. It's not. If you need to coordinate with a database that is guaranteed to have your excision, you can accomplish this with [sync-excise](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#sync-excise).
 
 Schema datoms and datoms that are part of Datomic's bootstrap cannot be excised. This includes all of the attributes of attributes, and the excision attributes themselves. In addition, you cannot excise anything in the db.part/db partition. Datoms about past excisions also cannot be excised. Attempts to excise datoms that cannot be excised will be recorded, but have no effect.
 
@@ -125,7 +125,7 @@ Thus, **excision is permanent and unrecoverable**, short of restoring a backup. 
 
 Excision puts a substantial burden on background indexing. Large excisions can trigger [indexing jobs](../04-capacity-planning/capacity-planning.md#indexing) whose execution time is proportional to the size of the entire database, leading to back pressure and reduced write availability. Try to avoid excising more than a few thousand datoms at a time on a live system.
 
-After excision and indexing are complete, storage for the excised data can be recovered via [gc-storage](../04-capacity-planning/capacity-planning.md#garbage-collection). The datoms recording excisions take up a small amount of space in storage.
+After excision and indexing are complete, storage for the excised data can be recovered via [gc-storage](../04-capacity-planning/capacity-planning.md#separated-garbage-collection-tool-for-datomic). The datoms recording excisions take up a small amount of space in storage.
 
 ## Limitations
 

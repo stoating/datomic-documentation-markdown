@@ -6,7 +6,7 @@ This section explains how to read EDN notation and how to use data structures to
 
 ## Quickstart Video
 
-A 70 second overview of EDN can be found at the [EDN Live Tutorial](../livetutorial/edntutorial.md).
+A 70 second overview of EDN can be found at the EDN Live Tutorial.
 
 A video is available [on Youtube](https://youtu.be/5eKgRcvEJxU) as well.
 

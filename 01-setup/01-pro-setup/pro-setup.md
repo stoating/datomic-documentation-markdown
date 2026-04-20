@@ -1,6 +1,6 @@
 # Pro Setup
 
-This page is for users who have [chosen Datomic Pro](../../introduction.md#datomic-editions) and covers getting Datomic Pro as well as running a transactor.
+This page is for users who have [chosen Datomic Pro](../../introduction.md) and covers getting Datomic Pro as well as running a transactor.
 
 ## Get Datomic Pro
 

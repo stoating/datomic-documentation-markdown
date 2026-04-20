@@ -12,7 +12,7 @@ Datomic caches only immutable data, so all caches are valid forever.
 
 ## Memory Index
 
-Recent datoms are cached in the memory index on the transactor and on all peers. The memory index size is [controlled](../04-capacity-planning/capacity-planning.md#memory-index-defaults) by the *memory-index-threshold* and *memory-index-max* [settings on the transactor](../10-system-properties/system-properties.md#transactor-properties). The actual size of the memory index will rarely rise much above *memory-index-threshold*, except during data imports when it may reach *memory-index-max*.
+Recent datoms are cached in the memory index on the transactor and on all peers. The memory index size is [controlled](../04-capacity-planning/capacity-planning.md#prefer-memory-index-defaults) by the *memory-index-threshold* and *memory-index-max* [settings on the transactor](../10-system-properties/system-properties.md#transactor-properties). The actual size of the memory index will rarely rise much above *memory-index-threshold*, except during data imports when it may reach *memory-index-max*.
 
 Setting memory index configuration on a peer is meaningless; peers must be able to handle the memory index given to them by the transactor.
 
@@ -46,13 +46,13 @@ Unlike the memory index, the object cache can vary (in both configuration and co
 
 Memcached is an optional addition to a Datomic system, providing another level of cache between the in-process object cache and storage. Adding Memcached to a system can reduce the load on storage, and can reduce the latency associated with populating the object cache.
 
-Memcached configuration is [controlled](../../../02-accessing/01-peer-library/peer-library.md#configuring-caching) by the *memcached* [property on the transactor](../10-system-properties/system-properties.md#transactor-properties) and the *datomic.memcachedServers* [Java system property on the peer](../10-system-properties/system-properties.md#peer-properties).
+Memcached configuration is [controlled](../../../02-accessing/01-peer-library/peer-library.md) by the *memcached* [property on the transactor](../10-system-properties/system-properties.md#transactor-properties) and the *datomic.memcachedServers* [Java system property on the peer](../10-system-properties/system-properties.md#peer-properties).
 
 You can set up more than one Memcached, and each Datomic process can choose via configuration which one(s) it uses. Datomic uses only UUIDs for Memcached keys, so Datomic can coexist with other uses of a Memcached installation. Additionally, if you specify more than one Memcached server, Datomic will distribute values across all instances, effectively enabling a single cache the size of the sum of all the instances.
 
 When configured to use Memcached, a Datomic process will automatically write into Memcached any segment it needs that is not already present in Memcached. In addition, the transactor (only) will write index and log segments to Memcached as the segments are produced.
 
-The *datomic.memcachedServers* property specifies a fixed list of Memcached servers. To change the list of servers, you must change the value of this property and restart the affected peer and transactor processes. If you are using Amazon ElastiCache, a better approach is to use [automatic discovery](#node-auto-discovery).
+The *datomic.memcachedServers* property specifies a fixed list of Memcached servers. To change the list of servers, you must change the value of this property and restart the affected peer and transactor processes. If you are using Amazon ElastiCache, a better approach is to use [automatic discovery](#automatic-node-discovery).
 
 ### SASL Auth
 

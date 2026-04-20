@@ -10,11 +10,11 @@ An immutable, point-in-time fact: `[entity, attribute, value, transaction, added
 
 | Modifier and Type | Method | Description |
 |---|---|---|
-| [`Object`](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html) | [`a()`](#a) | This datom's [attribute](../../../../06-reference/01-schema/01-schema-reference/schema-reference.md#attributes) id. |
+| [`Object`](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html) | [`a()`](#a) | This datom's [attribute](../../../../06-reference/01-schema/01-schema-reference/schema-reference.md#defining-schema) id. |
 | `boolean` | [`added()`](#added) | Is this datom added or retracted? |
 | [`Object`](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html) | [`e()`](#e) | This datom's [entity id](../../../../06-reference/01-schema/04-identity-and-uniqueness/identity-and-uniqueness.md#entities). |
 | [`Object`](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html) | [`get(int index)`](#get) | Positional getter, as if datom is tuple of `[e a v tx added]` |
-| [`Object`](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html) | [`tx()`](#tx) | This datom's [transaction id](../../../../06-reference/02-transactions/03-processing-transactions/processing-transactions.md#reified-transactions). |
+| [`Object`](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html) | [`tx()`](#tx) | This datom's [transaction id](../../../../06-reference/02-transactions/02-transaction-data/transaction-data.md#reified-transactions). |
 | [`Object`](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html) | [`v()`](#v) | This datom's value. |
 
 ## Method Details
@@ -33,7 +33,7 @@ This datom's [entity id](../../../../06-reference/01-schema/04-identity-and-uniq
 
 `Object a()`
 
-This datom's [attribute](../../../../06-reference/01-schema/01-schema-reference/schema-reference.md#attributes) id.
+This datom's [attribute](../../../../06-reference/01-schema/01-schema-reference/schema-reference.md#defining-schema) id.
 
 **Returns:** attribute id
 
@@ -53,7 +53,7 @@ This datom's value.
 
 `Object tx()`
 
-This datom's [transaction id](../../../../06-reference/02-transactions/03-processing-transactions/processing-transactions.md#reified-transactions).
+This datom's [transaction id](../../../../06-reference/02-transactions/02-transaction-data/transaction-data.md#reified-transactions).
 
 **Returns:** transaction id
 

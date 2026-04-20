@@ -153,7 +153,7 @@ You could choose to send each of these attributes to the database in individual 
 Now that we have our attribute definitions ready to go, we have to issue a transaction via the Peer library, using the *transact* function. Transact takes two arguments:
 
 - An active connection
-- A collection of transaction data, formatted in [list or map form](../../../06-reference/02-transactions/transactions.md#list-forms)
+- A collection of transaction data, formatted in [list or map form](../../../06-reference/02-transactions/transactions.md)
 
 Transact the schema:
 
@@ -186,7 +186,7 @@ Transact the schema:
 
 The presence of the *:db-before* and a *:db-after* values shows you that new information was transmitted and persisted in your database.
 
-Refer to [transact](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/transact) to learn more about the details of this return value.
+Refer to [transact](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#transact) to learn more about the details of this return value.
 
 Next, we'll start adding movies into the database.
 
@@ -276,7 +276,7 @@ Once you have the database value, you can issue queries against it. You issues q
 - Query data (represented as a map or list) containing **at least** a *:find* clause and a *:where* clause
 - A list of input sources for the query
 
-The query data can also contain a variety of other optional components, which you can learn more about in the [q reference](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/q).
+The query data can also contain a variety of other optional components, which you can learn more about in the [q reference](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#q).
 
 When crafting your datalog query, provide enough of a *:where* clause to limit the results. So the question is, how do we ask for all the movies in our database? In our schema, a movie is anything that has an associated *:movie/title* attribute (or *:movie/release-year* or *:movie/genre*, but we'll just use *:movie/title* for now).
 
@@ -369,7 +369,7 @@ And when you run it:
   [17592186045418 "The Goonies" 1985 "action/adventure"]}
 ```
 
-> Notice that this time, each of your returned tuples contains multiple values - one per logic variable in the *:find* specification. The shape of the relations returned is defined by your *:find* specification. More information on that can found in the [query reference documentation](../../../06-reference/03-query-and-pull/02-query-reference/query-reference.md#find-specifications).
+> Notice that this time, each of your returned tuples contains multiple values - one per logic variable in the *:find* specification. The shape of the relations returned is defined by your *:find* specification. More information on that can found in the [query reference documentation](../../../06-reference/03-query-and-pull/02-query-reference/query-reference.md#find-specs).
 
 There is much more to learn about datalog, from nested queries to secondary inputs and more. You can find out about it in the [query reference](../../../06-reference/03-query-and-pull/02-query-reference/query-reference.md).
 

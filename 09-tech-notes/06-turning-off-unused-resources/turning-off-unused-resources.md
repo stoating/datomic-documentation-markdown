@@ -1,6 +1,6 @@
 # Turning Off Unused Compute Resources
 
-While you can [delete a compute stack](../../05-operation/02-cloud/15-deleting/deleting.md#deleting-stacks) at any time without loss of data, it is often useful to instead temporarily turn down unused compute capacity in a Datomic system. This is achieved by setting the scaling capacity targets for your compute group's auto-scaling group to 0.
+While you can [delete a compute stack](../../05-operation/02-cloud/15-deleting/deleting.md#deleting-cloudformation-stacks) at any time without loss of data, it is often useful to instead temporarily turn down unused compute capacity in a Datomic system. This is achieved by setting the scaling capacity targets for your compute group's auto-scaling group to 0.
 
 ## Adjusting the ASG
 
@@ -33,6 +33,6 @@ The ASG will terminate all nodes of that compute or query group without removing
 
 ### CLI Tools - Solo Topology (Legacy)
 
-> This section only applies to [Datomic 781-9041](../../11-releases/02-datomic-cloud/02-cloud-change-log/cloud-change-log.md#781-9041) and lower.
+> This section only applies to [Datomic 781-9041](../../11-releases/02-datomic-cloud/02-cloud-change-log/cloud-change-log.md#20210302-781-9041-compute-update) and lower.
 
-The [`datomic solo`](../../05-operation/02-cloud/07-cli-tools/cli-tools.md#solo) CLI Tool command can be used to set the ASG to 0 or 1 for [solo topology systems](../../05-operation/02-cloud/01-cloud-architecture/cloud-architecture.md#solo-topology).
+The [`datomic solo`](../../05-operation/02-cloud/07-cli-tools/cli-tools.md#solo) CLI Tool command can be used to set the ASG to 0 or 1 for [solo topology systems](../../05-operation/02-cloud/01-cloud-architecture/cloud-architecture.md).

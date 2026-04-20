@@ -35,7 +35,7 @@ Most commands support the following options:
 
 Queries the supplied Datomic Compute Group for logs.
 
-`Log` requires one argument, a [`compute-group-name`](../11-how-to/how-to.md#compute-group-name):
+`Log` requires one argument, a [`compute-group-name`](../11-how-to/how-to.md#find-compute-group-name):
 
 ```
 datomic log list <compute-group>
@@ -51,7 +51,7 @@ datomic log list <compute-group>
 
 Returns the details of a specific log. Returns a JSON array.
 
-`Detail` requires two arguments, a [`compute-group-name`](../11-how-to/how-to.md#compute-group-name) and a [message-id](#list) supplied to `-m`:
+`Detail` requires two arguments, a [`compute-group-name`](../11-how-to/how-to.md#find-compute-group-name) and a [message-id](#list) supplied to `-m`:
 
 ```
 datomic log detail <compute-group> -m <message-id>
@@ -111,13 +111,13 @@ datomic cloud list-systems
 
 ## Legacy
 
-> This section only applies to [Datomic 781-9041](../../../11-releases/02-datomic-cloud/02-cloud-change-log/cloud-change-log.md#781-9041) and lower.
+> This section only applies to [Datomic 781-9041](../../../11-releases/02-datomic-cloud/02-cloud-change-log/cloud-change-log.md#20210302-781-9041-compute-update) and lower.
 
 ### Client
 
 The `client` commands use ssh to allow connections from outside the [Datomic VPC](../01-cloud-architecture/cloud-architecture.md#security) through the [access gateway](../01-cloud-architecture/cloud-architecture.md#api-gateways) to a [Datomic system](../01-cloud-architecture/cloud-architecture.md#system).
 
-`client` commands requires a single argument: [`system-name`](../11-how-to/how-to.md#system-name).
+`client` commands requires a single argument: [`system-name`](../11-how-to/how-to.md#find-datomic-system-name).
 
 #### Access
 
@@ -154,7 +154,7 @@ You can also monitor the status of the access gateway in the [AWS EC2 Management
 
 Enable the access gateway, setting the ASG to 1.
 
-`Enable` requires a single argument, [`system-name`](../11-how-to/how-to.md#system-name):
+`Enable` requires a single argument, [`system-name`](../11-how-to/how-to.md#find-datomic-system-name):
 
 ```
 datomic gateway enable <system>
@@ -166,7 +166,7 @@ datomic gateway enable <system>
 
 Disable the access gateway, setting the ASG to 0.
 
-`Disable` requires a single argument, [`system-name`](../11-how-to/how-to.md#system-name):
+`Disable` requires a single argument, [`system-name`](../11-how-to/how-to.md#find-datomic-system-name):
 
 ```
 datomic gateway disable <system>
@@ -178,7 +178,7 @@ datomic gateway disable <system>
 
 Restarts the analytics support on the access gateway.
 
-`Restart` requires a single argument, [`system-name`](../11-how-to/how-to.md#system-name):
+`Restart` requires a single argument, [`system-name`](../11-how-to/how-to.md#find-datomic-system-name):
 
 ```
 datomic gateway restart <system>
@@ -190,7 +190,7 @@ datomic gateway restart <system>
 
 `Solo` manages the [ASG](https://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroup.html) for a Datomic solo instance.
 
-`Solo` commands requires a single argument, [`system-name`](../11-how-to/how-to.md#system-name).
+`Solo` commands requires a single argument, [`system-name`](../11-how-to/how-to.md#find-datomic-system-name).
 
 #### Up
 
@@ -233,7 +233,7 @@ Tools for utilizing [Datomic analytics](../../../08-analytics/01-analytics-conce
 
 `Access` uses SSH to allow connections from outside the [Datomic VPC](../01-cloud-architecture/cloud-architecture.md#security) through the [access gateway](../01-cloud-architecture/cloud-architecture.md#api-gateways) to a [Datomic system](../01-cloud-architecture/cloud-architecture.md#system) for [analytics support](../../../08-analytics/01-analytics-concepts/analytics-concepts.md).
 
-`Access` requires a single argument, [`system-name`](../11-how-to/how-to.md#system-name):
+`Access` requires a single argument, [`system-name`](../11-how-to/how-to.md#find-datomic-system-name):
 
 ```
 datomic analytics access <system>
@@ -245,9 +245,9 @@ datomic analytics access <system>
 
 #### Sync
 
-`Sync` syncs your local [configuration directory](../../../08-analytics/03-cloud-configuration/cloud-configuration.md#configuration-directory) to the Datomic system's analytics configuration.
+`Sync` syncs your local [configuration directory](../../../08-analytics/03-cloud-configuration/cloud-configuration.md) to the Datomic system's analytics configuration.
 
-`Sync` requires two arguments, [`system-name`](../11-how-to/how-to.md#system-name) and your local configuration directory:
+`Sync` requires two arguments, [`system-name`](../11-how-to/how-to.md#find-datomic-system-name) and your local configuration directory:
 
 ```
 datomic analytics sync <system> <directory>

@@ -8,7 +8,7 @@ All nodes implement the entire Datomic API, so HA covers all Datomic functionali
 
 To enable HA for the primary compute group, set its minimum number of compute nodes [higher than one](../03-growing-your-system/growing-your-system.md#primary-compute-group).
 
-To enable HA for a query group, set its minimum number of nodes [higher than one](../03-growing-your-system/growing-your-system.md#query-group).
+To enable HA for a query group, set its minimum number of nodes [higher than one](../03-growing-your-system/growing-your-system.md#adding-and-scaling-a-query-group).
 
 You can change these settings at any time if needed.
 
@@ -49,6 +49,6 @@ In the event of node failures, Datomic will remain available for transactions (a
 
 ## Programs Should Be Ready for Transient Anomalies
 
-When a node becomes unhealthy for any reason, client requests that are routed from the ALB to that node may experience slow responses or transient `unavailable` [anomalies](../../../04-apis/04-client-api/client-api.md#anomalies). The client requests that reach one of the other, healthy nodes during this time will experience normal behavior and performance.
+When a node becomes unhealthy for any reason, client requests that are routed from the ALB to that node may experience slow responses or transient `unavailable` [anomalies](../../../04-apis/04-client-api/client-api.md#handling-errors). The client requests that reach one of the other, healthy nodes during this time will experience normal behavior and performance.
 
 The Datomic client may transparently retry requests when it is safe to do so, but programs should not rely on this. Programs should be implemented to detect and handle transient anomalies in a manner appropriate to the program's needs.

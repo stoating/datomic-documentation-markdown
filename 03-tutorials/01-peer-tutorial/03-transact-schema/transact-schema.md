@@ -16,7 +16,7 @@ In a relational database, each of those (title, release year, and genre) would b
 
 In Datomic, each of those is an attribute, which can be associated with an entity.
 To start adding movie data to our database, we'll have to tell it about those three attributes.
-And, since schema is just data, you describe your custom attributes using Datomic's [built-in attributes](../../../06-reference/01-schema/schema.md).
+And, since schema is just data, you describe your custom attributes using Datomic's [built-in attributes](../../../06-reference/01-schema/01-schema-reference/schema-reference.md).
 
 Every attribute definition has [three required attributes](../../../06-reference/01-schema/01-schema-reference/schema-reference.md#defining-schema).
 
@@ -79,7 +79,7 @@ have to issue a transaction via the Peer library, using the *transact* method.
 Transact takes two parameters:
 
 - An active connection
-- A collection of transaction data, formatted in [list or map form](../../../06-reference/02-transactions/transactions.md#list-forms)
+- A collection of transaction data, formatted in [list or map form](../../../06-reference/02-transactions/02-transaction-data/transaction-data.md#transaction-data)
 
 - Go ahead and transact the schema:
 

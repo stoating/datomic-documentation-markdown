@@ -6,7 +6,7 @@
 
 ## Installing Superset
 
-- Use the venv [created previously](../09-python/python.md#setup-venv). Start the virtual environment using the directory created when making the venv (my-python-env):
+- Use the venv [created previously](../09-python/python.md#setting-up-a-python-virtual-environment). Start the virtual environment using the directory created when making the venv (my-python-env):
 
 ```sh
 . venv/bin/activate

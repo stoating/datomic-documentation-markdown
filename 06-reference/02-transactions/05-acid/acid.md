@@ -18,8 +18,8 @@ A Datomic transaction is written to durable storage in a single atomic write, so
 Datomic also provides first class support for accessing the time basis of information:
 
 - Every fact in the database knows its time basis via the transaction component of a datom.
-- A database value knows its time basis via [Database.basisT](../../04-apis/02-peer-api-javadoc/interfaces/database/database.md#basisT--).
-- Peers can synchronize on a time basis via [Connection.sync](../../04-apis/02-peer-api-javadoc/interfaces/connection/connection.md#sync-long-).
+- A database value knows its time basis via [Database.basisT](../../../04-apis/02-peer-api-javadoc/interfaces/database/database.md#basist).
+- Peers can synchronize on a time basis via [Connection.sync](../../../04-apis/02-peer-api-javadoc/interfaces/connection/connection.md#synclong).
 
 To correctly implement domain models, transactions need to be able to derive new facts based on existing facts (e.g. adding to a bank balance), and to enforce domain-specific functional constraints (e.g. a valid account must include name, email, and password hash). Datomic's [transaction functions](../04-transaction-functions/transaction-functions.md) provide transformations and validations of transaction data based on the database value at start-of-transaction (db-before), and [entity predicates](../../01-schema/01-schema-reference/schema-reference.md#entity-predicates) provide arbitrary predicates of the database value at end-of-transaction (db-after).
 
@@ -27,13 +27,13 @@ To correctly implement domain models, transactions need to be able to derive new
 
 The Isolation property ensures that concurrent transactions result in the same system state that would result if the transactions were executed serially.
 
-For purposes of understanding isolation, Datomic operations come in two flavors: reads and writes. A read is an operation which obtains the current value of the database: e.g., a call to [d/db](../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/db). A write is an operation which alters the state of the database, e.g. [d/transact](../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/transact).
+For purposes of understanding isolation, Datomic operations come in two flavors: reads and writes. A read is an operation which obtains the current value of the database: e.g., a call to [d/db](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#db). A write is an operation which alters the state of the database, e.g. [d/transact](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#transact).
 
 Datomic guarantees serializability: all operations, across all nodes, appear to execute in a total order.
 
 - Writes are *strong* serializable because they are fully serialized. Every successful transaction performs a storage CAS ensuring that its basis is the previous transaction.
 - All operations on a single peer are monotonic. If operation Op1 completes before operation Op2 begins, a peer will always observe that Op1 executed before Op2. This holds for any combination of writes and reads.
-- Reads across multiple peers are merely serializable. For instance, if peer P1 sees a write complete before peer P2 begins a read, P2 may not observe P1’s write. Operations that interact with multiple peers can explicitly ensure operation orders using [sync](../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/sync).
+- Reads across multiple peers are merely serializable. For instance, if peer P1 sees a write complete before peer P2 begins a read, P2 may not observe P1’s write. Operations that interact with multiple peers can explicitly ensure operation orders using [sync](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#sync).
 
 ## Durability
 

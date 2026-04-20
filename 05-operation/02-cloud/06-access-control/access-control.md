@@ -2,8 +2,8 @@
 
 On this page, the following metavariables are used:
 
-- *SystemName* is your Datomic [system name](../11-how-to/how-to.md#system-name)
-- *S3DatomicArn* is your Datomic system's [S3 bucket ARN](../11-how-to/how-to.md#s3-bucket)
+- *SystemName* is your Datomic [system name](../11-how-to/how-to.md#find-datomic-system-name)
+- *S3DatomicArn* is your Datomic system's [S3 bucket ARN](../11-how-to/how-to.md#find-system-s3-bucket)
 - *DbName* is the name of a particular database
 
 ## Datomic Administrator Policy

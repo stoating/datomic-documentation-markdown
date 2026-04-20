@@ -56,7 +56,7 @@ The [deploy](../02-ions-reference/ions-reference.md#deploy) operation installs y
 
 Let's deploy the revision you just pushed. The output of a successful push will include some important pieces of information:
 
-- `:rev` or `:uname` – the name of the git SHA or [unreproducible push name](../02-ions-reference/ions-reference.md#unreproducible)
+- `:rev` or `:uname` – the name of the git SHA or [unreproducible push name](../02-ions-reference/ions-reference.md#unreproducible-push)
 - `:deploy-groups` – a list of compute groups with the same `:app-name`
 - `:deploy-command` – an example deploy command. This may require unescaping backslashes
 
@@ -96,4 +96,4 @@ Deploy Status returns the [Step Functions reference](https://docs.aws.amazon.com
 
 If your `deploy-status` doesn't reach `SUCCEEDED`, then use the [deploy-status troubleshooting guide](../../05-operation/02-cloud/13-cloud-troubleshooting/cloud-troubleshooting.md#troubleshooting-ion-deploy-status) to diagnose and fix any problems.
 
-Once your ion is successfully deployed, explore the [entry points](../07-entry-points/entry-points.md) to your ion.
+Once your ion is successfully deployed, explore the [entry points](../07-entry-points/../07-entry-points/entry-points.md) to your ion.

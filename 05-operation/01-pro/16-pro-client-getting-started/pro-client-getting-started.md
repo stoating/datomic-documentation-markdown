@@ -17,7 +17,7 @@ The Datomic client library includes both the [synchronous](../../../04-apis/04-c
 
 ### Clojure CLI
 
-To use the Client library from a [Clojure CLI REPL](../../02-cloud/11-how-to/how-to.md#clojure-cli), add
+To use the Client library from a [Clojure CLI REPL](../../02-cloud/11-how-to/how-to.md#install-clojure-cli), add
 the following to your [deps.edn](https://clojure.org/guides/deps_and_cli) dependencies map:
 
 ```clojure

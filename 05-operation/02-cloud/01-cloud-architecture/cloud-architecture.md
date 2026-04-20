@@ -4,13 +4,13 @@ Datomic's data model - based on immutable facts stored over time -
 enables a physical design that is fundamentally different from
 traditional [RDBMSs](https://en.wikipedia.org/wiki/Relational_database_management_system). Instead of processing all requests in a single
 server component, Datomic [distributes](#compute-groups) [ACID](../../../06-reference/02-transactions/05-acid/acid.md) transactions, query, datalog and pull,
-[indexing](#indexes), [caching](#caching), and [SQL analytics support](#analytics) to provide [high
-availability](#ha), [horizontal scaling, and elasticity](#query-groups). Datomic also allows
+[indexing](#indexes), [caching](#caching), and [SQL analytics support](#analytics-and-sql) to provide [high
+availability](#high-availability), [horizontal scaling, and elasticity](#query-groups). Datomic also allows
 for [dynamic assignment of compute resources](#query-groups) to tasks **without** any
 kind of pre-assignment or [sharding](https://en.wikipedia.org/wiki/Shard_(database_architecture)).
 
 Datomic is designed from the ground up to run on AWS. Datomic
-automates AWS [resources](#minimal-admin), [deployment](#api-gateway) and [security](#security) so that you can
+automates AWS [resources](#minimal-administration), [deployment](#api-gateways) and [security](#security) so that you can
 [focus on your application](#applications).
 
 The [Day of Datomic videos](https://www.youtube.com/watch?v=p-C_xaKhOHg&t=288s) discuss Datomic architecture in detail.
@@ -95,7 +95,7 @@ accessible.
 
 - **Indelible:** the log accumulates new information and never removes
 information. Where update-in-place databases would delete, Datomic
-instead *adds* a new [retraction](../../../06-reference/02-transactions/02-transaction-data/transaction-data.md#op).
+instead *adds* a new [retraction](../../../06-reference/02-transactions/02-transaction-data/transaction-data.md#assert-and-retract).
 - **Chronological:** the log contains the entire history of the database,
 in time order.
 - **Transactional:** Datomic writes are *always* [ACID](../../../06-reference/02-transactions/05-acid/acid.md) transactions,
@@ -166,7 +166,7 @@ particular:
 
 - Client code does not know or care whether it is talking to the
 primary compute group or to a query group
-- Query groups are [peers](#peers) with the primary compute group
+- Query groups are [peers](#peer-processes) with the primary compute group
 
 You can add, modify, or remove query groups at any time. For example,
 you might initially release a transactional application that uses only
@@ -212,7 +212,7 @@ per segment
 - Are for performance only, and have no bearing on [transactional guarantees](../../../06-reference/02-transactions/05-acid/acid.md)
 
 Datomic's cache hierarchy includes the [object cache](#object-cache),
-[EFS cache](#efs-cache) and optionally [Valcache](#valcache) when using [i3 instances](../03-growing-your-system/growing-your-system.md#valcache).
+[EFS cache](#efs-cache) and optionally [Valcache](#valcache) when using [i3 instances](../03-growing-your-system/growing-your-system.md#valcache-for-large-databases).
 
 ![cache-hierarchy](https://docs.datomic.com/images/cache-hierarchy.png)
 
@@ -221,14 +221,14 @@ Datomic's cache hierarchy includes the [object cache](#object-cache),
 Nodes maintain an LRU cache of segments as Java objects. When a node
 needs a segment, Datomic looks in the object cache first. If a
 segment is unavailable in the object cache, Datomic will look next to
-the Valcache [if it's available](../03-growing-your-system/growing-your-system.md#valcache).
+the Valcache [if it's available](../03-growing-your-system/growing-your-system.md#valcache-for-large-databases).
 
 Because each process maintains its own object cache, a process will
 automatically adjust over time to its workload.
 
 ### Valcache
 
-Primary Compute Nodes [on i3 instance types](../03-growing-your-system/growing-your-system.md#valcache) maintain a *Valcache*. Valcache implements an immutable subset of the Memcached API and maintains an LRU cache backed by fast local SSDs.
+Primary Compute Nodes [on i3 instance types](../03-growing-your-system/growing-your-system.md#valcache-for-large-databases) maintain a *Valcache*. Valcache implements an immutable subset of the Memcached API and maintains an LRU cache backed by fast local SSDs.
 
 If a segment is unavailable in Valcache, Datomic will look next to the EFS cache.
 
@@ -259,11 +259,11 @@ application deployment on AWS. In particular, you can:
 
 - [Develop and test with real-time feedback at a local REPL](../../../07-datomic-cloud-ions/02-ions-reference/ions-reference.md#best-practices)
 - Deploy to AWS [with no downtime](../../../07-datomic-cloud-ions/02-ions-reference/ions-reference.md#deploy)
-- Expose functions [as AWS Lambdas](../../../07-datomic-cloud-ions/02-ions-reference/ions-reference.md#lambda-ion) without using the AWS Lambda API
-- Expose functions [as web services](../../../07-datomic-cloud-ions/02-ions-reference/ions-reference.md#web-ion)
-- Deploy [multiple applications](../03-growing-your-system/growing-your-system.md#dev-workflow) that share a common Datomic system
-- [Elastically scale](../03-growing-your-system/growing-your-system.md#query-group) your entire application instead of many separate elements
-- Reproducible deploy across [different development stages](../03-growing-your-system/growing-your-system.md#dev-workflow)
+- Expose functions [as AWS Lambdas](../../../07-datomic-cloud-ions/02-ions-reference/ions-reference.md#lambda-entry-point) without using the AWS Lambda API
+- Expose functions [as web services](../../../07-datomic-cloud-ions/02-ions-reference/ions-reference.md#http-direct-entry-point)
+- Deploy [multiple applications](../03-growing-your-system/growing-your-system.md#development-workflow) that share a common Datomic system
+- [Elastically scale](../03-growing-your-system/growing-your-system.md#adding-and-scaling-a-query-group) your entire application instead of many separate elements
+- Reproducible deploy across [different development stages](../03-growing-your-system/growing-your-system.md#development-workflow)
 
 ![application-consumers](https://docs.datomic.com/images/application-consumers.png)
 
@@ -275,9 +275,9 @@ Datomic is designed to follow [AWS security best practices](https://aws.amazon.c
 transfer via S3, enabling [access control](../06-access-control/access-control.md) governed by IAM roles.
 - Data is encrypted at rest using [AWS KMS](https://aws.amazon.com/kms/).
 - All Datomic compute groups are isolated in a private [VPC](https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html).
-- Datomic is exposed to the internet only via optional AWS [API Gateways](#api-gateway).
+- Datomic is exposed to the internet only via optional AWS [API Gateways](#api-gateways).
 - Datomic EC2 instances run with an [IAM](https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html) role configured for least privilege.
-- Datomic requires [minimal administration](#minimal-admin) after initial setup. Administrative tasks are performed in CloudFormation, never by logging in to EC2 instances.
+- Datomic requires [minimal administration](#minimal-administration) after initial setup. Administrative tasks are performed in CloudFormation, never by logging in to EC2 instances.
 
 ## API Gateways
 
@@ -316,11 +316,11 @@ manually in many database systems.
 with no configuration or coordination required. There is no separate
 cache API, and all database operations benefit from caching
 automatically.
-- Because all processes [are peers](#peers), developers do not have to worry
+- Because all processes [are peers](#peer-processes), developers do not have to worry
 about data locality for query.
 - Datomic [durable storage](#storage-resources) requires no configuration and scales
 automatically.
-- Datomic [compute](#compute-groups) can be [scaled manually or automatically](../03-growing-your-system/growing-your-system.md#query-group), and tasks with
+- Datomic [compute](#compute-groups) can be [scaled manually or automatically](../03-growing-your-system/growing-your-system.md#adding-and-scaling-a-query-group), and tasks with
 different needs can have their own dedicated compute resources.
 
 With ions, Datomic can host your entire application, minimizing the

@@ -2,7 +2,7 @@
 
 ## Background
 
-Datomic stores data immutably. When you ask a connection for a db value, you are given a recent value of the db. All clients see a valid, [consistent](../../02-transactions/05-acid/acid.md) view. You can never see partial transactions, corruption/regression of timelines, causal anomalies etc. Datomic is always 'business rules' valid, and causally consistent.
+Datomic stores data immutably. When you ask a connection for a db value, you are given a recent value of the db. All clients see a valid, [consistent](../05-acid/acid.md) view. You can never see partial transactions, corruption/regression of timelines, causal anomalies etc. Datomic is always 'business rules' valid, and causally consistent.
 
 ## Motivation
 
@@ -14,18 +14,18 @@ This comes up when you would like to read-your-own-writes via the Client API (e.
 
 ## Sync
 
-[Peer API](../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/sync) | [Client API](../../04-apis/03-client-api-clojuredoc/client-api-clojuredoc.md#var-sync)
+[Peer API](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#sync) | [Client API](../../../04-apis/03-client-api-clojuredoc/client-api-clojuredoc.md#sync)
 
 `sync` takes a basis point `t`, and it returns a database value that includes point `t`. This does not cause any additional network traffic, and it saves you from having to poll for arrival. `sync` is the preferred method to use for synchronizing between Datomic callers:
 
 - Caller A gets the basis `t` for some transaction of interest
 - Caller A records the `t` value in its communication to B, e.g. via cookie.
 
-You can easily get the basis `t` for any db value you have in hand using the [Peer API](../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/basis-t) or [Client API](../../04-apis/03-client-api-clojuredoc/client-api-clojuredoc.md#var-db).
+You can easily get the basis `t` for any db value you have in hand using the [Peer API](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#basis-t) or [Client API](../../../04-apis/03-client-api-clojuredoc/client-api-clojuredoc.md#db).
 
 ## Comparison to As-Of
 
-`sync` ensures (by maybe waiting) that you have up to some time point `t`. [as-of](../../06-reference/06-time-in-datomic/time-in-datomic.md#as-of) ensures (by maybe filtering) that you have not more than some time point `t`. In combination, they allow separate processes to know that they are working from the same basis.
+`sync` ensures (by maybe waiting) that you have up to some time point `t`. [as-of](../../06-time-in-datomic/time-in-datomic.md#as-of) ensures (by maybe filtering) that you have not more than some time point `t`. In combination, they allow separate processes to know that they are working from the same basis.
 
 ## Conclusion
 

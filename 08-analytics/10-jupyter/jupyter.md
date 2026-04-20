@@ -6,7 +6,7 @@
 
 ## Installing Jupyter
 
-Use the venv [created previously](../09-python/python.md#setup-venv) to perform the steps below.
+Use the venv [created previously](../09-python/python.md#setting-up-a-python-virtual-environment) to perform the steps below.
 
 - From the directory created when making the venv (my-python-env):
 

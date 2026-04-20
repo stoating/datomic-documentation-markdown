@@ -2,46 +2,46 @@
 
 ## Datomic Schema Best Practices
 
-- [Group related attributes in a namespace](#group-related-attributes)
+- [Group related attributes in a namespace](#group-related-attributes-in-a-namespace)
 - [Plan for accretion](#plan-for-accretion)
-- [Model relationships in one direction only](#one-direction-only)
-- [Use idents for enumerated types](#idents-for-enumerated-types)
-- [Use unique identities for external keys](#unique-ids-for-external-keys)
-- [Use NoHistory for high-churn attributes](#nohistory-for-high-churn)
+- [Model relationships in one direction only](#model-relationships-in-one-direction-only)
+- [Use idents for enumerated types](#use-idents-for-enumerated-types)
+- [Use unique identities for external keys](#use-unique-identities-for-external-keys)
+- [Use NoHistory for high-churn attributes](#use-nohistory-for-high-churn-attributes)
 
 ## Datomic Production Schema Best Practices
 
-- [Grow schema and never break it](#grow-schema)
-- [Never remove or reuse names](#never-remove-or-reuse)
+- [Grow schema and never break it](#grow-schema-and-never-break-it)
+- [Never remove or reuse names](#never-remove-or-reuse-names)
 - [Use aliases](#use-aliases)
 - [Annotate schema](#annotate-schema)
 
 ## Datomic Transaction Best Practices
 
 - [Add facts to the transaction entity](#add-facts-about-the-transaction-entity)
-- [Use lookup refs to specify existing entities](#lookup-refs-to-specify-existing-entities)
-- [Use CAS for optimistic concurrency](#optimistic-concurrency)
-- [Use DbAfter to see the result of a transaction](#use-dbafter)
+- [Use lookup refs to specify existing entities](#use-lookup-refs-to-specify-existing-entities)
+- [Use CAS for optimistic concurrency](#use-cas-for-optimistic-concurrency)
+- [Use DbAfter to see the result of a transaction](#use-dbafter-to-see-the-result-of-a-transaction)
 - [Set txInstant on imports](#set-txinstant-on-imports)
-- [Pipeline transactions for higher throughput](#pipeline-transactions)
+- [Pipeline transactions for higher throughput](#pipeline-transactions-for-higher-throughput)
 
 ## Datomic Query Best Practices
 
-- [Put the most selective clauses first in query](#most-selective-clauses-first)
-- [Prefer query over raw index access](#prefer-query)
-- [Pass collections as inputs](#collections-as-inputs)
+- [Put the most selective clauses first in query](#put-the-most-selective-clause-first-in-query)
+- [Prefer query over raw index access](#prefer-query-over-raw-index-access)
+- [Pass collections as inputs](#pass-collections-as-inputs)
 - [Use pull to retrieve attribute values](#use-pull-to-retrieve-attribute-values)
-- [Put blanks in data patterns](#blanks-in-data-patterns)
-- [Use query inputs to parameterize queries and leverage caching](#parameterize-queries)
-- [Work with Data Structures, Not Strings](#work-with-data-structures)
+- [Put blanks in data patterns](#put-blanks-in-data-patterns)
+- [Use query inputs to parameterize queries and leverage caching](#use-query-inputs-to-parameterize-queries-and-leverage-caching)
+- [Work with Data Structures, Not Strings](#work-with-data-structures-not-strings)
 
 ## Datomic Time Best Practices
 
-- [Use a consistent db value for a unit of work](#consistent-db-value-for-unit-of-work)
-- [Specify t instead of txInstant for precise asOf locations](#t-instead-of-txinstant)
-- [Use the history filter for audit trail queries](#use-history)
-- [Pass multiple points-in-time to a single query](#multiple-points-in-time)
-- [Use the Log API if time is your most selective criterion](#use-log-api)
+- [Use a consistent db value for a unit of work](#use-a-consistent-db-value-for-a-unit-of-work)
+- [Specify t instead of txInstant for precise asOf locations](#specify-t-instead-of-txinstant-for-precise-asof-locations)
+- [Use the history filter for audit trail queries](#use-the-history-filter-for-audit-trail-queries)
+- [Pass multiple points-in-time to a single query](#pass-multiple-points-in-time-to-a-single-query)
+- [Use the Log API if time is your most selective criterion](#use-the-log-api-if-time-is-your-most-selective-criterion)
 
 ## Group Related Attributes in a Namespace
 
@@ -59,7 +59,7 @@ Further, namespaces greatly reduce the cost of getting a name wrong, as the same
 
 ## Plan for Accretion
 
-Programs should not assume that an entity will be limited to the set of attributes that it has at a given point in time. The [schema growth](#grow-schema) principle provides a means for entities to develop over time, and ties programmatic usage to a fixed set of attributes can lead to *breakage* in the face of *growth*.
+Programs should not assume that an entity will be limited to the set of attributes that it has at a given point in time. The [schema growth](#grow-schema-and-never-break-it) principle provides a means for entities to develop over time, and ties programmatic usage to a fixed set of attributes can lead to *breakage* in the face of *growth*.
 
 For example, usage should be structured to handle a given set of attributes for an entity, not applying arbitrary usage to all possible attributes:
 
@@ -137,7 +137,7 @@ The meaning of a name is established when the name is first introduced. Removing
 
 ## Use Aliases
 
-Instead of removing or reusing names, use aliases to allow multiple names to refer to a single schema element. Datomic allows multiple [`db/idents`](../../01-schema/01-schema-reference/schema-reference.md#db-ident) to refer to a single entity ID.
+Instead of removing or reusing names, use aliases to allow multiple names to refer to a single schema element. Datomic allows multiple [`db/idents`](../01-schema/01-schema-reference/schema-reference.md#dbident) to refer to a single entity ID.
 
 For example, to create an alias, `:user/primary-email` that refers to the same schema element as an existing ident (`:user/id`), transact the following assertion:
 
@@ -145,7 +145,7 @@ For example, to create an alias, `:user/primary-email` that refers to the same s
 [:db/add :user/id :db/ident :user/primary-email]
 ```
 
-This new alias allows new programs to use the new `:user/primary-email` name, while adhering to the [prior section](#never-remove-or-reuse) ensures that old programs that require `:user/id` will continue to function.
+This new alias allows new programs to use the new `:user/primary-email` name, while adhering to the [prior section](#never-remove-or-reuse-names) ensures that old programs that require `:user/id` will continue to function.
 
 ## Annotate Schema
 
@@ -154,7 +154,7 @@ Because Datomic schema is stored as data, you can and should annotate your schem
 - Help users/readers understand the system
 - Document how the schema has grown over time
 
-For example, in the case of a [preferred newer schema option](#grow-schema), you could add a `:schema/see-instead` flag and a `:db/doc` on the older schema element to point users at the new convention:
+For example, in the case of a [preferred newer schema option](#grow-schema-and-never-break-it), you could add a `:schema/see-instead` flag and a `:db/doc` on the older schema element to point users at the new convention:
 
 ```clojure
 {:db/ident :user/email
@@ -238,7 +238,7 @@ The following example illustrates the use of `db/cas` for adding a deposit to an
 
 The *transact* function returns a map whose `:db-after` key holds value of the database immediately after the transaction is applied. Using `:db-after` ensures that you will see only the impact of your transaction and not other changes to the database that may have been made later.
 
-Because `:db-after` can also be retrieved from [with](../../04-apis/03-client-api-clojuredoc/client-api-clojuredoc.md#var-with), you can examine the results of a prospective or real transaction identically by using `:db-after`.
+Because `:db-after` can also be retrieved from [with](../../04-apis/03-client-api-clojuredoc/client-api-clojuredoc.md#with), you can examine the results of a prospective or real transaction identically by using `:db-after`.
 
 The following example uses `:db/cas` and `:db-after` in conjunction to verify that a deposit only increases the account by the correct amount:
 
@@ -324,7 +324,7 @@ This can be accomplished using [core.async pipeline](https://clojure.github.io/c
 
 ## Put the Most Selective Clause First in Query
 
-The `:where` clauses of Datomic queries are executed in order. To minimize the work performed by the query engine, the [most restrictive](../../03-query-and-pull/query-and-pull.md#clause-order) clauses should come before the less restrictive clauses, i.e.:
+The `:where` clauses of Datomic queries are executed in order. To minimize the work performed by the query engine, the [most restrictive](../03-query-and-pull/01-executing-queries/executing-queries.md#clause-order) clauses should come before the less restrictive clauses, i.e.:
 
 ```clojure
 :where [?e :only/matches ?few]
@@ -411,7 +411,7 @@ Returns maps for artists that have no gender listed:
 
 ## Put Blanks in Data Patterns
 
-[Blanks](../../03-query-and-pull/query-reference.md#blanks) can be used as placeholders that match anything but do not bind or unify. This Mbrainz example finds all countries that have an artist in the Mbrainz database, using a blank to match any artist:
+[Blanks](../03-query-and-pull/02-query-reference/query-reference.md#blanks) can be used as placeholders that match anything but do not bind or unify. This Mbrainz example finds all countries that have an artist in the Mbrainz database, using a blank to match any artist:
 
 ```clojure
 [:find ?c
@@ -425,7 +425,7 @@ Using a variable rather than the blank when you do not care about the value is a
 
 ## Use Query Inputs to Parameterize Queries and Leverage Caching
 
-Datomic [caches](../../03-query-and-pull/query-and-pull.md#query-cacheing) queries, so long as the query argument data structures are evaluated as equal. As a result, reusing parameterized queries is much more efficient than building different query data structures. If you need to build data structures at run time for a query, do so using a standard process so that equivalent queries will be evaluated as equal.
+Datomic [caches](../03-query-and-pull/query-and-pull.md#query) queries, so long as the query argument data structures are evaluated as equal. As a result, reusing parameterized queries is much more efficient than building different query data structures. If you need to build data structures at run time for a query, do so using a standard process so that equivalent queries will be evaluated as equal.
 
 The following query finds the names of all bands starting with `"B"`, of type *group*, with a start year of `1970`:
 

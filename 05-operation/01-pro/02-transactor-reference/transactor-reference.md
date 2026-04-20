@@ -20,7 +20,7 @@ Once your storage service is configured, you can start the transactor locally by
 sql-driver-params=ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory
 ```
 
-- When you run the transactor locally against DynamoDB, specify AWS access keys using either environment variables (AWS_SECRET_ACCESS_KEY and AWS_ACCESS_KEY_ID) or Java system properties (aws.secretAccessKey and aws.accessKeyId). You can use your AWS account access keys or a set of IAM user access keys. If you use IAM user access keys, the user must be assigned the [necessary policies](../01-storage-services/storage-services.md#manual-setup). Running locally this way should only be considered for development and is not a supported means for handling permissions in production.
+- When you run the transactor locally against DynamoDB, specify AWS access keys using either environment variables (AWS_SECRET_ACCESS_KEY and AWS_ACCESS_KEY_ID) or Java system properties (aws.secretAccessKey and aws.accessKeyId). You can use your AWS account access keys or a set of IAM user access keys. If you use IAM user access keys, the user must be assigned the [necessary policies](../01-storage-services/storage-services.md#ddb-manual-setup). Running locally this way should only be considered for development and is not a supported means for handling permissions in production.
 
 > For more information on configuring the transactor review the [transactor properties section](../10-system-properties/system-properties.md#transactor-properties) of the documentation.
 
@@ -88,7 +88,7 @@ bin/transactor -Djavax.net.ssl.trustStore=path-to-truststore
 -Djavax.net.ssl.keyStorePassword=password-for-keystore my-transactor.properties
 ```
 
-> Check the [Troubleshooting](#trouble-ssl) section for more info if you get an exception when trying to start the transactor with SSL.
+> Check the [Troubleshooting](#troubleshooting-ssl-connections) section for more info if you get an exception when trying to start the transactor with SSL.
 
 If you are not using SSL to access Cassandra, Datomic configures a KeyStore for the transactor and a TrustStore for peers automatically.
 
@@ -117,7 +117,7 @@ If you are accessing Cassandra via SSL, you must provide a Java [TrustStore](htt
 -Djavax.net.ssl.trustStorePassword=password-for-truststore
 ```
 
-> Check the [Troubleshooting](#trouble-ssl) section for more info if you get an exception when trying to connect a peer when using SSL.
+> Check the [Troubleshooting](#troubleshooting-ssl-connections) section for more info if you get an exception when trying to connect a peer when using SSL.
 
 If you are not using SSL to access Cassandra, Datomic configures a KeyStore for the transactor and a TrustStore for peers automatically.
 

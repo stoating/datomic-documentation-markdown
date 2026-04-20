@@ -20,4 +20,4 @@ curl https://datomic-pro-downloads.s3.amazonaws.com/1.0.7556/datomic-pro-1.0.755
 | Artifact | Release Date | Version | Release |
 |---|---|---|---|
 | [Datomic Pro](../../../introduction.md#datomic-editions) | 2026/03/13 | 1.0.7556 | [Download](https://datomic-pro-downloads.s3.amazonaws.com/1.0.7556/datomic-pro-1.0.7556.zip) |
-| [Datomic Peer](../../../introduction.md#datomic-APIs) | 2026/03/13 | 1.0.7556 | `Copy Peer dep` |
+| [Datomic Peer](../../../introduction.md#datomic-apis) | 2026/03/13 | 1.0.7556 | `Copy Peer dep` |

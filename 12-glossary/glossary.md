@@ -86,7 +86,7 @@ An atomic fact in a database, composed of entity/attribute/value/transaction/add
 
 ## Database URI
 
-A Unique Resource Identifier pointing to a specific Datomic database. URI syntax is described in the [datomic.api/connect](../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/connect) doc string.
+A Unique Resource Identifier pointing to a specific Datomic database. URI syntax is described in the [datomic.api/connect](../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#connect) doc string.
 
 ## Data Function
 
@@ -272,7 +272,7 @@ Indexes store datoms as a tree of segments, where the leaf nodes contain a few t
 
 ## Segment Cache
 
-A cache that stores [fressian](#Fressian)-serialized data, e.g. in memcached. A segment cache takes much less memory than equivalent data in the [object cache](#object-cache), but is slower to access. [Peer](#peer) and [transactor](#transactor) processes use both object caches and segment caches.
+A cache that stores [fressian](#fressian)-serialized data, e.g. in memcached. A segment cache takes much less memory than equivalent data in the [object cache](#object-cache), but is slower to access. [Peer](#peer) and [transactor](#transactor) processes use both object caches and segment caches.
 
 ## Storage Resources
 

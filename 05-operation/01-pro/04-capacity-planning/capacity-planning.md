@@ -142,8 +142,8 @@ If your database is very small, you can get extraordinary read performance by se
 
 Datomic transactions enforce the invariants of a Datomic database. To improve the performance of Datomic transactions, you can:
 
-- Give Datomic more resources, e.g. [more CPUs](#more-cpus), [memcached](#cache-for-transactions), or [more memory](#transactor-memory)
-- Do less work, e.g. [prefer squuids](#prefer-squuids), [queue transactions](#queue-transactions), or [store what you need](#store-what-you-need)
+- Give Datomic more resources, e.g. [more CPUs](#more-cpus), [memcached](#use-memcached-andor-valcache), or [more memory](#transactor-memory)
+- Do less work, e.g. [prefer squuids](#prefer-squuids-to-random-uuids), [queue transactions](#queue-transactions), or [store what you need](#store-what-you-need)
 
 ### More CPUs
 
@@ -171,7 +171,7 @@ Because Datomic stores time information, a common modeling mistake is to assume 
 
 Datomic is designed as a system-of-record database. Put your records in Datomic, and put your operational logs somewhere else.
 
-If your system stores information whose past values are unimportant, declare those attributes as [noHistory](../../../06-reference/01-schema/01-schema-reference/schema-reference.md#nohistory).
+If your system stores information whose past values are unimportant, declare those attributes as [noHistory](../../../06-reference/01-schema/01-schema-reference/schema-reference.md#dbnohistory).
 
 ## Indexing
 
@@ -183,7 +183,7 @@ Once indexing has begun, the transactor will continue to process transactions un
 
 To check how well Datomic is keeping up with your system load, follow the *[MemoryIndexMB]* metric. If this metric reaches the midway point (default 144MB) between *memory-index-threshold* and *memory-index-max* during normal operation, your system has enough load that you need to plan carefully to avoid back pressure.
 
-On large systems, you may want to [prefer squuids](#prefer-squuids) and enable [index-parallelism](#index-parallelism).
+On large systems, you may want to [prefer squuids](#prefer-squuids-to-random-uuids) and enable [index-parallelism](#index-parallelism).
 
 ### Index Parallelism
 

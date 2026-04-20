@@ -4,7 +4,7 @@
 
 Datomic is a system of facts - values of attributes of entities. This is a rich model well suited for information programming, and Datomic's query language fits seamlessly into the information programming model of Clojure.
 
-However, you may have other members of your team - data scientists, analysts, operations people et al who need to leverage the information stored in Datomic but are not versed in Clojure. Instead, they might have skills in Python, R, SQL, or high-level analytics tools like Metabase, Tableau, or Superset. The analytics support [preview](#preview) provides access to Datomic for these users, via those tools and more.
+However, you may have other members of your team - data scientists, analysts, operations people et al who need to leverage the information stored in Datomic but are not versed in Clojure. Instead, they might have skills in Python, R, SQL, or high-level analytics tools like Metabase, Tableau, or Superset. The analytics support [preview](#preview-status) provides access to Datomic for these users, via those tools and more.
 
 ## How It works
 

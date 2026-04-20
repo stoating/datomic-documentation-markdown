@@ -5,7 +5,7 @@
 Most usage of Datomic Local should be via portable Client API calls. Capabilities that are specific to Datomic Local are available through the `datomic.local` namespace:
 
 - [divert-system](#divert-system) to develop and test Datomic Cloud applications against Datomic Local
-- [release-db](#release-db) to release [memory used by a database](../datomic-local/datomic-local.md#limits)
+- [release-db](#release-db) to release [memory used by a database](../../01-setup/03-local-setup/local-setup.md#limits)
 - [import-cloud](#import-cloud) to import a Cloud database for Datomic Local use
 
 All Datomic Local API calls take a single arg-map argument.
@@ -18,7 +18,7 @@ All Datomic Local API calls take a single arg-map argument.
 
 ### divert-system
 
-Diverts subsequent [d/client](../03-client-api-clojuredoc/client-api-clojuredoc.md#var-client/client) calls for system to local storage. arg-map has the following keys:
+Diverts subsequent [d/client](../03-client-api-clojuredoc/client-api-clojuredoc.md#client) calls for system to local storage. arg-map has the following keys:
 
 | Key | Value | Required |
 |---|---|---|

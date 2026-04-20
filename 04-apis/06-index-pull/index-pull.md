@@ -1,7 +1,7 @@
 # Index-Pull
 
 `index-pull` walks an [index](#indexes), [pulling](../../06-reference/03-query-and-pull/03-pull/pull.md) each entity using the
-[pattern](../../06-reference/03-query-and-pull/03-pull/pull.md#pattern), returning a lazy seq on the results.
+[pattern](../../06-reference/03-query-and-pull/03-pull/pull.md#patterns), returning a lazy seq on the results.
 
 `index-pull` takes a `db` and a map with the following required keys:
 
@@ -16,7 +16,7 @@ Optionally:
 - `:limit` [Client API] - Maximum total number of results to return. Specify -1 for no limit. Defaults to 1000.
 - [`:reverse`](#reverse) - walks the index in reverse.
 
-[Peer API](../01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomicapiindex-pull) | [Client API](../03-client-api-clojuredoc/client-api-clojuredoc.md#var-index-pull)
+[Peer API](../01-peer-api-clojuredoc/peer-api-clojuredoc.md#index-pull) | [Client API](../03-client-api-clojuredoc/client-api-clojuredoc.md#index-pull)
 
 ## Indexes
 
@@ -78,7 +78,7 @@ This `index-pull` does not pull _only_ artists with a `:artist/startYear` of `18
 
 An `:index` of [`:aevt`](../../06-reference/04-indexes/01-index-model/index-model.md#aevt) pulls the values of an entity for `:a`.
 
-`:v` must be `:db.type/ref` and [`:db.cardinality/many`](../../06-reference/01-schema/01-schema-reference/schema-reference.md#db-cardinality)
+`:v` must be `:db.type/ref` and [`:db.cardinality/many`](../../06-reference/01-schema/01-schema-reference/schema-reference.md#dbcardinality)
 
 This example walks the index starting at `:release/artists`, which is `db.type/ref`, and pulls the artists' names.
 

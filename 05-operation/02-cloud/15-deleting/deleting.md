@@ -16,8 +16,8 @@ while leaving your data intact.
 > You can delete CloudFormation stacks at any time, with no loss of
 > data. You might do this e.g. to save computing costs for a system not
 > in active use. To recreate the stacks later, simply follow the
-> [recreate storage](../16-splitting-stacks/splitting-stacks.md#recreate-storage) and
-> [recreate compute](../16-splitting-stacks/splitting-stacks.md#recreate-compute) instructions.
+> [recreate storage](../16-splitting-stacks/splitting-stacks.md#recreating-stacks) and
+> [recreate compute](../16-splitting-stacks/splitting-stacks.md#recreating-stacks) instructions.
 
 From your
 [CloudFormation dashboard](https://console.aws.amazon.com/cloudformation/home?#/stacks?filter=active)

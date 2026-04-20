@@ -2,9 +2,9 @@
 
 All access to Datomic Cloud is via the Datomic client API. You can also use the client API with Datomic Pro and Datomic Local. This page covers everything you need to use the Datomic client API after you have added the client API to your project:
 
-- An overview of the two API flavors: [synchronous](#sync) ([clojuredoc](../03-client-api-clojuredoc/client-api-clojuredoc.md)) and [asynchronous](#async)
+- An overview of the two API flavors: [synchronous](#synchronous-api) ([clojuredoc](../03-client-api-clojuredoc/client-api-clojuredoc.md)) and [asynchronous](#asynchronous-api)
 - Key API objects: clients and [connections](#connection)
-- Key API concepts: [catalog operations](#catalog-operations), [error handling](#anomalies), [timeouts](#timeouts), [chunking](#chunking), and [offset/limit](#offset-and-limit)
+- Key API concepts: [catalog operations](#catalog-operations), [error handling](#handling-errors), [timeouts](#timeouts), [chunking](#chunked-results), and [offset/limit](#offset-and-limit)
 
 The [Day of Datomic Cloud](https://youtu.be/ZP-E2IgqKfA?t=2032) videos include an overview of the client API.
 
@@ -14,7 +14,7 @@ The [Day of Datomic Cloud](https://youtu.be/ZP-E2IgqKfA?t=2032) videos include a
 
 - They block the calling thread if they access a remote resource
 - They return a value
-- They indicate anomalies by [throwing an exception](#anomalies)
+- They indicate anomalies by [throwing an exception](#handling-errors)
 
 The following example shows a simple transaction using the [synchronous API](../03-client-api-clojuredoc/client-api-clojuredoc.md):
 
@@ -39,8 +39,8 @@ The [asynchronous API](../03-client-api-clojuredoc/client-api-clojuredoc.md) fun
 - They return a core.async channel if they access a remote resource
 - They never block the calling thread
 - They place result(s) on the channel
-- They place [anomalies](#anomalies) on the channel
-- A [server type of `:ion`](#client) is only supported by the [synchronous API](#sync)
+- They place [anomalies](#handling-errors) on the channel
+- A [server type of `:ion`](#client-object) is only supported by the [synchronous API](#synchronous-api)
 
 You must use a channel-taking operator such as [`<!!`](https://clojure.github.io/core.async/#clojure.core.async/%3C!!) to retrieve the result of an asynchronous operation, and you must explicitly check for anomalies:
 
@@ -63,11 +63,11 @@ You must use a channel-taking operator such as [`<!!`](https://clojure.github.io
 
 ## Client Object
 
-All use of the Client API begins by [creating a client](../03-client-api-clojuredoc/client-api-clojuredoc.md#var-client). The args map for creating a client uses the following keys:
+All use of the Client API begins by [creating a client](../03-client-api-clojuredoc/client-api-clojuredoc.md#client). The args map for creating a client uses the following keys:
 
 | Key | Value |
 |-----|-------|
-| `:server-type` | `:cloud` (or `:ion` for [ion applications](../../07-datomic-cloud-ions/02-ions-reference/ions-reference.md#server-type-ion)) |
+| `:server-type` | `:cloud` (or `:ion` for [ion applications](../../07-datomic-cloud-ions/02-ions-reference/ions-reference.md#ion-clients)) |
 | `:region` | AWS region |
 | `:system` | Your system name |
 | `:endpoint` | Compute group endpoint, see below |
@@ -75,7 +75,7 @@ All use of the Client API begins by [creating a client](../03-client-api-clojure
 | `:creds-profile` | Optional [AWS Profile](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html) used to [retrieve keys](../../05-operation/02-cloud/06-access-control/access-control.md#how-datomic-access-control-works) |
 | `:proxy-port` | Optional local port for SSH tunnel |
 
-For most systems, the `:endpoint` is an API gateway endpoint. You can find the endpoint name under the `ClientApiGatewayEndpoint` [output](../../05-operation/02-cloud/11-how-to/how-to.md#template-outputs) from your [compute group's CloudFormation template](../../05-operation/02-cloud/11-how-to/how-to.md#compute-group-name) or use [the CLI tool's `describe-groups` command](../../05-operation/02-cloud/07-cli-tools/cli-tools.md).
+For most systems, the `:endpoint` is an API gateway endpoint. You can find the endpoint name under the `ClientApiGatewayEndpoint` [output](../../05-operation/02-cloud/11-how-to/how-to.md#find-template-outputs) from your [compute group's CloudFormation template](../../05-operation/02-cloud/11-how-to/how-to.md#find-compute-group-name) or use [the CLI tool's `describe-groups` command](../../05-operation/02-cloud/07-cli-tools/cli-tools.md).
 
 If the `ClientApiGatewayEndpoint` output is missing, you will need to get an `:endpoint` from the Datomic system administrator who configured [intra- and inter- VPC access](../../05-operation/02-cloud/09-vpc-access/vpc-access.md) or [created a custom API Gateway](../../05-operation/02-cloud/08-customizing-api-gateways/customizing-api-gateways.md).
 
@@ -83,15 +83,15 @@ Client access through API Gateway is securely managed by [IAM permissions](../..
 
 ### Catalog Operations
 
-The client object can be used to [list](../03-client-api-clojuredoc/client-api-clojuredoc.md#var-list-databases), [create](../03-client-api-clojuredoc/client-api-clojuredoc.md#var-create-database) and [delete](../03-client-api-clojuredoc/client-api-clojuredoc.md#var-delete-database) databases.
+The client object can be used to [list](../03-client-api-clojuredoc/client-api-clojuredoc.md#list-databases), [create](../03-client-api-clojuredoc/client-api-clojuredoc.md#create-database) and [delete](../03-client-api-clojuredoc/client-api-clojuredoc.md#delete-database) databases.
 
 Create and delete operations take effect immediately. After a database is deleted, a Primary Compute Node will asynchronously delete all resources associated with a database.
 
 ### Connection
 
-All use of a database is through a connection object. The [connect API](../03-client-api-clojuredoc/client-api-clojuredoc.md#var-connect) returns a connection, which is then passed as an argument to the transaction and db APIs.
+All use of a database is through a connection object. The [connect API](../03-client-api-clojuredoc/client-api-clojuredoc.md#connect) returns a connection, which is then passed as an argument to the transaction and db APIs.
 
-Database values remember their association with a connection, so APIs that work against a single database (e.g. [datoms](../03-client-api-clojuredoc/client-api-clojuredoc.md#var-datoms)) do not need to redundantly specify a connection argument.
+Database values remember their association with a connection, so APIs that work against a single database (e.g. [datoms](../03-client-api-clojuredoc/client-api-clojuredoc.md#datoms)) do not need to redundantly specify a connection argument.
 
 Connections do not require any special handling on the client side:
 
@@ -202,7 +202,7 @@ The default chunk size delivers good performance, and should only be changed to 
 Note that the chunk size is orthogonal to the actual work done by the server:
 
 - Datalog queries always realize the entire result in memory first, and then chunk the result back to the client.
-- APIs that pull datoms from indexes ([datoms](../03-client-api-clojuredoc/client-api-clojuredoc.md#var-datoms), [index-range](../03-client-api-clojuredoc/client-api-clojuredoc.md#var-index-range) and [tx-range](../03-client-api-clojuredoc/client-api-clojuredoc.md#var-tx-range)) are lazy and realize chunks one at a time on both the server and client.
+- APIs that pull datoms from indexes ([datoms](../03-client-api-clojuredoc/client-api-clojuredoc.md#datoms), [index-range](../03-client-api-clojuredoc/client-api-clojuredoc.md#index-range) and [tx-range](../03-client-api-clojuredoc/client-api-clojuredoc.md#tx-range)) are lazy and realize chunks one at a time on both the server and client.
 
 When you use an [ion client](../../07-datomic-cloud-ions/01-ions-overview/ions-overview.md), the "client" and "server" are the same process, and the `:chunk` argument is ignored.
 

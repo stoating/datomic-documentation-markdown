@@ -38,7 +38,7 @@ The example below changes the cardinality of `:person/favorite-food` to many and
 
 When changing from a multi-valued attribute to a single-valued attribute, there must be at most a single value for every entity in the set of current assertions; otherwise, the change will not be accepted and the transaction will fail.
 
-After changing the cardinality of an attribute, entity lookups will return values specified by the new cardinality - either a single value in the case of `:db.cardinality/one` or a set of values in the case of `:db.cardinality/many`. This includes queries against historical databases. An entity from a [`d/as-of`](../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/as-of), [`d/since`](../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/since), or [`d/history`](../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/history) database that has an attribute with multiple values will return a single one of those values if the schema attribute has been changed to be single-valued.
+After changing the cardinality of an attribute, entity lookups will return values specified by the new cardinality - either a single value in the case of `:db.cardinality/one` or a set of values in the case of `:db.cardinality/many`. This includes queries against historical databases. An entity from a [`d/as-of`](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#as-of), [`d/since`](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#since), or [`d/history`](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#history) database that has an attribute with multiple values will return a single one of those values if the schema attribute has been changed to be single-valued.
 
 ## Changing a `:db/isComponent` Attribute
 
@@ -68,7 +68,7 @@ Changing an attribute's `:db/noHistory` to false or retracting it will cause Dat
 
 ## Adding an AVET index to an attribute
 
-If `:db/index` is `true` or `:db/unique` is set, Datomic will maintain values for the attribute in the [AVET index](../../06-reference/04-indexes/01-index-model/index-model.md#avet). When you alter an existing attribute to be maintained in the AVET index, the AVET index may not be available immediately. To find out when the AVET index is available, call [`sync-schema`](../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/sync-schema).
+If `:db/index` is `true` or `:db/unique` is set, Datomic will maintain values for the attribute in the [AVET index](../../04-indexes/01-index-model/index-model.md#avet). When you alter an existing attribute to be maintained in the AVET index, the AVET index may not be available immediately. To find out when the AVET index is available, call [`sync-schema`](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#sync-schema).
 
 In Datomic Cloud, all attributes are maintained in the AVET index.
 

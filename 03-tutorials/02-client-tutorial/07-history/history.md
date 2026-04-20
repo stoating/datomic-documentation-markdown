@@ -147,5 +147,5 @@ history views of the database.
 
 While this tutorial has introduced several key ideas, it has only
 scratched the surface of Datomic's capabilities. As you build your
-database, consult the reference section of [Datomic Docs](http://docs.datomic.com/) for more
+database, consult the [Datomic Docs](../../../introduction.md) for more
 in-depth coverage.

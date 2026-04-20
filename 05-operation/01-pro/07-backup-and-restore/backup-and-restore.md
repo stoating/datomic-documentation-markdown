@@ -135,7 +135,7 @@ backup-uris have the following syntax:
 Database URI syntax is described in the API docs for `connect`:
 
 - Java - [Peer.connect()](../../../04-apis/02-peer-api-javadoc/classes/peer/peer.md#connect)
-- Clojure - [datomic.api/connect](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/connect)
+- Clojure - [datomic.api/connect](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#connect)
 
 ## AWS Permissions
 

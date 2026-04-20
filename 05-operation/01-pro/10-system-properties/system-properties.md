@@ -95,4 +95,4 @@ Note that:
 
 - In 0.8.3814, *datomic.objectCacheBytes* was deprecated, and renamed to *datomic.objectCacheMax*.
 - In 0.8.4110, the defaults for *datomic.objectCacheMax*, *datomic.memoryIndexThreshold*, and *datomic.memoryIndexMax* were removed on the transactor, so that the transactor properties file must now specify values for these properties. Peer defaults remain as described above.
-- datomic.licenseKey is valid only for [Datomic 1.0.6711](../../../11-releases/01-datomic-pro/02-pro-change-log/pro-change-log.md#106711) version or older.
+- datomic.licenseKey is valid only for [Datomic 1.0.6711](../../../11-releases/01-datomic-pro/02-pro-change-log/pro-change-log.md#106711-20230420) version or older.

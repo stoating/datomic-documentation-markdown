@@ -17,7 +17,7 @@ Transaction data (tx-data) is the data representation of a Datomic transaction. 
 + one or more
 ```
 
-The symbols `keyword`, `string`, `boolean`, `instant`, `uuid`, `long`, `bigint`, `float`, `double`, and `bigdec` are the [primitive value types](../../01-schema/01-schema-reference/schema-reference.md#db-valuetype) supported by datomic.
+The symbols `keyword`, `string`, `boolean`, `instant`, `uuid`, `long`, `bigint`, `float`, `double`, and `bigdec` are the [primitive value types](../../01-schema/01-schema-reference/schema-reference.md#dbvaluetype) supported by datomic.
 
 ### Grammar
 
@@ -48,7 +48,7 @@ tx-fn-name = db-fn | classpath-fn
 tx-data = [list-form | map-form | tx-fn]+
 ```
 
-Datomic represents transaction data as [data structures](../../05-programming-with-data-and-edn/programming-with-data-and-edn.md#data-structure-literals). This is a significant difference from SQL databases, where requests are submitted as strings. Using data instead of strings makes it easier to build requests programmatically.
+Datomic represents transaction data as [data structures](../../05-programming-with-data-and-edn/programming-with-data-and-edn.md). This is a significant difference from SQL databases, where requests are submitted as strings. Using data instead of strings makes it easier to build requests programmatically.
 
 Transaction data is *semantically* an unordered set of datoms, all of which are added to a database at an atomic moment in time. Datomic provides a number of *mechanical* conveniences for writing such sets of datoms. First, transaction data is represented as an ordered list. This ordering is entirely for the convenience of transaction authors, who can produce (and print/read!) data in any order that is convenient for human understanding of the transaction.
 
@@ -64,7 +64,7 @@ Inside these forms, there are several ways to specify entities:
 - temporary ids (tempids) specify entities where a transaction author does not know or care to provide an entity id
 - lookup refs specify entities by a domain unique identifier
 - idents specify entities by a qualified keyword for use in programs, and are used to name e.g. attributes
-- the reserved tempid "datomic.tx" names the [current Tx](#reified-txes)
+- the reserved tempid "datomic.tx" names the [current Tx](#reified-transactions)
 
 Each of these data forms are described in detail below.
 
@@ -122,7 +122,7 @@ While the names "add" and "retract" are verbs, tx-data forms are not operations.
 
 Datomic will automatically exclude redundant datoms in tx-data. Datoms are considered redundant if they are equal to an existing datom in every component except for tx-id. A retraction that does not match the E/A/V of an existing datom is also redundant, as the absence of a datom already (and efficiently!) indicates that a fact is not true.
 
-Note that entire transactions are never redundant, as the [transaction time](#reified-txes) is always a new fact.
+Note that entire transactions are never redundant, as the [transaction time](#reified-transactions) is always a new fact.
 
 Some system attributes (e.g. `:db.install/attribute`) trigger side effects. Datomic will never treat such attributes as redundant.
 
@@ -191,7 +191,7 @@ Which in turn is equivalent to writing each datom as a list form:
  [:db/add item-2-id :line-item/quantity 2]]
 ```
 
-Datomic requires that a nested map either be referenced by a [component attribute](../../01-schema/01-schema-reference/schema-reference.md#db-iscomponent) or include a [unique](../../01-schema/01-schema-reference/schema-reference.md#db-unique) attribute. This constraint prevents the accidental creation of easily-orphaned entities that have no unique identity or relation to other entities.
+Datomic requires that a nested map either be referenced by a [component attribute](../../01-schema/01-schema-reference/schema-reference.md#dbiscomponent) or include a [unique](../../01-schema/01-schema-reference/schema-reference.md#dbunique) attribute. This constraint prevents the accidental creation of easily-orphaned entities that have no unique identity or relation to other entities.
 
 ## Transaction Functions
 
@@ -203,7 +203,7 @@ classpath-fn = qualified-symbol
 tx-fn-arg   = (value | [value] | {value value})
 ```
 
-A list beginning with anything other than `:db/add` or `:db/retract` names a transaction function. Transaction functions are covered in detail on the [Transaction Functions](../../02-transactions/04-transaction-functions/transaction-functions.md) page.
+A list beginning with anything other than `:db/add` or `:db/retract` names a transaction function. Transaction functions are covered in detail on the [Transaction Functions](../04-transaction-functions/transaction-functions.md) page.
 
 ## Entity ids
 
@@ -308,7 +308,7 @@ Datomic maintains an in-memory lookup table for idents in every peer process.
 lookup-ref = [identifier value]
 ```
 
-A *lookup ref* allows you to specify entities by their domain-unique identities. Inside a lookup ref, the *identifier* names a [unique attribute](../../01-schema/01-schema-reference/schema-reference.md#db-unique) in the database, and a value is a valid value for that attribute. For example, this lookup ref specifies the entity with the `:person/email` value "joe@example.com":
+A *lookup ref* allows you to specify entities by their domain-unique identities. Inside a lookup ref, the *identifier* names a [unique attribute](../../01-schema/01-schema-reference/schema-reference.md#dbunique) in the database, and a value is a valid value for that attribute. For example, this lookup ref specifies the entity with the `:person/email` value "joe@example.com":
 
 ```clojure
 [:person/email "joe@example.com"]
@@ -343,7 +343,7 @@ In transactions, there is a fourth option for identifying an entity that might n
 value = (string | keyword | boolean | ref | instant | uuid | number)
 ```
 
-The value type of a datom is dictated by its attribute's schema. The value types are defined and demonstrated in the [Schema Data Reference](../../01-schema/01-schema-reference/schema-reference.md#db-valuetype).
+The value type of a datom is dictated by its attribute's schema. The value types are defined and demonstrated in the [Schema Data Reference](../../01-schema/01-schema-reference/schema-reference.md#dbvaluetype).
 
 ## Reified Transactions
 

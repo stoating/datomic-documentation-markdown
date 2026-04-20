@@ -30,7 +30,7 @@ Named partitions are useful when your domain has a modest number of named catego
 
 Schema entities are automatically placed in the `:db.part/db` partition.
 
-[Transaction entities](../02-transaction-data/transaction-data.md#reified-txes) are automatically placed in the `:db.part/tx` partition.
+[Transaction entities](../02-transaction-data/transaction-data.md#reified-transactions) are automatically placed in the `:db.part/tx` partition.
 
 ### Default Partition
 
@@ -116,15 +116,15 @@ Partition-based sharding is an optimization only. Entities in any partition can 
 
 ## New Entity Scans
 
-Because Datomic stores information about time, it is easy to ask questions that apply only to recently created entities. For example, it is trivial in Datomic to run a batch job over everything that changed today, by grabbing the *txRange* of the [log](../../04-apis/08-log-api/log-api.md) starting at midnight.
+Because Datomic stores information about time, it is easy to ask questions that apply only to recently created entities. For example, it is trivial in Datomic to run a batch job over everything that changed today, by grabbing the *txRange* of the [log](../../../04-apis/08-log-api/log-api.md) starting at midnight.
 
 Such a scan does, however, have to consider *all* of today's datoms, filtering out any that are irrelevant to the task at hand.
 
 It is possible to use partitions as a filtering mechanism when designing a system that needs to know about specific new entities (something that wants to respond to new events of a certain type, for example, using the Peer API):
 
 - Assign all the datoms for an event category to the same partition.
-- Instead of using the log, use [entid-at](../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/entid-at) to fabricate an event id closest to the chosen start time t.
-- Pass the fabricated entity id to [seek-datoms](../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/seek-datoms) to walk EAVT, walking entities ordered by time of creation and implicitly "filtered" by partition's impact on order.
+- Instead of using the log, use [entid-at](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#entid-at) to fabricate an event id closest to the chosen start time t.
+- Pass the fabricated entity id to [seek-datoms](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#seek-datoms) to walk EAVT, walking entities ordered by time of creation and implicitly "filtered" by partition's impact on order.
 
 ## Partitions in Tempids (Obsolete)
 
@@ -132,7 +132,7 @@ Tempid partitions are obsolete but will continue to be supported. For new applic
 
 Datomic supports partition assignment inside tempids. Rather than tempid strings, you can create tempids as a special data structure, with a slot for specifying the desired partition.
 
-To assign a partition to a tempid, create a structural tempid by calling [d/tempid](../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/tempid), passing the partition:
+To assign a partition to a tempid, create a structural tempid by calling [d/tempid](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#tempid), passing the partition:
 
 ```clojure
 (d/tempid :preferred-customers)

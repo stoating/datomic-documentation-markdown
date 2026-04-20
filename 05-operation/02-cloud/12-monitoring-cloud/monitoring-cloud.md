@@ -115,7 +115,7 @@ Datomic reports a large number of distinct metrics, many of which are
 useful primarily for Datomic support. The most useful metrics for
 operators fall into three categories:
 
-- Troubleshooting metrics are helpful for [troubleshooting problems](../13-cloud-troubleshooting/cloud-troubleshooting.md#troubleshooting-nodes)
+- Troubleshooting metrics are helpful for [troubleshooting problems](../13-cloud-troubleshooting/cloud-troubleshooting.md#troubleshooting-compute-nodes)
 - Request metrics measure the request load on a system, and can act as
 [autoscaling triggers](../03-growing-your-system/growing-your-system.md#autoscaling-triggers) for query groups
 - Capacity metrics measure the size of the database and indexes, and are
@@ -127,7 +127,7 @@ These key metrics are summarized below.
 |--------|----------|-------|-------------|
 | Alerts | Troubleshooting | Count | Number of alerts written to Cloudwatch logs |
 | JvmFreeMb | Troubleshooting | Mb | Free JVM memory |
-| HttpDirectOpsPending | Request | Count | Total number of [HTTP direct](../../../07-datomic-cloud-ions/02-ions-reference/ions-reference.md#http-direct-config) requests started |
+| HttpDirectOpsPending | Request | Count | Total number of [HTTP direct](../../../07-datomic-cloud-ions/02-ions-reference/ions-reference.md#http-direct-configuration) requests started |
 | HttpDirectThrottled | Request | Count | HTTP requests rejected because server too busy |
 | HttpEndpointOpsPending | Request | Count | Total number of client requests started |
 | HttpEndpointThrottled | Request | Count | Client requests rejected because server too busy |

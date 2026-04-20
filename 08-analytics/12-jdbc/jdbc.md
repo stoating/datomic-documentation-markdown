@@ -28,7 +28,7 @@ jdbc:presto://<host>:<port>/<catalog>/<schema>?user=<user>
 
 Consider the following:
 
-- `host` and `port` are the host and port of your [Presto server](../02-pro-configuration/pro-configuration.md#start).
+- `host` and `port` are the host and port of your [Presto server](../14-connecting-pro/connecting-pro.md#running-presto).
 - `catalog` is the name of your [catalog](../02-pro-configuration/pro-configuration.md#catalog).
 - `schema` is the name of your Datomic database.
 - `user` is not currently used, but some tools may require that you specify it.

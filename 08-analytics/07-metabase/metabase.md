@@ -36,4 +36,4 @@ Note that:
 
 - `port` is 8989 by default
 - The `user` and `password` are your Trino server passwords, which default to `admin` and no password by default
-- `catalog` is the [catalog](../03-cloud-configuration/cloud-configuration.md#connections) that you configured when setting up Datomic analytics
+- `catalog` is the [catalog](../03-cloud-configuration/cloud-configuration.md#configure-connections) that you configured when setting up Datomic analytics

@@ -58,7 +58,7 @@ If you delete a Datomic storage stack, the underlying database storage is **not*
 
 VPC configuration parameters control the assignment of private IP addresses in the Datomic VPC. The Datomic VPC as a whole uses the `VpcCidrBlock`. Within the block, Datomic will allocate three subnets in separate availability zones. Each subnet has its own `Subnet{N}CidrBlock`, which must be non-overlapping subsets of the `VpcCidrBlock`.
 
-Datomic automatically creates and manages CIDR blocks for you. Datomic also manages gateways and load balancers so that you need never to connect to (or even care about the addresses of) individual compute nodes. Leave all VPC configuration parameters set to their defaults, unless you need [VPC peering](../09-vpc-access/vpc-access.md#inter-vpc).
+Datomic automatically creates and manages CIDR blocks for you. Datomic also manages gateways and load balancers so that you need never to connect to (or even care about the addresses of) individual compute nodes. Leave all VPC configuration parameters set to their defaults, unless you need [VPC peering](../09-vpc-access/vpc-access.md#inter-vpc-access).
 
 ## Configure Stack Options
 

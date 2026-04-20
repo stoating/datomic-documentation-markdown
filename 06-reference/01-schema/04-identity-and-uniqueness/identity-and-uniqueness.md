@@ -19,9 +19,9 @@ An *entity identifier* is any one of the three ways that Datomic can uniquely id
 
 Every datom in Datomic includes a database-unique entity id, often abbreviated as simply *e* in documentation and API names. Entity ids are assigned by the transactor, and never change.
 
-You can request new entity ids by specifying a temporary id (tempid) in transaction data. The [Peer.tempid](../../04-apis/02-peer-api-javadoc/classes/peer/peer.md#tempid-java.lang.Object-long-) method creates a new tempid, and the [Peer.resolveTempid](../../04-apis/02-peer-api-javadoc/classes/peer/peer.md#resolveTempid-datomic.Database-java.lang.Object-java.lang.Object-) method can be used to interrogate a transaction return value for the actual id assigned.
+You can request new entity ids by specifying a temporary id (tempid) in transaction data. The [Peer.tempid](../../../04-apis/02-peer-api-javadoc/classes/peer/peer.md#tempid) method creates a new tempid, and the [Peer.resolveTempid](../../../04-apis/02-peer-api-javadoc/classes/peer/peer.md#resolvetempid) method can be used to interrogate a transaction return value for the actual id assigned.
 
-Internally, entity ids encode the partition an entity belongs to. An entity's partition may be useful in some cases, and can be discovered by calling [Peer.part](../../04-apis/02-peer-api-javadoc/classes/peer/peer.md#squuidTimeMillis-java.util.UUID-).
+Internally, entity ids encode the partition an entity belongs to. An entity's partition may be useful in some cases, and can be discovered by calling [Peer.part](../../../04-apis/02-peer-api-javadoc/classes/peer/peer.md#part).
 
 Transactions and partitions are discussed fully in [transactions](../../02-transactions/transactions.md).
 
@@ -58,11 +58,11 @@ These characteristics also imply situations where idents should *not* be used:
 
 Idents can be used instead of entity ids in the following API calls:
 
-- As the sole argument to [entity](../../04-apis/02-peer-api-javadoc/classes/database/database.md#entity-java.lang.Object-).
-- In the e, a, and v positions of assertions and retractions passed to [transact](../../04-apis/02-peer-api-javadoc/interfaces/connection/connection.md#transact-java.util.List-) and [with](../../04-apis/02-peer-api-javadoc/interfaces/database/database.md#with-java.util.List-).
-- In the e, a, and v positions of a [query](../../04-apis/02-peer-api-javadoc/classes/query-request/query-request.md#?).
+- As the sole argument to [entity](../../../04-apis/02-peer-api-javadoc/interfaces/database/database.md#entity).
+- In the e, a, and v positions of assertions and retractions passed to [transact](../../../04-apis/02-peer-api-javadoc/interfaces/connection/connection.md#transact) and [with](../../../04-apis/02-peer-api-javadoc/interfaces/database/database.md#with).
+- In the e, a, and v positions of a [query](../../../04-apis/02-peer-api-javadoc/classes/query-request/query-request.md).
 
-There are some situations where Datomic cannot know that a keyword is an ident. For example, Datomic does not know the semantics of database functions written by you. If you need to convert between idents and entity ids in your own code, you can use the [ident](../../04-apis/02-peer-api-javadoc/interfaces/database/database.md#ident-java.lang.Object-) and [entid](../../04-apis/02-peer-api-javadoc/interfaces/database/database.md#entid-java.lang.Object-) methods on the *Database* class.
+There are some situations where Datomic cannot know that a keyword is an ident. For example, Datomic does not know the semantics of database functions written by you. If you need to convert between idents and entity ids in your own code, you can use the [ident](../../../04-apis/02-peer-api-javadoc/interfaces/database/database.md#ident) and [entid](../../../04-apis/02-peer-api-javadoc/interfaces/database/database.md#entid) methods on the *Database* class.
 
 ## Unique Identities
 
@@ -86,7 +86,7 @@ It is legal for a single entity to have multiple different unique attributes, e.
 
 Uniqueness can be declared on attributes of any value type, including references (`:db.type/ref`). Only (`:db.cardinality/one`) attributes can be unique.
 
-Datomic does provide a mechanism to declare composite uniqueness constraints via [composite tuples](../../06-reference/01-schema/schema-reference.md#tuples).
+Datomic does provide a mechanism to declare composite uniqueness constraints via [composite tuples](../01-schema-reference/schema-reference.md#tuples).
 
 ## Unique Values
 
@@ -98,9 +98,9 @@ Unique values have the same semantics as unique identities, with one critical di
 
 It is often important to have a globally unique identifier for an entity. Where such identifiers do not already exist in the domain, you can use a unique identity attribute with a value type of `:db.type/uuid`.
 
-In all systems that maintain a value-sorted index, checking for the existence or uniqueness of random (v4) UUIDs has poor locality, as reads will scatter across all the UUIDs. To address this, Datomic includes a semi-sequential UUID generator, [squuid](../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/squuid). Squuids are valid UUIDs, but unlike purely random UUIDs, they include a leading time component, which helps align read patterns with recency. Applications may also choose to use v7 UUIDs for the same rationale.
+In all systems that maintain a value-sorted index, checking for the existence or uniqueness of random (v4) UUIDs has poor locality, as reads will scatter across all the UUIDs. To address this, Datomic includes a semi-sequential UUID generator, [squuid](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#squuid). Squuids are valid UUIDs, but unlike purely random UUIDs, they include a leading time component, which helps align read patterns with recency. Applications may also choose to use v7 UUIDs for the same rationale.
 
-You can retrieve the time component of a squuid with [squuid-time-millis](../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/squuid-time-millis).
+You can retrieve the time component of a squuid with [squuid-time-millis](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#squuid-time-millis).
 
 If the ability to discover the time that a squuid was created leaks sensitive information, then squuids may not be appropriate. However, you should still prefer Squuids (or v7 UUIDs) if your ids may ever be indexed in other, non-Datomic systems.
 
@@ -129,7 +129,7 @@ Lookup refs have the following restrictions:
 
 - The specified attribute must be defined as either `:db.unique/value` or `:db.unique/identity`.
 - When used in a transaction, the lookup ref is evaluated against the specified attribute's index as it exists before the transaction is processed, so you cannot use a lookup ref to lookup an entity being defined in the same transaction.
-- Lookup refs cannot be used in the body of a query though they can be used as [inputs in a parameterized query](../../03-query-and-pull/02-query-reference/query-reference.md#multiple-inputs).
+- Lookup refs cannot be used in the body of a query though they can be used as [inputs in a parameterized query](../../03-query-and-pull/02-query-reference/query-reference.md#inputs).
 
 Lookup refs used in a transaction will be resolved by the transactor. Lookup refs used with *datoms* or *seek-datoms* will resolve on the peer using the database value provided.
 
@@ -141,4 +141,4 @@ Queries against a single database can lookup entity ids via other kinds of ident
 
 ## Limitations
 
-Attributes of type `:db.type/bytes` cannot be unique and cannot be used as lookup refs. Check [bytes limitations](../../06-reference/01-schema/schema-reference.md#bytes-limitations).
+Attributes of type `:db.type/bytes` cannot be unique and cannot be used as lookup refs. Check [bytes limitations](../01-schema-reference/schema-reference.md#limitations-of-bytes).

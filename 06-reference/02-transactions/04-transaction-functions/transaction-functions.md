@@ -4,16 +4,16 @@ This page describes transaction functions, which allow arbitrary validations and
 
 Sections covered in this page are:
 
-- [Transaction function semantics](#semantics)
-- [When to use transaction functions](#when-to-use)
+- [Transaction function semantics](#transaction-function-semantics)
+- [When to use transaction functions](#when-to-use-transaction-functions)
 - [Performance and security](#performance-and-security)
-- [Types of transaction functions](#types)
-- [Invoking transaction functions](#invoking)
-- [Built-in transaction functions](#built-in)
-- [Writing transaction functions](#writing)
-- [Canceling a transaction](#canceling)
-- [Testing transaction functions](#testing)
-- [Deploying transaction functions](#deploying)
+- [Types of transaction functions](#types-of-transaction-functions)
+- [Invoking transaction functions](#invoking-transaction-functions)
+- [Built-in transaction functions](#built-in-transaction-functions)
+- [Writing transaction functions](#writing-transaction-functions)
+- [Canceling a transaction](#canceling-a-transaction)
+- [Testing transaction functions](#testing-transaction-functions)
+- [Deploying transaction functions](#deploying-transaction-functions)
 
 ## Transaction Function Semantics
 
@@ -21,7 +21,7 @@ A transaction function lets you build transactions that are flexible based on th
 
 A transaction function is a pure function `[db-before, args] -> tx-data`, i.e. a transaction function takes db-before plus args you provide and produces tx-data for inclusion in the transaction.
 
-Transaction functions support the operation of [d/with](../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/with), which is also a pure function `[db-before, tx-data] -> tx-data`. `d/with` calls transaction functions to augment tx-data, producing more tx-data:
+Transaction functions support the operation of [d/with](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#with), which is also a pure function `[db-before, tx-data] -> tx-data`. `d/with` calls transaction functions to augment tx-data, producing more tx-data:
 
 ```text
 tx-data + (tx-fn db-before args) -> tx-data'
@@ -31,19 +31,19 @@ Transaction functions are tightly focused: they do not see the entire tx-data, o
 
 ## When to use transaction functions
 
-[Consistency](../../02-transactions/05-acid/acid.md#consistency) refers to the property that a database transaction takes the database from one valid state to another. Datomic has a number of built-in consistency checks that you can augment by writing custom [entity predicates](../../01-schema/01-schema-reference/schema-reference.md#entity-predicates) and *transaction functions*. Datomic’s features are well-tested and optimized, and you should prefer them over writing custom code where they fit your use case. Generally speaking, you should work your way down the table below, preferring the approaches listed earlier if they are sufficient for your needs.
+[Consistency](../05-acid/acid.md#consistency) refers to the property that a database transaction takes the database from one valid state to another. Datomic has a number of built-in consistency checks that you can augment by writing custom [entity predicates](../../01-schema/01-schema-reference/schema-reference.md#entity-predicates) and *transaction functions*. Datomic’s features are well-tested and optimized, and you should prefer them over writing custom code where they fit your use case. Generally speaking, you should work your way down the table below, preferring the approaches listed earlier if they are sufficient for your needs.
 
 | Desired Consistency | Datomic Feature |
 |---------------------|-----------------|
-| value type | attribute [value type](../../01-schema/01-schema-reference/schema-reference.md#db-valuetype) |
-| uniqueness | attribute [uniqueness constraint](../../01-schema/01-schema-reference/schema-reference.md#db-unique) |
-| single / multi value attribute | attribute [cardinality](../../01-schema/01-schema-reference/schema-reference.md#db-cardinality) |
-| optimistic concurrency (at the level of a single datom) | [db/cas](#dbfn-cas) |
+| value type | attribute [value type](../../01-schema/01-schema-reference/schema-reference.md#dbvaluetype) |
+| uniqueness | attribute [uniqueness constraint](../../01-schema/01-schema-reference/schema-reference.md#dbunique) |
+| single / multi value attribute | attribute [cardinality](../../01-schema/01-schema-reference/schema-reference.md#dbcardinality) |
+| optimistic concurrency (at the level of a single datom) | [db/cas](#dbcas) |
 | attribute predicate | attribute spec ([`:db.attr/preds`](../../01-schema/01-schema-reference/schema-reference.md#attribute-predicates)) |
 | entity required attributes | entity spec required attributes ([`:db.entity/attrs`](../../01-schema/01-schema-reference/schema-reference.md#required-attributes)) |
 | entity predicate against db-after | entity spec predicates ([`:db.entity/preds`](../../01-schema/01-schema-reference/schema-reference.md#entity-predicates)) |
 | predicates and transformations of transaction data, given db-before | custom transaction function |
-| sagas | [sync](../client-synchronization.md#sync) and [as-of](../client-synchronization.md#comparison) |
+| sagas | [sync](../06-client-synchronization/client-synchronization.md#sync) and [as-of](../06-client-synchronization/client-synchronization.md#comparison-to-as-of) |
 
 ## Performance and Security
 
@@ -78,7 +78,7 @@ Datomic calls transaction functions automatically when encountering anything oth
 [[:db/retractEntity [:person/email "jdoe@example.com"]]]
 ```
 
-Transaction functions can abort a transaction for any reason whatsoever by calling [`cancel`](../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/cancel), or they can [expand](../02-transactions/02-transaction-data/transaction-data.md#tx-data) to (possibly empty) data that will be included in the transaction.
+Transaction functions can abort a transaction for any reason whatsoever by calling [`cancel`](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#cancel), or they can [expand](../02-transaction-data/transaction-data.md#transaction-data) to (possibly empty) data that will be included in the transaction.
 
 The following example installs and invokes a trivial database function:
 
@@ -113,9 +113,9 @@ The following transaction functions are automatically included in Datomic for yo
 
 ### `:db/retractEntity`
 
-The `:db/retractEntity` function takes an entity id as an argument. It retracts all the attribute values where the given entity id is either the entity or value, effectively retracting the entity's own data and any references to the entity as well. Entities that are [components](../../01-schema/01-schema-reference/schema-reference.md#db-iscomponent) of the given entity are also recursively retracted.
+The `:db/retractEntity` function takes an entity id as an argument. It retracts all the attribute values where the given entity id is either the entity or value, effectively retracting the entity's own data and any references to the entity as well. Entities that are [components](../../01-schema/01-schema-reference/schema-reference.md#dbiscomponent) of the given entity are also recursively retracted.
 
-The following example transaction data retracts two entities, specifying one of the entities by entity id, and the other by a [lookup ref](../02-transaction-data/transaction-data.md#lookup-ref).
+The following example transaction data retracts two entities, specifying one of the entities by entity id, and the other by a [lookup ref](../02-transaction-data/transaction-data.md#lookup-refs).
 
 ```clojure
 [[:db/retractEntity eid-of-jane]]
@@ -148,11 +148,11 @@ The following example transaction data asserts entity 42's `:account/balance` to
 
 ### `:db/force-partition`
 
-The [`:db/force-partition`](../transactions/partitions.html#force-partition) function takes a map of tempids to desired partitions.
+The [`:db/force-partition`](../07-partitions/partitions.md#dbforce-partition) function takes a map of tempids to desired partitions.
 
 ### `:db/match-partition`
 
-The [`:db/match-partition`](../transactions/partitions.html#match-partition) function takes a map of tempids to entities that are in desired partitions.
+The [`:db/match-partition`](../07-partitions/partitions.md#dbmatch-partition) function takes a map of tempids to entities that are in desired partitions.
 
 ## Writing Transaction Functions
 
@@ -161,12 +161,12 @@ If you have a consistency requirement that is not covered by a built-in feature 
 1. Must be pure functions, free of side effects.
 2. Must take the current value of the database (`db-before`) as a first argument, followed by data arguments that match the arguments in the transaction data.
 3. On success, must return valid transaction data (which can include more transaction functions!)
-4. To abort a transaction, call [`cancel`](../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/cancel).
+4. To abort a transaction, call [`cancel`](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#cancel).
 5. Transaction data is serialized with Fressian. Transaction functions should not rely on, or presume, Clojure collection capabilities since collections deserialized by Fressian are guaranteed only Java interfaces.
 
 ## Canceling a transaction
 
-[`cancel`](../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/cancel) cancels the current Datomic query or transaction, and throws an ex-info with an [anomaly](https://github.com/cognitect-labs/anomalies) to the original caller.
+[`cancel`](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#cancel) cancels the current Datomic query or transaction, and throws an ex-info with an [anomaly](https://github.com/cognitect-labs/anomalies) to the original caller.
 
 `cancel` requires a map with the key `:cognitect.anomalies/category`, which has valid values of:
 

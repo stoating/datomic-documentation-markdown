@@ -6,7 +6,7 @@
 
 ## Data
 
-[Sample-data](../../04-apis/05-datomic-local-api/datomic-local-api.md#samples).
+[Sample-data](../../04-apis/05-datomic-local-api/datomic-local-api.md).
 
 ## Code Samples
 

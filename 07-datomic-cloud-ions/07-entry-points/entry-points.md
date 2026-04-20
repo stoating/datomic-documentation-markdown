@@ -1,14 +1,14 @@
 # Entry Points
 
-There are [many entry points for ions](../02-ions-reference/ions-reference.md#entry-points). This section covers:
+There are [many entry points for ions](../02-ions-reference/ions-reference.md#ion-entry-points). This section covers:
 
-- [Lambda invocation](#invoke-lambda)
+- [Lambda invocation](#invoke-a-lambda)
 - [HTTP direct](#http-direct)
 - [Attribute predicates](../../06-reference/01-schema/01-schema-reference/schema-reference.md#attribute-predicates)
 
 ## Invoke a Lambda
 
-Lambda entry points can be invoked from the [AWS CLI](https://docs.aws.amazon.com/cli/latest/reference/lambda/index.html). First, call `get-schema`. In the command below, replace `$(GROUP)` with the [name of your compute group](../../05-operation/02-cloud/11-how-to/how-to.md#compute-group-name):
+Lambda entry points can be invoked from the [AWS CLI](https://docs.aws.amazon.com/cli/latest/reference/lambda/index.html). First, call `get-schema`. In the command below, replace `$(GROUP)` with the [name of your compute group](../../05-operation/02-cloud/11-how-to/how-to.md#find-compute-group-name):
 
 ```sh
 aws lambda invoke --function-name $(GROUP)-get-schema --payload '' /dev/stdout
@@ -60,7 +60,7 @@ On success, this will return details about shirts:
 
 ## Add an Attribute Predicate
 
-You can use ions to deploy functions for use as [attribute predicates](../../06-reference/01-schema/01-schema-reference/schema-reference.md#attribute-predicates), [entity predicates](../../06-reference/01-schema/01-schema-reference/schema-reference.md#entity-predicates), [transaction functions](../../06-reference/02-transactions/04-transaction-functions/transaction-functions.md#custom), or [query functions](../../06-reference/03-query-and-pull/query-reference.md#calling-clojure-functions).
+You can use ions to deploy functions for use as [attribute predicates](../../06-reference/01-schema/01-schema-reference/schema-reference.md#attribute-predicates), [entity predicates](../../06-reference/01-schema/01-schema-reference/schema-reference.md#entity-predicates), [transaction functions](../../06-reference/02-transactions/04-transaction-functions/transaction-functions.md#writing-transaction-functions), or [query functions](../../06-reference/03-query-and-pull/02-query-reference/query-reference.md#calling-clojure-functions).
 
 When you deployed the tutorial application, your [ion-config.edn file](https://github.com/Datomic/ion-starter/blob/master/resources/datomic/ion-config.edn) allowed a [valid-sku? function](https://github.com/Datomic/ion-starter/blob/master/src/datomic/ion/starter/attributes.clj) suitable for an attribute predicate.
 
@@ -117,7 +117,7 @@ Entity -9223301668109598141 attribute :inv/sku value not-a-sku failed pred datom
 
 Invoking an ion via HTTP Direct is a simple HTTP request.
 
-Find your `IonApiGatewayEndpoint` in your compute group's [template outputs](../../05-operation/02-cloud/11-how-to/how-to.md#template-outputs).
+Find your `IonApiGatewayEndpoint` in your compute group's [template outputs](../../05-operation/02-cloud/11-how-to/how-to.md#find-template-outputs).
 
 Since HTTP Direct is a simple HTTP request, it can be invoked from any platform that supports such requests. Try entering your `IonApiGatewayEndpoint` and data of `:hat` below.
 
@@ -144,4 +144,4 @@ curl https://$(IonApiGatewayEndpoint) -d :hat
   {:color :blue, :type :hat, :size :small, :sku "SKU-35"}}
 ```
 
-Now [delete your system and conclude this tutorial](cleanup.md).
+Now [delete your system and conclude this tutorial](../08-conclusion/conclusion.md).

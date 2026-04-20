@@ -4,7 +4,7 @@
 
 `public interface Attribute`
 
-Programmatic representation of a [schema attribute](../../../../06-reference/01-schema/01-schema-reference/schema-reference.md#attributes).
+Programmatic representation of a [schema attribute](../../../../06-reference/01-schema/01-schema-reference/schema-reference.md#defining-schema).
 
 Attribute information always resides in memory, so using this interface is more efficient than accessing the same information from the database via e.g. query.
 
@@ -37,16 +37,16 @@ Attribute information always resides in memory, so using this interface is more 
 
 | Modifier and Type | Method | Description |
 |-------------------|--------|-------------|
-| `Object` | `cardinality()` | The attribute's [cardinality](../../../../06-reference/01-schema/01-schema-reference/schema-reference.md#cardinality) |
+| `Object` | `cardinality()` | The attribute's [cardinality](../../../../06-reference/01-schema/01-schema-reference/schema-reference.md#dbcardinality) |
 | `boolean` | `hasAVET()` | Does this attribute *currently* have an [AVET index](../../../../06-reference/04-indexes/01-index-model/index-model.md#avet)? |
 | `boolean` | `hasFulltext()` | Does this attribute have a fulltext index? |
-| `boolean` | `hasNoHistory()` | Is this a [noHistory](../../../../06-reference/01-schema/01-schema-reference/schema-reference.md#nohistory) attribute? |
+| `boolean` | `hasNoHistory()` | Is this a [noHistory](../../../../06-reference/01-schema/01-schema-reference/schema-reference.md#dbnohistory) attribute? |
 | `Object` | `id()` | The attribute's [entity id](../../../../06-reference/01-schema/04-identity-and-uniqueness/identity-and-uniqueness.md#entities) |
 | `Object` | `ident()` | The attribute's [ident](../../../../06-reference/01-schema/04-identity-and-uniqueness/identity-and-uniqueness.md#idents) (programmatic name) |
-| `boolean` | `isComponent()` | Is this a [component](../../../../06-reference/01-schema/01-schema-reference/schema-reference.md#component) attribute? |
+| `boolean` | `isComponent()` | Is this a [component](../../../../06-reference/01-schema/01-schema-reference/schema-reference.md#dbiscomponent) attribute? |
 | `boolean` | `isIndexed()` | Is this attribute configured for an [AVET index](../../../../06-reference/04-indexes/01-index-model/index-model.md#avet)? |
 | `Object` | `unique()` | Type of the attribute's [unique index](../../../../06-reference/01-schema/04-identity-and-uniqueness/identity-and-uniqueness.md#unique-identities), if any. |
-| `Object` | `valueType()` | The attribute's [value type](../../../../06-reference/01-schema/01-schema-reference/schema-reference.md#value-types) |
+| `Object` | `valueType()` | The attribute's [value type](../../../../06-reference/01-schema/01-schema-reference/schema-reference.md#dbvaluetype) |
 
 ## Field Details
 
@@ -144,7 +144,7 @@ The attribute's [ident](../../../../06-reference/01-schema/04-identity-and-uniqu
 
 `Object valueType()`
 
-The attribute's [value type](../../../../06-reference/01-schema/01-schema-reference/schema-reference.md#value-types)
+The attribute's [value type](../../../../06-reference/01-schema/01-schema-reference/schema-reference.md#dbvaluetype)
 
 **Returns:** a value type
 
@@ -152,7 +152,7 @@ The attribute's [value type](../../../../06-reference/01-schema/01-schema-refere
 
 `Object cardinality()`
 
-The attribute's [cardinality](../../../../06-reference/01-schema/01-schema-reference/schema-reference.md#cardinality)
+The attribute's [cardinality](../../../../06-reference/01-schema/01-schema-reference/schema-reference.md#dbcardinality)
 
 **Returns:** either `CARDINALITY_MANY` or `CARDINALITY_ONE`
 
@@ -168,7 +168,7 @@ Type of the attribute's [unique index](../../../../06-reference/01-schema/04-ide
 
 `boolean isComponent()`
 
-Is this a [component](../../../../06-reference/01-schema/01-schema-reference/schema-reference.md#component) attribute?
+Is this a [component](../../../../06-reference/01-schema/01-schema-reference/schema-reference.md#dbiscomponent) attribute?
 
 **Returns:** true if `:db/isComponent` true for this attribute
 
@@ -186,7 +186,7 @@ Is this attribute configured for an [AVET index](../../../../06-reference/04-ind
 
 Does this attribute *currently* have an [AVET index](../../../../06-reference/04-indexes/01-index-model/index-model.md#avet)?
 
-When you [alter](../../../../06-reference/01-schema/02-changing-schema/changing-schema.md#schema-alteration) an existing schema, indexes are created in the background after setting `:db/index` to true. This method returns true once a recently-added index is ready for use.
+When you [alter](../../../../06-reference/01-schema/02-changing-schema/changing-schema.md#changing-schema) an existing schema, indexes are created in the background after setting `:db/index` to true. This method returns true once a recently-added index is ready for use.
 
 **Returns:** true if AVET index available for this attribute
 
@@ -194,7 +194,7 @@ When you [alter](../../../../06-reference/01-schema/02-changing-schema/changing-
 
 `boolean hasNoHistory()`
 
-Is this a [noHistory](../../../../06-reference/01-schema/01-schema-reference/schema-reference.md#nohistory) attribute?
+Is this a [noHistory](../../../../06-reference/01-schema/01-schema-reference/schema-reference.md#dbnohistory) attribute?
 
 **Returns:** true if `:db/noHistory` true for this attribute
 

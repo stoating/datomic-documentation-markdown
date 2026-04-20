@@ -29,7 +29,7 @@ With the above change, requests will now be passed to your application which wil
 
 ## The Solution (Legacy)
 
-> This section only applies to [Datomic 781-9041](../../11-releases/02-datomic-cloud/02-cloud-change-log/cloud-change-log.md#781-9041) and lower.
+> This section only applies to [Datomic 781-9041](../../11-releases/02-datomic-cloud/02-cloud-change-log/cloud-change-log.md#20210302-781-9041-compute-update) and lower.
 
 Add an unauthenticated lambda proxy OPTIONS method to your API gateway. Then add the appropriate CORS headers to the request response from within your application.
 

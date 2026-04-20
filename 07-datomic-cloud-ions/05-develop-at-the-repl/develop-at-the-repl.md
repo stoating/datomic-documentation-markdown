@@ -8,7 +8,7 @@ The application code for this tutorial is already written so we will use the REP
 
 ### Configure Connection
 
-The ion-starter project keeps connection arguments in a resource file `resources/datomic/ion/starter/config.edn`. Edit this file to include the [connection arguments](../../04-apis/04-client-api/client-api.md#client) for your system.
+The ion-starter project keeps connection arguments in a resource file `resources/datomic/ion/starter/config.edn`. Edit this file to include the [connection arguments](../../04-apis/03-client-api-clojuredoc/client-api-clojuredoc.md#client) for your system.
 
 ### Test Your Connection
 
@@ -126,7 +126,7 @@ The lambda entry points are in a separate `lambdas` namespace, so that you can e
 
 ### Test HTTP Entry Points at the REPL
 
-An HTTP entry point is just a function with an [HTTP-compatible signature](../02-ions-reference/ions-reference.md#web-ion) that receives input and output maps that describe web requests and responses.
+An HTTP entry point is just a function with an [HTTP-compatible signature](../02-ions-reference/ions-reference.md#http-direct-entry-point) that receives input and output maps that describe web requests and responses.
 
 The HTTP entry points are in a separate `http` namespace. Review the HTTP entry points, and then try them from the REPL.
 

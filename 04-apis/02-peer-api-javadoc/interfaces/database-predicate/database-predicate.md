@@ -8,7 +8,7 @@
 
 `public static interface Database.Predicate<T>`
 
-Boolean-valued function for [filtering](../database/database.md#filter) a database.
+Boolean-valued function for [filtering](../database/database.md#filterdatabasepredicatedatom-pred) a database.
 
 **Since:** 0.8.3627
 

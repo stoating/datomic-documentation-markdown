@@ -47,7 +47,7 @@ If you have a large number of databases and you do not limit the set of exposed 
 
 All properties specified in *.properties [files](#first-configuration) can be passed as command line parameters, e.g. you can provide a node.id without editing the node.properties file with `bin/presto run -Dnode.id=<uuid>`. Jvm.config settings cannot be passed this way.
 
-Changes to the catalog and any `*.properties` files require restarting the [Presto server](../14-connecting-pro/connecting-pro.md#running).
+Changes to the catalog and any `*.properties` files require restarting the [Presto server](../14-connecting-pro/connecting-pro.md#running-presto).
 
 ## Enabling JDBC Metadata
 

@@ -4,19 +4,19 @@ This reference describes io-stats and includes:
 
 - [Background](#background)
 - [Problem statement](#problem)
-- [Io-stats approach](#approach)
+- [Io-stats approach](#approach-io-stats)
 - [Transaction logging of io-stats](#transaction-logging)
-- [Io-stats in transactions](#transactions)
-- [Io-stats query](#query)
-- [The io-stats map](#map)
-- [Interpreting io-stats](#interpreting)
-- [Relating io-stats to transaction time](#relating)
+- [Io-stats in transactions](#transaction-api-io-stats)
+- [Io-stats query](#query-api-io-stats)
+- [The io-stats map](#the-io-stats-map)
+- [Interpreting io-stats](#interpreting-io-stats)
+- [Relating io-stats to transaction time](#relating-io-stats-to-transaction-time)
 
 Everything about io-stats is alpha and subject to change in future releases.
 
 ## Background
 
-Any application or task has a [working set](https://en.wikipedia.org/wiki/Working_set) of data. Where that data is located/cached is an important part of architecting a system; a well-architected system has to plan for moving through tiers of cache. Otherwise, applications will encounter unexpected and dramatically different performance when data accesses spill over to the next tier. In Datomic, this can happen when there is too much reliance on increasing the first tier [object cache](../../introduction.md#architecture) (an in-memory cache of Java objects) to handle the entire working set.
+Any application or task has a [working set](https://en.wikipedia.org/wiki/Working_set) of data. Where that data is located/cached is an important part of architecting a system; a well-architected system has to plan for moving through tiers of cache. Otherwise, applications will encounter unexpected and dramatically different performance when data accesses spill over to the next tier. In Datomic, this can happen when there is too much reliance on increasing the first tier [object cache](../../introduction.md) (an in-memory cache of Java objects) to handle the entire working set.
 
 ## Problem
 
@@ -30,7 +30,7 @@ Before io-stats, Datomic APIs did not provide direct access to I/O information, 
 
 Io-stats summarizes the input and output (I/O) associated with a Datomic API call. Io-stats allows you to analyze where data is coming from, providing counts and latencies for index segments accessed from each tier. Io-stats shows what API call was made, and supports a user-provided io-context to distinguish different operations. And finally, io-stats provides some help with why, telling you the count of each different index sort order (:aevt/:avet/:eavt/:vaet).
 
-Io-stats are reported as a Clojure map, [described in detail below](#map). Io-stats are logged automatically for transactions, and you can explicitly request io-stats be returned from various transaction and query APIs.
+Io-stats are reported as a Clojure map, [described in detail below](#the-io-stats-map). Io-stats are logged automatically for transactions, and you can explicitly request io-stats be returned from various transaction and query APIs.
 
 ## Transaction Logging
 

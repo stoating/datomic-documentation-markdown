@@ -4,7 +4,7 @@ This page explains how to convert a master stack system into a split stack syste
 
 ## Rationale
 
-> This section only applies to [Datomic 990-9202](../../../11-releases/02-datomic-cloud/02-cloud-change-log/cloud-change-log.md#990-9202) and lower.
+> This section only applies to [Datomic 990-9202](../../../11-releases/02-datomic-cloud/02-cloud-change-log/cloud-change-log.md#20230228-990-9202) and lower.
 > Newer versions of Datomic Cloud do not use the Master stack templates.
 
 A Datomic Cloud system comprises at least 2 CloudFormation stacks per

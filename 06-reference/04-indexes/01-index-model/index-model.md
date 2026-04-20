@@ -47,7 +47,7 @@ The VAET index contains only datoms whose attribute has a `:db/valueType` of `:d
 
 ### Accumulate Only
 
-Datomic is accumulate-only. Information accumulates over time, and change is represented by accumulating the new, not by modifying or removing the old. For example, "removing" occurs not by taking something away, but by adding a new [retraction](../../02-transactions/transactions.md#retracting-data).
+Datomic is accumulate-only. Information accumulates over time, and change is represented by accumulating the new, not by modifying or removing the old. For example, "removing" occurs not by taking something away, but by adding a new [retraction](../../02-transactions/02-transaction-data/transaction-data.md#assert-and-retract).
 
 At the implementation level, this means that index and log segments are immutable, and can be consumed directly without coordination by any processes in a Datomic system. This is the reason that Datomic processes are called peers - all processes have equivalent access to the information in the system. In addition, because the indexes are immutable, they can be efficiently cached in application processes.
 
@@ -62,7 +62,7 @@ The Datomic API presents indexes to consumers as sorted sets of datoms or of tra
 - Updates the datom trees only occasionally, via background indexing jobs.
 - Uses an adaptive indexing algorithm that has a sublinear relationship with total database size.
 - Merges index trees with an in-memory representation of recent changes so that peers see up-to-date indexes.
-- Updates the log for every transaction (the D in [ACID](../../02-transactions/acid.md)).
+- Updates the log for every transaction (the D in [ACID](../../02-transactions/05-acid/acid.md)).
 - Optimizes log writes using additional data structures tuned to allow O(1) storage writes per transaction.
 
 ### Efficient Query

@@ -19,7 +19,7 @@ and peer processes.
 ```
 
 Given a log, you can retrieve an iterable over a range in the log with
-[tx-range](#tx-range) or use the [log in query](#log-in-query).
+[tx-range](#tx-range) or use the [log in query](#log-in-query-tx-ids-and-tx-data).
 
 ## tx-range
 

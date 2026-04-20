@@ -4,7 +4,7 @@
 
 ## Querying a Database
 
-In order to query, you must acquire a [database value](../whatis/data-model.md#database). To get a database value, you can call `db`, passing in a [connection](../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/connect).
+In order to query, you must acquire a [database value](../../../introduction.md). To get a database value, you can call `db`, passing in a [connection](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#connect).
 
 ```clojure
 (require '[datomic.api :as d])
@@ -31,24 +31,24 @@ The arguments to `q` are documented in the [Query Data Reference](../02-query-re
 
 `q` is the primary entry point for Datomic query.
 
-[Peer API](../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/q) | [Client API](../../04-apis/03-client-api-clojuredoc/client-api-clojuredoc.md#var-q)
+[Peer API](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#q) | [Client API](../../../04-apis/03-client-api-clojuredoc/client-api-clojuredoc.md#q)
 
 `q` performs the query described by query and args, and returns a collection of tuples.
 
-- The query to perform: a map, list, or [string](#work-with-data-structures). [Complete description.](../02-query-reference/query-reference.md)
+- The query to perform: a map, list, or [string](../../08-best-practices/best-practices.md#work-with-data-structures-not-strings). [Complete description.](../02-query-reference/query-reference.md)
   - [`:find`](../02-query-reference/query-reference.md#find-specs) - specifies the tuples to be returned.
-  - [`:with`](../02-query-reference/query-reference.md#with) - is optional, and names vars to be kept in the aggregation set but not returned
+  - [`:with`](../02-query-reference/query-reference.md#with-clauses) - is optional, and names vars to be kept in the aggregation set but not returned
   - [`:in`](../02-query-reference/query-reference.md#inputs) - is optional. Omitting `:in …` is the same as specifying `:in $`
   - [`:where`](../02-query-reference/query-reference.md#where-clauses) - limits the result returned
 - Data sources for the query, e.g. database values retrieved from a [call to db](#querying-a-database), and/or [rules](../02-query-reference/query-reference.md#rules).
 
 ## qseq
 
-`qseq` is a variant of `q` that [pulls](../03-pull/pull.md#pull-expressions) and [xforms](../03-pull/pull.md#xform-option) lazily as you consume query results.
+`qseq` is a variant of `q` that [pulls](../03-pull/pull.md) and [xforms](../03-pull/pull.md#xform-option) lazily as you consume query results.
 
-[Peer API](../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/qseq) | [Client API](../../04-apis/03-client-api-clojuredoc/client-api-clojuredoc.md#var-qseq)
+[Peer API](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#qseq) | [Client API](../../../04-apis/03-client-api-clojuredoc/client-api-clojuredoc.md#qseq)
 
-`qseq` utilizes the same [arguments and grammar as q](../02-query-reference/query-reference.md#arg-grammar).
+`qseq` utilizes the same [arguments and grammar as q](../02-query-reference/query-reference.md#query-arg-grammar).
 
 `qseq` is primarily useful when you know in advance that you do not need/want a realized collection. i.e. you are only going to make a single pass (or partial pass) over the result data.
 
@@ -99,7 +99,7 @@ While most people find the positional syntax easy to read, it makes extra work f
 
 Users can protect against long-running queries via Datomic's query timeout functionality. Datomic will abort a query shortly after its elapsed duration has exceeded the provided `:timeout` threshold.
 
-`:timeout` can be provided to [query](../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/query) in the Peer API and the 1-arity version of [q](../../04-apis/03-client-api-clojuredoc/client-api-clojuredoc.md#var-q) in the Client API.
+`:timeout` can be provided to [query](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#query) in the Peer API and the 1-arity version of [q](../../../04-apis/03-client-api-clojuredoc/client-api-clojuredoc.md#q) in the Client API.
 
 The example below lists all movies in the database by genre, but will likely fail due to the 1msec timeout.
 
@@ -117,7 +117,7 @@ You will likely see something like `ExceptionInfo Datomic Client Timeout  clojur
 
 To minimize the amount of work the query engine must do, query authors should put the most selective or narrowing `:where` clauses first, and then proceed on to less selective clauses.
 
-[query-stats](../../04-apis/11-query-stats/query-stats.md) provides information about clause selectivity that can be used to properly order the `:where` clauses of a query.
+[query-stats](../../../04-apis/11-query-stats/query-stats.md) provides information about clause selectivity that can be used to properly order the `:where` clauses of a query.
 
 As an example, consider the following two queries looking for Paul McCartney's releases. The first `:where` clause begins with a [data pattern](../02-query-reference/query-reference.md#data-patterns) (`[?release :release/name ?name]`) that has very low selectivity since `?release` nor `?name` have values bound to them, forcing the query engine to consider any release with some value for `:release/name` in the database:
 

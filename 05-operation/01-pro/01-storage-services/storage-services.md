@@ -375,7 +375,7 @@ aws-peer-role=<PEER-IAM-ROLE-NAME>
 
 #### Other DDB Configuration
 
-If required, for communication between peers and transactors on AWS, configure [security groups](../11-running-on-aws/running-on-aws.md#connecting-transactor-aws)
+If required, for communication between peers and transactors on AWS, configure [security groups](../11-running-on-aws/running-on-aws.md#connecting-to-the-transactor-on-aws)
 as well.
 
 > Refer to [the AWS docs](../11-running-on-aws/running-on-aws.md) for all other
@@ -579,7 +579,7 @@ services).
 
 ### Limitations
 
-- Datomic does not support Cassandra's multi-datacenter replication. See [the HA section](../06-high-availability/high-availability.md#moving-across-data-centers)
+- Datomic does not support Cassandra's multi-datacenter replication. See [the HA section](../06-high-availability/high-availability.md#moving-across-data-centers-regions)
 for more information on Datomic's storage level consistent copy requirements.
 - Datomic does not support quorum operations in multi-datacenter environments
 due to the negative impact on availability and write performance.

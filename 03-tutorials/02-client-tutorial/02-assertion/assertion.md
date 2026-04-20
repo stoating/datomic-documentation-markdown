@@ -4,7 +4,7 @@
 
 An assertion requires a database to exist and a connection.
 
-- Utilize a configuration map as described [in the client API tutorial](../01-client-api/client-api.md#create-client):
+- Utilize a configuration map as described [in the client API tutorial](../01-client-api/client-api.md#create-a-client):
 
 ```clojure
 (require '[datomic.client.api :as d])
@@ -15,13 +15,13 @@ An assertion requires a database to exist and a connection.
 (def client (d/client cfg))
 ```
 
-- Create a new database with [`create-database`](https://docs.datomic.com/client-api/datomic.client.api.html#var-create-database):
+- Create a new database with [`create-database`](../../../04-apis/03-client-api-clojuredoc/client-api-clojuredoc.md#create-database):
 
 ```clojure
 (d/create-database client {:db-name "tutorial"})
 ```
 
-- Acquire a connection to the database with [`connect`](https://docs.datomic.com/client-api/datomic.client.api.html#var-connect):
+- Acquire a connection to the database with [`connect`](../../../04-apis/03-client-api-clojuredoc/client-api-clojuredoc.md#connect):
 
 ```clojure
 (def conn (d/connect client {:db-name "tutorial"}))
@@ -121,9 +121,9 @@ So far we have used only built-in schema such as `:db/ident`. Now we want to add
 
 In Datomic, schema are entities just like program data. A schema entity must include:
 
-- [:db/ident](../../../06-reference/01-schema/01-schema-reference/schema-reference.md#db-ident), a programmatic name
-- [:db/valueType](../../../06-reference/01-schema/01-schema-reference/schema-reference.md#db-valuetype), a reference to an entity that specifies what type the attribute allows
-- [:db/cardinality](../../../06-reference/01-schema/01-schema-reference/schema-reference.md#db-cardinality), a reference to an entity that specifies whether a particular entity can possess more than one value for the attribute at a given time.
+- [:db/ident](../../../06-reference/01-schema/01-schema-reference/schema-reference.md#dbident), a programmatic name
+- [:db/valueType](../../../06-reference/01-schema/01-schema-reference/schema-reference.md#dbvaluetype), a reference to an entity that specifies what type the attribute allows
+- [:db/cardinality](../../../06-reference/01-schema/01-schema-reference/schema-reference.md#dbcardinality), a reference to an entity that specifies whether a particular entity can possess more than one value for the attribute at a given time.
 
 So we can add our schema like this:
 

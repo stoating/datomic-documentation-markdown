@@ -10,7 +10,7 @@ The Datomic client library includes both the synchronous and asynchronous APIs, 
 
 ### Clojure CLI
 
-To use the Client library from a [Clojure CLI REPL](../../05-operation/02-cloud/11-how-to/how-to.md#clojure-cli), add the following to your [deps.edn](https://clojure.org/guides/deps_and_cli) dependencies map:
+To use the Client library from a [Clojure CLI REPL](../../05-operation/02-cloud/11-how-to/how-to.md#install-clojure-cli), add the following to your [deps.edn](https://clojure.org/guides/deps_and_cli) dependencies map:
 
 ```clojure
 com.datomic/client-cloud {:mvn/version "1.0.131"}

@@ -5,13 +5,13 @@ Datomic analytics is implemented via a Datomic connector to [Trino](https://trin
 | Step | When |
 |------|------|
 | [Prerequisites](#prerequisites) | All Datomic analytics use |
-| [Install Datomic analytics](#installing) | One-time setup |
-| [Configure Trino](#trino-cluster) | One-time setup |
-| [Configure a Datomic connection](#connections) | Per Datomic system/db |
-| [Configure a Datomic metaschema](#metaschema) | Per Datomic Metaschema |
-| [Start and stop analytics](#start) | As desired |
+| [Install Datomic analytics](#install-datomic-analytics) | One-time setup |
+| [Configure Trino](#configure-a-trino-cluster) | One-time setup |
+| [Configure a Datomic connection](#configure-connections) | Per Datomic system/db |
+| [Configure a Datomic metaschema](#configure-metaschema) | Per Datomic Metaschema |
+| [Start and stop analytics](#start-and-stop-trino) | As desired |
 
-The Datomic analytics distribution includes sample configuration and templates so that you can complete these steps in minutes. Each of these steps is explained below, along with pointers for deploying analytics [for production use](#production).
+The Datomic analytics distribution includes sample configuration and templates so that you can complete these steps in minutes. Each of these steps is explained below, along with pointers for deploying analytics [for production use](#trino-in-production).
 
 ## Prerequisites
 
@@ -24,27 +24,27 @@ The Datomic analytics distribution includes sample configuration and templates s
 
 ## Configure a Trino Cluster
 
-Trino configuration lives under a directory that Trino commands call the `etc-dir`. The `etc-dir` is specified when [launching Trino](#start).
+Trino configuration lives under a directory that Trino commands call the `etc-dir`. The `etc-dir` is specified when [launching Trino](#start-and-stop-trino).
 
 The `etc-samples` directory of Datomic analytics is part of the Trino `etc-dir` configured to run a minimal Trino cluster of a single node on your local machine. You can leave these configuration files unchanged while exploring Trino on your local machine, and consult the [Trino docs](https://trino.io/docs/current/) when you are ready to plan a production cluster.
 
 ## Configure Connections
 
-For each Datomic system, you have to create a Trino [catalog](https://trino.io/docs/current/overview/concepts.html#catalog) property file in the `catalog` subdirectory of the Trino [etc-dir](#trino-cluster). A catalog file has a name of the form `<catalog>.properties`, where `<catalog>` is the catalog name. `/etc-samples/catalog` in the provided zip has an example catalog properties.
+For each Datomic system, you have to create a Trino [catalog](https://trino.io/docs/current/overview/concepts.html#catalog) property file in the `catalog` subdirectory of the Trino [etc-dir](#configure-a-trino-cluster). A catalog file has a name of the form `<catalog>.properties`, where `<catalog>` is the catalog name. `/etc-samples/catalog` in the provided zip has an example catalog properties.
 
 A Datomic catalog property file has the following entries:
 
 | Property | Required? | Value | Notes |
 |----------|-----------|-------|-------|
 | `connector.name` | Yes | `"datomic"` | Do not change |
-| `datomic.client.config` | Yes | A Datomic [client connect map](../../04-apis/04-client-api/client-api.md#client) | Must be on one line |
+| `datomic.client.config` | Yes | A Datomic [client connect map](../../04-apis/04-client-api/client-api.md#client-object) | Must be on one line |
 | `datomic.databases` | No | A vector of Datomic database names | |
 
-The `datomic.databases` property lists the databases that are available via Trino. Supplying one or more databases enables [JDBC Metadata](#jdbc-metadata). If this property is omitted, all databases will be available and not automatically queried.
+The `datomic.databases` property lists the databases that are available via Trino. Supplying one or more databases enables [JDBC Metadata](#enabling-jdbc-metadata). If this property is omitted, all databases will be available and not automatically queried.
 
 Any time you change a catalog file, you have to stop and then start the Trino cluster for your changes to take effect.
 
-The `etc-samples` directory includes a catalog named `sample.properties`. Before you start Trino, edit this file and set `datomic.client.config` to have a valid [client connect map](../../04-apis/04-client-api/client-api.md#client) for your system.
+The `etc-samples` directory includes a catalog named `sample.properties`. Before you start Trino, edit this file and set `datomic.client.config` to have a valid [client connect map](../../04-apis/04-client-api/client-api.md#client-object) for your system.
 
 You can also rename the file from `sample.properties` to something more descriptive of your system.
 
@@ -52,7 +52,7 @@ You can also rename the file from `sample.properties` to something more descript
 
 Many analytics tools provide the ability to automatically explore all of the tables in your system. Such exploration involves issuing one *(or many)* JDBC metadata queries, forcing each database in your system to be loaded.
 
-Because these automatic queries can be so expensive, they are disabled by default. To enable JDBC metadata queries, explicitly enumerate the Datomic databases you want to query with the `datomic.databases` property [described above](#connections).
+Because these automatic queries can be so expensive, they are disabled by default. To enable JDBC metadata queries, explicitly enumerate the Datomic databases you want to query with the `datomic.databases` property [described above](#configure-connections).
 
 ## Configure Metaschema
 

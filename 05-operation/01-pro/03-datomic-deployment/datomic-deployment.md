@@ -49,16 +49,16 @@ If you are using CloudWatch to [monitor transactors](../05-monitoring-and-perfor
 
 The peer library is designed to survive and automatically reconnect in the event of transactor failure, check [transactor failover](#transactor-failover).
 
-When a peer cannot communicate with a transactor or storage, that peer will automatically attempt to reconnect, with no special action required by the application code. During a period of unavailability, calls to [(d/db)](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/db) will return the most recent [consistent](../../../06-reference/02-transactions/05-acid/acid.md#consistency) database value available locally in the Peer, so that peers can continue to read and query during transactor outage.
+When a peer cannot communicate with a transactor or storage, that peer will automatically attempt to reconnect, with no special action required by the application code. During a period of unavailability, calls to [(d/db)](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#db) will return the most recent [consistent](../../../06-reference/02-transactions/05-acid/acid.md#consistency) database value available locally in the Peer, so that peers can continue to read and query during transactor outage.
 
-The mentioned queries have a sound point-in-time basis, accessible through the database future returned by [(d/sync)](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/sync), which will block until the transactor becomes available. A peer will require the latest database value - these techniques allow peers to choose to continue reading during transactor failover or to wait until the transactor becomes available.
+The mentioned queries have a sound point-in-time basis, accessible through the database future returned by [(d/sync)](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#sync), which will block until the transactor becomes available. A peer will require the latest database value - these techniques allow peers to choose to continue reading during transactor failover or to wait until the transactor becomes available.
 
 Peer application code should be prepared for the possibility of transient write failure in the event of transactor unavailability and implement appropriate retry strategies. Datomic will not automatically retry arbitrary transactions. Not all transactions are idempotent, and transactions may have succeeded, even if the communication back to the peer failed.
 
 Given that a peer must discover on reconnect whether or not a transaction has succeeded, you can handle retry logic with a variety of strategies. In general, you will want to query the database to determine what happened from a time basis after the transaction failure/success. Some example strategies:
 
-- Coordination using [(d/sync)](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/sync)
-- [Annotating transactions](../../../06-reference/02-transactions/03-processing-transactions/processing-transactions.md#reified-transactions) with a unique identifier
+- Coordination using [(d/sync)](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#sync)
+- [Annotating transactions](../../../06-reference/02-transactions/03-processing-transactions/processing-transactions.md) with a unique identifier
 - Implementing retry in a [transaction function](../../../06-reference/02-transactions/04-transaction-functions/transaction-functions.md)
 
 ## Troubleshooting
@@ -221,11 +221,11 @@ Caused by: clojure.lang.ExceptionInfo: Error communicating with HOST 0.0.0.0 on 
    Caused by: ActiveMQException[errorType=NOT_CONNECTED message=AQ119007: Cannot connect to server(s). Tried with all available servers.]
 ```
 
-Further description of the peer connection process is available [in the transactor reference page](../02-transactor-reference/transactor-reference.md#connecting-to-transactor) and [the peer fails to connect section](#peer-fails-to-connect).
+Further description of the peer connection process is available [in the transactor reference page](../02-transactor-reference/transactor-reference.md#connecting-to-the-transactor) and [the peer fails to connect section](#peer-fails-to-connect).
 
 ### Queries Fail With Thread Pool Shutdown
 
-Calling the Datomic API [*shutdown*](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/shutdown) or Clojure *shutdown-agents* function will shut down the Peer library. If either of these functions is called before an attempt to run a Datomic query, the query will fail with the exception:
+Calling the Datomic API [*shutdown*](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#shutdown) or Clojure *shutdown-agents* function will shut down the Peer library. If either of these functions is called before an attempt to run a Datomic query, the query will fail with the exception:
 
 ```
 Task java.util.concurrent.FutureTask@7ff48e13 rejected from java.util.concurrent.ThreadPoolExecutor@3407eed0[Shutting down, pool size = 7, active threads = 7, queued tasks = 0, completed tasks = 7]

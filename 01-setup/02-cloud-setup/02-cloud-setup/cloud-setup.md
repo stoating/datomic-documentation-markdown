@@ -16,7 +16,7 @@ System and application names cannot be changed, so choose good names. Points to 
 
 - Datomic creates AWS resources named "datomic-[system]-[subresource]", so keep your system name short – and **don't** name your system "Datomic".
 - Multiple systems might serve the same primary database in different development stages. Name systems via the convention "[db]-[stage]", e.g. "inventory-dev", "inventory-staging" and "inventory-prod".
-- A system can serve more than one application via different [query groups](../../../05-operation/02-cloud/01-cloud-architecture/cloud-architecture.md#query-groups), although one application is often primary. So you might name applications "[db](-[app])", e.g. "inventory" and "inventory-analytics".
+- A system can serve more than one application via different [query groups](../../../05-operation/02-cloud/01-cloud-architecture/cloud-architecture.md#query-groups), although one application is often primary. So you might name applications "[db]-[app]", e.g. "inventory" and "inventory-analytics".
 
 ## Create a Storage Stack
 

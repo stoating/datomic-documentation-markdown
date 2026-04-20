@@ -67,7 +67,7 @@ Entity attributes are accessed lazily as you request them. Once you access a par
 
 `clojure.core/keys` returns the keys available for an entity, without caching their values.
 
-The [d/touch](../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/touch) method is a convenience that accesses and caches all the attributes of an entity. In addition, `touch` also accesses and caches the attributes of any other entities reachable through an attribute whose schema definition includes `:db/isComponent true`.
+The [d/touch](../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#touch) method is a convenience that accesses and caches all the attributes of an entity. In addition, `touch` also accesses and caches the attributes of any other entities reachable through an attribute whose schema definition includes `:db/isComponent true`.
 
 As an example, consider a database of orders, line items, and products. A line item is a component of an order. A product is related to an order but is not a component of the order. In such a database, touching an order will access the order's attributes, and recursively access all the order's line items. Touching an order will not access the line items' products.
 
@@ -105,4 +105,4 @@ Entities are based on a point in time of the database. Navigation from an entity
 
 Entities are not a mapping layer between databases and application code. Entities are a direct, mechanical translation from database information to associative application access.
 
-Entities are not suitable for existence tests, which should typically be performed via lookup of a [unique identity](../../01-schema/04-identity-and-uniqueness/identity-and-uniqueness.md).
+Entities are not suitable for existence tests, which should typically be performed via lookup of a [unique identity](../01-schema/04-identity-and-uniqueness/identity-and-uniqueness.md).

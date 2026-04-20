@@ -3,8 +3,8 @@
 This page covers:
 
 - General tuning tips for Datomic
-- Integrating [custom](#custom) monitoring
-- [Configuring](#configuring) CloudWatch monitoring
+- Integrating [custom](#custom-monitoring) monitoring
+- [Configuring](#configuring-cloudwatch-monitoring) CloudWatch monitoring
 - A list of [available metrics](#available-cloudwatch-metrics)
 - Responding to [alarms](#alarms)
 - [Internal monitoring](#internal-monitoring)
@@ -158,14 +158,14 @@ time. A correct callback implementation should be tolerant of:
 
 The Datomic Pro transactor can be configured to write metrics to
 [CloudWatch](https://aws.amazon.com/cloudwatch/). Find instructions
-for setting up CloudWatch [here](../11-running-on-aws/running-on-aws.md#s3-log-storage).
+for setting up CloudWatch [here](../11-running-on-aws/running-on-aws.md#using-s3-log-storage-and-cloudwatch-metrics).
 
 ## Use CloudWatch From Anywhere
 
 Note that you can use CloudWatch with any Datomic Pro transactor,
 regardless of which storage you are using, and regardless of where
 your transactor is located. Instructions for configuring CloudWatch
-for storages other than DynamoDB are [here](../11-running-on-aws/running-on-aws.md#other-storages).
+for storages other than DynamoDB are [here](../11-running-on-aws/running-on-aws.md#using-s3-log-storage-and-cloudwatch-metrics-with-other-storage).
 
 ## Available CloudWatch Metrics
 

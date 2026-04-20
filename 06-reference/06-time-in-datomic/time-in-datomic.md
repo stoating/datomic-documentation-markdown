@@ -32,7 +32,7 @@ All the examples below use an [example inventory database](https://github.com/co
 
 ## as-of
 
-[Peer API](../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/as-of) | [Client API](../../04-apis/03-client-api-clojuredoc/client-api-clojuredoc.md#var-as-of)
+[Peer API](../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#as-of) | [Client API](../../04-apis/03-client-api-clojuredoc/client-api-clojuredoc.md#as-of)
 
 An `as-of` filter returns a database "as of" at a particular point in time, ignoring any transactions after that point. The time specification can be any time point, i.e.
 
@@ -68,7 +68,7 @@ Because the `item/count` of dilithium crystals is changing over time, different 
 
 ## since
 
-[Peer API](../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/since) | [Client API](../../04-apis/03-client-api-clojuredoc/client-api-clojuredoc.md#var-since)
+[Peer API](../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#since) | [Client API](../../04-apis/03-client-api-clojuredoc/client-api-clojuredoc.md#since)
 
 A `since` filter is the opposite of `as-of`. Taking the same point-in-time arguments as `as-of`, `since` returns a value of the database that includes only datoms added by transactions after that point in time.
 
@@ -111,7 +111,7 @@ Here, the `db` argument is named `$` inside the query and used to resolve the `:
 
 ## history
 
-[Peer API](../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/history) | [Client API](../../04-apis/03-client-api-clojuredoc/client-api-clojuredoc.md#var-history)
+[Peer API](../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#history) | [Client API](../../04-apis/03-client-api-clojuredoc/client-api-clojuredoc.md#history)
 
 The history view of the database includes the present and the unfiltered past, including retractions. This makes the history view ideal for querying the complete history of an entity, or group of entities.
 
@@ -135,7 +135,7 @@ Simplified views of data that do not account for time are incompatible with `his
 
 ## filter
 
-[Peer API](../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/filter)
+[Peer API](../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#filter)
 
 ### Filtering Errors
 

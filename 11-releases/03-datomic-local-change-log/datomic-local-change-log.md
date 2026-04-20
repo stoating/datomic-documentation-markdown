@@ -5,7 +5,7 @@
 ### 2025/03/19 - 1.0.291
 
 - Fix: `:db-name` key is now available for Datomic Local DBs.
-- Fix: changes to [BigDecimal](../../06-reference/01-schema/01-schema-reference/schema-reference.md#db-valuetype) attribute scale no longer ignored.
+- Fix: changes to [BigDecimal](../../06-reference/01-schema/01-schema-reference/schema-reference.md#dbvaluetype) attribute scale no longer ignored.
 
 ### 2024/07/11 - 1.0.285
 
@@ -54,15 +54,15 @@ Improvement: enable BigInt fressian handler.
 
 ### 2020/11/23 - 0.9.229
 
-- New: change the scale of a [BigDecimal attribute](../../06-reference/01-schema/01-schema-reference/schema-reference.md#db-valuetype) in a transaction.
+- New: change the scale of a [BigDecimal attribute](../../06-reference/01-schema/01-schema-reference/schema-reference.md#dbvaluetype) in a transaction.
 - Improvement: better error messages for `import-cloud`.
 - Fix: query correctly treats range functions as functions (not as predicates).
 
 ### 2020/10/21 - 0.9.225
 
-- New feature [Memdb](../../../01-setup/03-local-setup/local-setup.md#memdb).
-- Improvement: increase the limit on the total number of datoms in a transaction imported with [`import-cloud`](../../../04-apis/05-datomic-local-api/datomic-local-api.md#import-cloud) to 16 million.
-- Improvement: increase the limit on the length of strings imported with [`import-cloud`](../../../04-apis/05-datomic-local-api/datomic-local-api.md#import-cloud) to 1 million characters.
+- New feature [Memdb](../../01-setup/03-local-setup/local-setup.md#memdb).
+- Improvement: increase the limit on the total number of datoms in a transaction imported with [`import-cloud`](../../04-apis/05-datomic-local-api/datomic-local-api.md#import-cloud) to 16 million.
+- Improvement: increase the limit on the length of strings imported with [`import-cloud`](../../04-apis/05-datomic-local-api/datomic-local-api.md#import-cloud) to 1 million characters.
 
 ### 2020/09/25 - 0.9.203
 

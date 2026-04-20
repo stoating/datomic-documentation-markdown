@@ -58,13 +58,13 @@ As a development convenience, a peer server can also serve transient, memory-onl
 
 ## Installing the Client Library
 
-The Datomic client library includes both the [synchronous](../../../04-apis/04-client-api/client-api.md#sync) and [asynchronous](../../../04-apis/04-client-api/client-api.md#async) APIs, and is provided via [Maven central](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22client-pro%22).
+The Datomic client library includes both the [synchronous](../../../04-apis/04-client-api/client-api.md#synchronous-api) and [asynchronous](../../../04-apis/04-client-api/client-api.md#asynchronous-api) APIs, and is provided via [Maven central](http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22client-pro%22).
 
 For Peer Server you will need `client-pro` and can follow the [Pro Client Getting Started Tutorial](../16-pro-client-getting-started/pro-client-getting-started.md) steps for including the dependency in your Clojure CLI, Maven, or Leiningen project.
 
 ## Connecting to the Peer Server
 
-To connect to a Peer Server, call [connect](../../../04-apis/03-client-api-clojuredoc/client-api-clojuredoc.md#var-connect), passing a [client](../../../04-apis/03-client-api-clojuredoc/client-api-clojuredoc.md#var-client) created with the arguments used to create the peer server:
+To connect to a Peer Server, call [connect](../../../04-apis/03-client-api-clojuredoc/client-api-clojuredoc.md#connect), passing a [client](../../../04-apis/03-client-api-clojuredoc/client-api-clojuredoc.md#client) created with the arguments used to create the peer server:
 
 - Peer server `host:port` for `:endpoint`
 - Peer server `secret` for `:secret`

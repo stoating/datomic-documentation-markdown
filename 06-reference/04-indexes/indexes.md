@@ -15,8 +15,8 @@ Datomic indexes are used behind the scenes in [Query](../03-query-and-pull/query
 
 This section documents what Datomic's indexes are, how they are maintained, and how to access them.
 
-- [Index Model](index-model.md)
-- [Background Indexing](background-indexing.md)
+- [Index Model](01-index-model/index-model.md)
+- [Background Indexing](02-background-indexing/background-indexing.md)
 
 
 
