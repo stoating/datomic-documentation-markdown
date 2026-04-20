@@ -4,7 +4,7 @@ You have learned [how to transact a schema into the database](../03-transact-sch
 
 In the previous step, you learned how to transact schema data into the database. As was mentioned there, schema is just data, like any other data. So you will be unsurprised to learn that creating domain data is a very similar operation.
 
-Putting domain data into your database also takes advantage of the [`transact`](../../../datomic-clojure-api/datomic-clojure-api.md#datomic.api/transact) method of the Peer library. `transact` takes an active connection and a map of data.
+Putting domain data into your database also takes advantage of the [`transact`](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/transact) method of the Peer library. `transact` takes an active connection and a map of data.
 
 - Define your data in a var:
 

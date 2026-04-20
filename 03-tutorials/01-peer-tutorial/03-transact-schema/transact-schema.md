@@ -110,6 +110,6 @@ Transact takes two parameters:
 ```
 
 The presence of the `:db-before` and `:db-after` values shows that new information was transmitted and persisted in your database.
-You can learn more about the details of this return value by reading the details of [transact](../../../datomic-clojure-api/datomic-clojure-api.md#transact) in the reference guide.
+You can learn more about the details of this return value by reading the details of [transact](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#transact) in the reference guide.
 
 In the next section, we'll start [adding movies into the database](../04-transact-data/transact-data.md).

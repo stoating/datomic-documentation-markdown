@@ -1,8 +1,8 @@
 # Accessing the Peer Library
 
-This page is for users who have completed the [Datomic Pro setup](../../01-setup/01-pro-setup/pro-setup.md) and covers integrating the [Datomic peer library](../../datomic-clojure-api/datomic-clojure-api.md) into your Java or Clojure project.
+This page is for users who have completed the [Datomic Pro setup](../../01-setup/01-pro-setup/pro-setup.md) and covers integrating the [Datomic peer library](../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md) into your Java or Clojure project.
 
-The [peer library](../../datomic-clojure-api/datomic-clojure-api.md) must be on the classpath to be used to interact with Datomic.
+The [peer library](../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md) must be on the classpath to be used to interact with Datomic.
 
 - [Maven setup](#maven-setup)
 - [Using from Deps.edn](#deps)

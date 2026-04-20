@@ -20,10 +20,34 @@ After writing a file, **always read it first** (the file exists but is empty —
 - Strip all `<a class="anchorjs-link">` decorative anchor tags — these are just visual icons, not content
 
 ### Links
-- Convert all `href` links to local `.md` paths where the target exists in this repo
-- External links (https://) stay as-is
-- Resolve relative HTML paths (`../`) against the actual repo directory structure, not the original URL structure
-- The original site uses paths like `/operation/storage.html` — map these to the equivalent file, e.g. `../../05-operation/01-pro/01-storage-services/storage-services.md`
+- Convert **all** `href` links — including `https://docs.datomic.com/...` URLs — to relative `.md` paths within this repo. No `https://docs.datomic.com` links should remain in converted files.
+- External links to non-Datomic sites (e.g. Oracle Javadoc, AWS docs) stay as-is.
+- Resolve relative HTML paths (`../`) against the actual repo directory structure, not the original URL structure.
+- Preserve `#anchor` fragments when converting links so headings within a page are still reachable.
+
+#### URL → repo path mapping
+
+| docs.datomic.com URL path | Repo file |
+|---------------------------|-----------|
+| `/schema/schema.html` | `06-reference/01-schema/01-schema-reference/schema-reference.md` |
+| `/schema/identity.html` | `06-reference/01-schema/04-identity-and-uniqueness/identity-and-uniqueness.md` |
+| `/schema/schema-change.html` | `06-reference/01-schema/02-changing-schema/changing-schema.md` |
+| `/schema/data-modeling.html` | `06-reference/01-schema/03-data-modeling/data-modeling.md` |
+| `/transactions/transactions.html` | `06-reference/02-transactions/transactions.md` |
+| `/query/query.html` | `06-reference/03-query-and-pull/02-query-reference/query-reference.md` |
+| `/query/indexes.html` | `06-reference/04-indexes/01-index-model/index-model.md` |
+| `/query/pull.html` | `06-reference/03-query-and-pull/03-pull/pull.md` |
+| `/operation/storage.html` | `05-operation/01-pro/01-storage-services/storage-services.md` |
+| `/operation/aws.html` | `05-operation/01-pro/11-running-on-aws/running-on-aws.md` |
+| `/reference/entities.html` | `06-reference/07-entities/entities.md` |
+| `/api/log.html` | `04-apis/08-log-api/log-api.md` |
+| `/operation/capacity.html` | `05-operation/01-pro/04-capacity-planning/capacity-planning.md` |
+| `/operation/excision.html` | `05-operation/01-pro/14-excision/excision.md` |
+| `/glossary.html` | `12-glossary/glossary.md` |
+| `/reference/database-functions.html` | `06-reference/02-transactions/04-transaction-functions/transaction-functions.md` |
+| `/transactions/transaction-processing.html` | `06-reference/02-transactions/03-processing-transactions/processing-transactions.md` |
+
+For any URL not in this table, derive the repo path using the same pattern: strip the domain, map the path segments to the closest matching directory under the numbered top-level folders, and use the leaf `.md` file named after the directory. Add new entries to this table as you encounter and resolve new URLs.
 
 ### Code blocks
 - `<pre class="src src-sh">` or `src-bash` → fenced block with `sh`
@@ -69,7 +93,24 @@ These files have content (as of the last session):
 - `02-accessing/accessing.md` ✓
 - `02-accessing/01-peer-library/peer-library.md` ✓
 - `02-accessing/02-client-library/client-library.md` ✓
-- `datomic-clojure-api/datomic-clojure-api.md` ✓ — this is the target for any `../clojure/index.html` links
+- `04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md` ✓ — this is the target for any `../clojure/index.html` links
+- `04-apis/02-peer-api-javadoc/interfaces/connection/connection.md` ✓
+- `04-apis/02-peer-api-javadoc/classes/util/util.md` ✓
+- `04-apis/02-peer-api-javadoc/interfaces/datom/datom.md` ✓
+- `04-apis/02-peer-api-javadoc/interfaces/entity/entity.md` ✓
+- `04-apis/02-peer-api-javadoc/interfaces/log/log.md` ✓
+- `04-apis/02-peer-api-javadoc/classes/peer/peer.md` ✓
+- `04-apis/02-peer-api-javadoc/classes/query-request/query-request.md` ✓
+- `04-apis/02-peer-api-javadoc/classes/util/util.md` ✓
+- `04-apis/02-peer-api-javadoc/interfaces/attribute/attribute.md` ✓
+- `04-apis/02-peer-api-javadoc/interfaces/database/database.md` ✓
+- `04-apis/02-peer-api-javadoc/interfaces/database-predicate/database-predicate.md` ✓
+- `04-apis/02-peer-api-javadoc/interfaces/listenable-future/listenable-future.md` ✓
+- `04-apis/02-peer-api-javadoc/peer-api-javadoc.md` ✓
+
+## Javadoc directory naming note
+
+The `QueryRequest` class lives at `04-apis/02-peer-api-javadoc/classes/query-request/query-request.md` (not `query-result`). When linking to it, use `classes/query-request/query-request.md`.
 
 Everything else in the repo is an empty `.md` file waiting to be filled. The next file in sequence is `03-tutorials/tutorials.md`.
 

@@ -20,7 +20,7 @@ bin/repl
 nil
 ```
 
-The Datomic Peer API [names databases](../../../datomic-clojure-api/datomic-clojure-api.md#datomic.api/connect) with a URI that includes the protocol name, storage connection information, and a database name. The complete URI for a database named "hello" on the [transactor you started in the previous step](../01-run-a-transactor/run-a-transactor.md#start) is `"datomic:dev://localhost:4334/hello"`.
+The Datomic Peer API [names databases](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md#datomic.api/connect) with a URI that includes the protocol name, storage connection information, and a database name. The complete URI for a database named "hello" on the [transactor you started in the previous step](../01-run-a-transactor/run-a-transactor.md#start) is `"datomic:dev://localhost:4334/hello"`.
 
 - Def a var, `db-uri`, with this name:
 

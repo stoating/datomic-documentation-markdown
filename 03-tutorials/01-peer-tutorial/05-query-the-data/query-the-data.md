@@ -14,7 +14,7 @@ The client library offers two mechanisms for retrieving data from your database:
 - **Pull**: a declarative way to make hierarchical (and possibly nested) selections of information about entities
 - **Entity**: pulls a lazy, associative view of all the information that can be reached from an entity id
 
-We'll focus on [query](../../../datomic-clojure-api/datomic-clojure-api.md) in this tutorial. For more on pull, read [Datomic pull](../../../06-reference/03-query-and-pull/03-pull/pull.md), and for more on entity, read [entities](../../../06-reference/07-entities/entities.md).
+We'll focus on [query](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md) in this tutorial. For more on pull, read [Datomic pull](../../../06-reference/03-query-and-pull/03-pull/pull.md), and for more on entity, read [entities](../../../06-reference/07-entities/entities.md).
 
 ## Database Value
 
@@ -40,13 +40,13 @@ Once you have the database value, then you can issue queries against it. You iss
 - Query data (represented as a map or list) containing **at least** a `:find` clause and a `:where` clause
 - A list of input sources for the query
 
-The query data can also contain a variety of other optional components, which you can learn more about in the [q reference](../../../datomic-clojure-api/datomic-clojure-api.md).
+The query data can also contain a variety of other optional components, which you can learn more about in the [q reference](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md).
 
 Provide enough of a `:where` clause to limit the results, and your query performance is relative to the ordering and selectivity of the clauses. Put your most selective clauses first and it may limit the work that needs to be done by other related clauses which come after.
 
 Right now we want to find every movie in the database. A movie is anything that has an associated `:movie/title` attribute (or `:movie/release-year` or `:movie/genre`, but we'll just use `:movie/title` for now).
 
-You will use the [list form of the query data](../../../datomic-clojure-api/datomic-clojure-api.md). Create a vector with the three mandatory components listed above. Let's look at a minimal query:
+You will use the [list form of the query data](../../../04-apis/01-peer-api-clojuredoc/peer-api-clojuredoc.md). Create a vector with the three mandatory components listed above. Let's look at a minimal query:
 
 ```clojure
 (def all-movies-q '[:find ?e 
