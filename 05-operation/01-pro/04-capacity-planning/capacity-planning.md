@@ -21,7 +21,7 @@ Transactor memory is used for three key things:
 - The object cache caches recently used values from the database index
 - Transaction functions can use memory in arbitrary ways
 
-![transactor-memory.svg](../../../images/transactor-memory.svg)
+![transactor-memory.svg](https://docs.datomic.com/images/transactor-memory.svg)
 
 The following [system properties](../10-system-properties/system-properties.md) in the transactor properties file determine how memory is allocated among the above tasks:
 

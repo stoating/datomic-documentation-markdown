@@ -56,11 +56,11 @@ Ensure that the correct region is selected in the upper right-hand corner of the
 3. On the Amazon EC2 console dashboard, look for "Supported platforms" under "Account attributes".
    - If you see only "VPC", your region is EC2-VPC only, and you can run Datomic in this region.
 
-   ![ec2-vpc](../../../images/ec2-vpc.png)
+   ![ec2-vpc](https://docs.datomic.com/images/ec2-vpc.png)
 
    - If you see "EC2" listed under "Supported platforms" (even if you also see "VPC"), then this region is EC2-Classic, and you cannot run Datomic in this region at this time.
 
-   ![ec2-classic](../../../images/ec2-classic.png)
+   ![ec2-classic](https://docs.datomic.com/images/ec2-classic.png)
 
    If the region you checked is an EC2-Classic region, one of your other regions might still be an EC2-VPC-only region, if you didn't use that region before Dec 4, 2013. Follow the above instructions to check in the other supported regions.
 

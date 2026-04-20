@@ -14,7 +14,7 @@ brackets, e.g. *[TransactionMsec]*. Each reported value of a metric
 can include up to five different statistics: *samples*, *average*, *minimum*, *maximum*, and
 *sum*.
 
-![monitoring](../../../images/monitoring.svg)
+![monitoring](https://docs.datomic.com/images/monitoring.svg)
 
 ## Tuning Tips
 

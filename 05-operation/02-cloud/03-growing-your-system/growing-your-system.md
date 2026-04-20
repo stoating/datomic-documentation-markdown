@@ -233,4 +233,4 @@ The picture below shows an example deployment designed to meet the following dev
 - Demo and test code before deploying to production
 - Allow developers to access test data from their laptops
 
-[![transaction-functions.png](../../../images/transaction-functions.png)](../../../images/transaction-functions.png)
+[![transaction-functions.png](https://docs.datomic.com/images/transaction-functions.png)](https://docs.datomic.com/images/transaction-functions.png)

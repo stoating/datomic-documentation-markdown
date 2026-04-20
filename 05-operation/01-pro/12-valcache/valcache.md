@@ -9,7 +9,7 @@ Everything gets better when data moves closer to processing. Datomic Valcache is
 - Stays hot across process restarts
 - Reduces the load placed on storage, which is particularly helpful for provisioned storage such as DynamoDB
 
-![valcache.svg](../../../images/valcache.svg)
+![valcache.svg](https://docs.datomic.com/images/valcache.svg)
 
 ## Prerequisites
 

@@ -20,7 +20,7 @@ The [Day of Datomic videos](https://www.youtube.com/watch?v=p-C_xaKhOHg&t=288s) 
 A complete Datomic installation is called a system. A system consists of [storage resources](#storage-resources)
 plus one or more [compute groups](#compute-groups):
 
-![topology](../../../images/topology.png)
+![topology](https://docs.datomic.com/images/topology.png)
 
 ## Storage Resources
 
@@ -36,7 +36,7 @@ These resources are retained even when no computational resources are
 active, so you can shut down all the active elements of Datomic while
 maintaining your data.
 
-![storage-resources](../../../images/storage-resources.png)
+![storage-resources](https://docs.datomic.com/images/storage-resources.png)
 
 ### How Datomic Uses Storage
 
@@ -214,7 +214,7 @@ per segment
 Datomic's cache hierarchy includes the [object cache](#object-cache),
 [EFS cache](#efs-cache) and optionally [Valcache](#valcache) when using [i3 instances](../03-growing-your-system/growing-your-system.md#valcache).
 
-![cache-hierarchy](../../../images/cache-hierarchy.png)
+![cache-hierarchy](https://docs.datomic.com/images/cache-hierarchy.png)
 
 ### Object Cache
 
@@ -265,7 +265,7 @@ application deployment on AWS. In particular, you can:
 - [Elastically scale](../03-growing-your-system/growing-your-system.md#query-group) your entire application instead of many separate elements
 - Reproducible deploy across [different development stages](../03-growing-your-system/growing-your-system.md#dev-workflow)
 
-![application-consumers](../../../images/application-consumers.png)
+![application-consumers](https://docs.datomic.com/images/application-consumers.png)
 
 ## Security
 

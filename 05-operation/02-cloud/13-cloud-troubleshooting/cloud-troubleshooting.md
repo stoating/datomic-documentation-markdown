@@ -17,7 +17,7 @@ If a nested template fails, the root template will fail also, and the console wi
 
 - Click on the filter popup, and choose "Deleted"
 
-  [![template-filters.png](../../../images/template-filters.png)](../../../images/template-filters.png)
+  [![template-filters.png](https://docs.datomic.com/images/template-filters.png)](https://docs.datomic.com/images/template-filters.png)
 
 - Select the nested template, and then choose the `Events` tab to see the cause of failure
 
@@ -46,7 +46,7 @@ Without a storage system, compute will fail immediately and roll back. The stack
 No export named <system-name>-FileSystemId found. Rollback requested by user.
 ```
 
-[![compute-only-error.png](../../../images/compute-only-error.png)](../../../images/compute-only-error.png)
+[![compute-only-error.png](https://docs.datomic.com/images/compute-only-error.png)](https://docs.datomic.com/images/compute-only-error.png)
 
 ### Running in EC2 Classic
 
@@ -439,7 +439,7 @@ A `HTTP 500 Internal server error` returned from API Gateway indicates that the 
 
 The screenshot below shows finding an ion exception in the log:
 
-[![ion-exception-log.png](../../../images/ion-exception-log.png)](../../../images/ion-exception-log.png)
+[![ion-exception-log.png](https://docs.datomic.com/images/ion-exception-log.png)](https://docs.datomic.com/images/ion-exception-log.png)
 
 ## Troubleshooting OPTIONS Requests Blocked by CORS Policy
 

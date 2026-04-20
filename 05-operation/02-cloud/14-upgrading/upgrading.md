@@ -95,7 +95,7 @@ To update a Storage stack:
 - Select "Specify an Amazon S3 template URL" and enter the CloudFormation template URL for the version you wish to upgrade to (check the [release page](../../../11-releases/02-datomic-cloud/01-cloud-releases/cloud-releases.md) for all versions) then click "Next".
 - On the "Specify Details" screen, set the "Reuse Existing Storage" option to *true*:
 
-![reuse-existing-storage-true](../../../images/reuse-existing-storage-true.png)
+![reuse-existing-storage-true](https://docs.datomic.com/images/reuse-existing-storage-true.png)
 
 - On the "Options" screen, leave all options unchanged.
 - On the "Review" screen, click the checkbox stating "I acknowledge that AWS CloudFormation might create IAM resources with custom names" and click "Update".

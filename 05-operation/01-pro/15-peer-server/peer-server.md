@@ -7,9 +7,9 @@ The Client library can be used to connect lightweight processes to Datomic:
 - Incurs none of the memory overhead of the full Peer library, does not perform local caching within the lightweight process
 - Can support non-JVM languages
 
-![clientarch_client.svg](../../../images/clientarch_client.svg)
+![clientarch_client.svg](https://docs.datomic.com/images/clientarch_client.svg)
 
-[Peer applications](../../../02-accessing/01-peer-library/peer-library.md) can co-exist with Client applications. Compare a [Client-based architecture](../../../images/clientarch_client.svg) (grey indicating an unused option) with an architecture using [both Peers and Clients](../../../images/clientarch_orig.svg).
+[Peer applications](../../../02-accessing/01-peer-library/peer-library.md) can co-exist with Client applications. Compare a [Client-based architecture](https://docs.datomic.com/images/clientarch_client.svg) (grey indicating an unused option) with an architecture using [both Peers and Clients](https://docs.datomic.com/images/clientarch_orig.svg).
 
 ## Peer Server
 
